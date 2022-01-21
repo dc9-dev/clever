@@ -15,10 +15,10 @@
                 <th scope="col">Długość(mm)</th>
                 <th scope="col">Szerokość(mm)</th>
                 <th scope="col">Ilość(szt.)</th>
-                <th scope="col">Wzór</th>
-                <th scope="col">Frez</th>
-                <th scope="col">Frez na boku</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Okleina</th>
                 <th scope="col">Akcja</th>
+
               </tr>
             </thead>
             <tbody>
@@ -28,9 +28,8 @@
                 <td>{{ i.width }}</td>
                 <td>{{ i.lenght }}</td>
                 <td>{{ i.quantity }}</td>
-                <td>{% if i.pattern == None %} ---- {% else %} {{ i.pattern }} {% endif %}</td>
-                <td>{% if i.milling == None %} ---- {% else %} {{ i.milling }} {% endif %}</td>
-                <td>{{ i.milling_side }}</td>
+                <td>Opis</td>
+                <td>Okelina</td>
                 <td>akcja</td>
                 </tr>
                 {% endfor %}
@@ -41,9 +40,6 @@
               <th scope="col">{{ form.width }}</th>
               <th scope="col">{{ form.lenght }}</th>
               <th scope="col">{{ form.quantity }}</th>
-              <th scope="col">{{ form.pattern }}</th>
-              <th scope="col">{{ form.milling }}</th>
-              <th scope="col">{{ form.milling_side }}</th>
               <th scope="col"><button class="btn btn-primary btn-login fw-bold" type="submit">Dodaj</button></th>
             </form>
             </tfooter>
