@@ -1,0 +1,42 @@
+{% extends 'auth.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card border-0 shadow rounded-3 my-5">
+          
+          <div class="card-body p-4 p-sm-5">
+            <h5 class="card-title text-center mb-5 fw-light fs-5">Logowanie</h5>  
+            <form method="POST" action="">{% csrf_token %} 
+              <div class="form-floating mb-3">
+                {{ form.email }}
+                <label for="floatingInput">email</label>
+                
+              </div>
+              <div class="form-floating mb-3">
+                {{ form.password }}
+                <label for="floatingPassword">hasło</label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
+                <label class="form-check-label" for="rememberPasswordCheck">
+                  Remember password
+                </label>
+              </div>
+              <div class="d-grid">
+                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="login">Zaloguj</button>
+              </div>
+              <hr class="my-4">
+                {% for message in messages %}
+					<p class="text-center messages">{{message}}</p>
+			    {% endfor %}	
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

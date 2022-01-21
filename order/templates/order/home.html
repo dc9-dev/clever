@@ -1,0 +1,89 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+
+  <div class="col-sm-6">
+    <div class="card recent-sales">
+      <div class="card-body">
+        <h5 class="card-title">Ostatnie zamówienia</h5>
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#ID</th>
+              <th scope="col">Klient</th>
+              <th scope="col">Data</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in orders %}
+            <tr>
+              <th scope="row"><a href="{% url 'detail' i.slug %}">#{{ i.slug }}</a></th>
+              <td>{{ i.user.first_name }} {{ i.user.last_name|first }}.</td>
+              <td>{{ i.date_created|date:"d/m/y" }}</td>
+              <td><span class="badge {% if i.status == 2 %} bg-success {% elif i.status == 1 %} bg-warning {% elif i.status == 0 %} bg-secondary {% endif %} ">{{ i.get_status_display }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title">Zamówienia <span>| wszystkie</span></h5>
+            <div class="d-flex align-items-center">
+              <div class="mx-auto">
+                <h1>{{ orders_total }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title text-success">Zamówienia <span class="text-success">| ukończone</span><i class="bi bi-check2-all"></i></h5>
+            <div class="d-flex align-items-center">
+              <div class="mx-auto">
+                <h1 class="text-success">{{ orders_done }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title text-warning">Zamówienia <span class="text-warning">| w trakcie</span><i class="bi bi-hourglass-split"></i></h5>
+            <div class="d-flex align-items-center">
+              <div class="mx-auto">
+                <h1 class="text-warning">{{ orders_during }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card info-card">
+          <div class="card-body">
+            <h5 class="card-title text-muted">Zamówienia <span class="text-muted">| oczekujące</span><i class="bi bi-hourglass-top"></i></h5>
+            <div class="d-flex align-items-center">
+              <div class="mx-auto">
+                <h1 class="text-muted">{{ orders_pending }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

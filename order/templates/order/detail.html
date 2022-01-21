@@ -1,0 +1,45 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+
+  <div class="col-sm-6">
+    <div class="card recent-sales">
+      <a href="{% url  'export_csv' order.slug %}">Exportuj</a>
+      <div class="card-body">
+        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
+        <!-- Bordered Table -->
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Długość(mm)</th>
+                <th scope="col">Szerokość(mm)</th>
+                <th scope="col">Wzór</th>
+                <th scope="col">Frez</th>
+                <th scope="col">Frez na boku</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for i in item %}
+                <tr>
+                
+                <th scope="row"></th>
+                <td>{{ i.width }}</td>
+                <td>{{ i.lenght }}</td>
+                <td>{% if i.pattern == None %} ---- {% else %} {{ i.pattern }} {% endif %}</td>
+                <td>{% if i.milling == None %} ---- {% else %} {{ i.milling }} {% endif %}</td>
+                <td>{{ i.milling.milling_side }}</td>
+                
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+          <!-- End Bordered Table -->
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+{% endblock %}
