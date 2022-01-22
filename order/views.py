@@ -86,10 +86,10 @@ def export_csv(request, slug):
     
     
     # Add column headings to the csv file
-    writer.writerow(['Długość', 'Szerokość', 'Ilość', 'Wzór', 'Frez', 'Frez po boku'])
+    writer.writerow(['Długość', 'Szerokość', 'Ilość', 'Opis', 'Okleina'])
 
     # Loop Thu and output
     for i in items:
-        writer.writerow([i.width, i.lenght, i.quantity, i.pattern, i.milling, i.milling_side])
+        writer.writerow([i.lenght, i.width, i.quantity, , i. description, i.lenght1, i.lenght2, i.width1, i.width2])
 
     return response
