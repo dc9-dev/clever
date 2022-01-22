@@ -90,6 +90,6 @@ def export_csv(request, slug):
 
     # Loop Thu and output
     for i in items:
-        writer.writerow([i.lenght, i.width, i.quantity, , i. description, i.lenght1, i.lenght2, i.width1, i.width2])
+        writer.writerow([i.lenght, i.width, i.quantity, i. description, i.lenght1, i.lenght2, i.width1, i.width2])
 
     return response
