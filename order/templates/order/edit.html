@@ -3,44 +3,65 @@
 
 <div class="row">
 
-  <div class="col-sm-6">
+  <div class="col-sm-8">
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
         <!-- Bordered Table -->
-        <table class="table table-responsive">
+        <table class="table">
             <thead>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="4" class="bg-success text-light">Okleina</th>
+                <th></th>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Długość(mm)</th>
-                <th scope="col">Szerokość(mm)</th>
-                <th scope="col">Ilość(szt.)</th>
+                <th scope="col">Dł(mm)</th>
+                <th scope="col">Szer(mm)</th>
+                <th scope="col">Szt.</th>
                 <th scope="col">Opis</th>
-                <th scope="col">Okleina</th>
+                <th scope="col" class="bg-success text-light">1-dł.</th>
+                <th scope="col" class="bg-success text-light">1-szer.</th>
+                <th scope="col" class="bg-success text-light">2-dł.</th>
+                <th scope="col" class="bg-success text-light">2-szer.</th>
                 <th scope="col">Akcja</th>
-
               </tr>
             </thead>
             <tbody>
                 {% for i in item %}
                 <tr>
-                <td>{{ i.id }}</id>
+                <td class="bg-success text-light text-right">{{ i.id }}</id>
                 <td>{{ i.width }}</td>
                 <td>{{ i.lenght }}</td>
                 <td>{{ i.quantity }}</td>
-                <td>Opis</td>
-                <td>Okelina</td>
-                <td>akcja</td>
+                <td>{{ i.description }}</td>
+                <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.lenght2|yesno:"Tak,brak" }}</td>
+                <td><button class="btn btn-warning btn-sm" type="submit">Edytuj</button>
+                    <button class="btn btn-danger btn-sm" type="submit">Usuń</button>
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>
             <tfooter>
-              <form method="POST" class="item-form">{% csrf_token %}
-              <th scope="col"></th>
-              <th scope="col">{{ form.width }}</th>
-              <th scope="col">{{ form.lenght }}</th>
-              <th scope="col">{{ form.quantity }}</th>
-              <th scope="col"><button class="btn btn-primary btn-login fw-bold" type="submit">Dodaj</button></th>
+              <form method="POST">{% csrf_token %}
+             <tr>
+              <th></th>
+              <th>{{ form.width }}</th>
+              <th>{{ form.lenght }}</th>
+              <th>{{ form.quantity }}</th>
+              <th>{{ form.description }}</th>
+              <th class="bg-success text-light">{{ form.width1 }}</th>
+              <th class="bg-success text-light">{{ form.width2 }}</th>
+              <th class="bg-success text-light">{{ form.lenght1 }}</th>
+              <th class="bg-success text-light">{{ form.lenght2 }}</th>
+              <th><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
+            </tr>
             </form>
             </tfooter>
           </table>

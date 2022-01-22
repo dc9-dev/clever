@@ -11,8 +11,11 @@ from account.models import UserBase
 def home(request):
 
     user_id = request.user.id
-
-    orders = Order.objects.filter(user_id=user_id)[0:10]
+    if request.user.is_staff:
+        orders = Order.objects.all()
+    else:
+        orders = Order.objects.filter(user_id=user_id)[0:10]
+    
     orders_total = Order.objects.filter(user_id=user_id).count()
     orders_pending = Order.objects.filter(user_id=user_id, status='0').count()
     orders_during = Order.objects.filter(user_id=user_id, status='1').count()
