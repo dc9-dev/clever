@@ -53,25 +53,17 @@ class Milling(models.Model):
      
 
 class Item(models.Model):
- 
-    #CHOICE = (
-    #    ('krk', 'krk'),
-    #    ('dł', 'dł'),
-    #)
-    
+
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     lenght = models.DecimalField(max_digits=4, decimal_places=0)
     width = models.DecimalField(max_digits=4, decimal_places=0)
     lenght = models.PositiveSmallIntegerField(blank=False)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
-    description = models.CharField(max_length=255, blank=True, null=True, default='')
+    description = models.CharField(max_length=255, blank=True, null=True)
     lenght1 = models.BooleanField(default=False)
     lenght2 = models.BooleanField(default=False)
     width1 = models.BooleanField(default=False)
     width2 = models.BooleanField(default=False)
-    #pattern = models.ForeignKey(Pattern, null=True, on_delete=models.SET_NULL, blank=True)
-    #milling = models.ForeignKey(Milling, null=True, on_delete=models.SET_NULL, blank=True)
-    #milling_side = models.CharField(max_length=30, choices=CHOICE, blank=True)
 
     class Meta:
 

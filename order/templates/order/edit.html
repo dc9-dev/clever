@@ -34,11 +34,11 @@
             <tbody>
                 {% for i in item %}
                 <tr>
-                <td class="bg-dark text-light text-right">{{ i.id }}</id>
+                <td class="bg-dark text-light text-right">{{ i }}</id>
                 <td>{{ i.width }}</td>
                 <td>{{ i.lenght }}</td>
                 <td>{{ i.quantity }}</td>
-                <td>{{ i.description }}</td>
+                <td>{{ i.description|default_if_none:'' }}</td>
                 <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
                 <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
                 <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
