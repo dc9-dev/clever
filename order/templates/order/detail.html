@@ -44,7 +44,7 @@
                 <td>{{ i.width }}</td>
                 <td>{{ i.lenght }}</td>
                 <td>{{ i.quantity }}</td>
-                <td>{{ i.description }}</td>
+                <td>{{ i.description|default_if_none:"" }}</td>
                 <td class="bg-success text-light">{{ i.width1|yesno:"Tak, Nie"}}</td>
                 <td class="bg-success text-light">{{ i.width2|yesno:"Tak, Nie"}}</td>
                 <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak, Nie"}}</td>
