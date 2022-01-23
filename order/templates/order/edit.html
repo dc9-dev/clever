@@ -56,7 +56,7 @@
               <th>{{ form.width }}</th>
               <th>{{ form.lenght }}</th>
               <th>{{ form.quantity }}</th>
-              <th>{{ form.description }}</th>
+              <th>{{ form.description|default_if_none:"" }}</th>
               <th class="bg-success text-light">{{ form.width1 }}</th>
               <th class="bg-success text-light">{{ form.width2 }}</th>
               <th class="bg-success text-light">{{ form.lenght1 }}</th>
