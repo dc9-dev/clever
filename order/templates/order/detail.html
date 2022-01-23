@@ -46,9 +46,9 @@
                 <td>{{ i.quantity }}</td>
                 <td>{{ i.description }}</td>
                 <td class="bg-success text-light">{{ i.width1|iconbool }}</td>
-                <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.lenght2|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.width2|iconbool }}</td>
+                <td class="bg-success text-light">{{ i.lenght1|iconbool }}</td>
+                <td class="bg-success text-light">{{ i.lenght2|iconbool }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
