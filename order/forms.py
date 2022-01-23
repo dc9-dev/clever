@@ -11,12 +11,5 @@ class ItemForm(forms.ModelForm):
              'quantity': forms.TextInput(attrs={'style': 'width: 20px'}),
              'description': forms.Textarea(attrs={'style': 'width: 60px',
                                                   'rows': 2,
-                                                  'cols': 2,}),
-            }
+                                                  'cols': 2,}),}
         labels = {'description': 'Opis',}
-    
-    def __init__(self, *args, **kwargs):
-        super(ItemForm, self).__init__(*args, **kwargs)
-        for input, field in self.fields.items():
-            field.widget.attrs['class'] = ''
-          

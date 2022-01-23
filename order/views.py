@@ -15,7 +15,7 @@ def home(request):
         orders = Order.objects.all()
     else:
         orders = Order.objects.filter(user_id=user_id)[0:10]
-    
+
     orders_total = Order.objects.filter(user_id=user_id).count()
     orders_pending = Order.objects.filter(user_id=user_id, status='0').count()
     orders_during = Order.objects.filter(user_id=user_id, status='1').count()
@@ -31,12 +31,16 @@ def home(request):
 
 
 def new(request):
+
+
     user_id = request.user.id
     order = Order.objects.create(user_id=user_id)
 
     return redirect('edit', slug=order.slug)
 
 def detail(request, slug):
+
+
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
     context = {
@@ -47,6 +51,8 @@ def detail(request, slug):
     return render(request, 'order/detail.html', context)
 
 def edit(request, slug):
+
+
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
     form = ItemForm()
@@ -73,18 +79,13 @@ def edit(request, slug):
 
 
 def export_csv(request, slug):
-    
+
+
     order = Order.objects.get(slug=slug)
     items = order.item_set.all()
- 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=zamID#{}.csv'.format(order.slug)
-    
-
     writer = csv.writer(response)
-
-    
-    
     # Add column headings to the csv file
     writer.writerow(['Długość', 'Szerokość', 'Ilość', 'Opis', 'dlugosc-1', 'szerokosc-1', 'dlugosc-2', 'szerokosc2'])
 
