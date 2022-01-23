@@ -42,8 +42,8 @@
                 <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
                 <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
                 <td class="bg-success text-light">{{ i.lenght2|yesno:"Tak,brak" }}</td>
-                <td><button class="btn btn-warning btn-sm" type="submit">Edytuj</button>
-                    <button class="btn btn-danger btn-sm" type="submit">Usuń</button>
+                <td>
+                    <a href="{% url 'deleteItem' order.slug i.id %}"><button class="btn btn-danger btn-sm">Usuń</button></a>
                 </td>
                 </tr>
                 {% endfor %}

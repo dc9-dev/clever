@@ -32,14 +32,12 @@ def home(request):
 
 def new(request):
 
-
     user_id = request.user.id
     order = Order.objects.create(user_id=user_id)
 
     return redirect('edit', slug=order.slug)
 
 def detail(request, slug):
-
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
@@ -51,7 +49,6 @@ def detail(request, slug):
     return render(request, 'order/detail.html', context)
 
 def edit(request, slug):
-
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
@@ -69,7 +66,7 @@ def edit(request, slug):
         else:
             form = ItemForm()
             return redirect('edit', slug=slug)
-         
+
     context = {
         'order': order,
         'item': item,
@@ -77,9 +74,13 @@ def edit(request, slug):
     }
     return render(request, "order/edit.html", context)
 
+def deleteItem(request, slug, item_id):
+
+    item = Item.objects.get(id=item_id)
+    item.delete()
+    return redirect('edit', slug=slug)
 
 def export_csv(request, slug):
-
 
     order = Order.objects.get(slug=slug)
     items = order.item_set.all()
