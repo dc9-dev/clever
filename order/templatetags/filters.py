@@ -7,7 +7,7 @@ register = template.Library()
 @register.filter("iconbool", is_safe=True)
 def iconbool(value):
 
-    if bool(value):
+    if bool(value == True):
         result = '<i class="bi bi-check-circle-fill text-success"></i>'
     else:
         result = '<i class="bi bi-x text-danger"></i>'
