@@ -5,37 +5,54 @@
 
   <div class="col-sm-6">
     <div class="card recent-sales">
-      <a href="{% url  'export_csv' order.slug %}">Exportuj</a>
+      
       <div class="card-body">
-        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
+        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span>
+            {% if order.status == 0 %}
+            <a href="{% url 'edit' order.slug %}" class="btn btn-warning btn-sm">edytuj</a>
+            {% endif %}
+            {% if user.is_staff %}
+            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
+            {% endif %}
+        </h5>
         <!-- Bordered Table -->
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="4" class="bg-success text-light">Okleina</th>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Długość(mm)</th>
-                <th scope="col">Szerokość(mm)</th>
-                <th scope="col">Wzór</th>
-                <th scope="col">Frez</th>
-                <th scope="col">Frez na boku</th>
+                <th scope="col">Dł(mm)</th>
+                <th scope="col">Szer(mm)</th>
+                <th scope="col">Szt.</th>
+                <th scope="col">Opis</th>
+                <th scope="col" class="bg-success text-light">1-dł.</th>
+                <th scope="col" class="bg-success text-light">1-szer.</th>
+                <th scope="col" class="bg-success text-light">2-dł.</th>
+                <th scope="col" class="bg-success text-light">2-szer.</th>
               </tr>
             </thead>
             <tbody>
                 {% for i in item %}
                 <tr>
-                
-                <th scope="row"></th>
+                <td class="bg-dark text-light text-right">{{ i.id }}</id>
                 <td>{{ i.width }}</td>
                 <td>{{ i.lenght }}</td>
-                <td>{% if i.pattern == None %} ---- {% else %} {{ i.pattern }} {% endif %}</td>
-                <td>{% if i.milling == None %} ---- {% else %} {{ i.milling }} {% endif %}</td>
-                <td>{{ i.milling.milling_side }}</td>
-                
+                <td>{{ i.quantity }}</td>
+                <td>{{ i.description }}</td>
+                <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.lenght2|yesno:"Tak,brak" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
+    
           </table>
-          <!-- End Bordered Table -->
       </div>
     </div>
   </div>
