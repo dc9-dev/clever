@@ -64,7 +64,7 @@ class Item(models.Model):
     width = models.DecimalField(max_digits=4, decimal_places=0)
     lenght = models.PositiveSmallIntegerField(blank=False)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
-    description = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True, default='')
     lenght1 = models.BooleanField(default=False)
     lenght2 = models.BooleanField(default=False)
     width1 = models.BooleanField(default=False)
