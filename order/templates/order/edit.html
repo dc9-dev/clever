@@ -6,7 +6,7 @@
   <div class="col-sm-8">
     <div class="card recent-sales">
       <div class="card-body">
-        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
+        <h5 class="card-title">Zamówienie #{{ order.title }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
         <!-- Bordered Table -->
         <div class="table-responsive">
         <table class="table">
@@ -19,7 +19,7 @@
                 <th colspan="4" class="bg-success text-light">Okleina</th>
                 <th></th>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col">lp.</th>
                 <th scope="col">Dł(mm)</th>
                 <th scope="col">Szer(mm)</th>
                 <th scope="col">Szt.</th>
@@ -36,13 +36,13 @@
                 <tr>
                 <td class="bg-dark text-light text-right">{{ i.item_number }}</td>
                 <td>{{ i.width }}</td>
-                <td>{{ i.lenght }}</td>
+                <td>{{ i.length }}</td>
                 <td>{{ i.quantity }}</td>
                 <td>{{ i.description|default_if_none:'' }}</td>
                 <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
                 <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.lenght1|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.lenght2|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.length1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.length2|yesno:"Tak,brak" }}</td>
                 <td>
                     <a href="{% url 'deleteItem' order.slug i.id %}"><button class="btn btn-danger btn-sm">Usuń</button></a>
                 </td>
@@ -54,13 +54,13 @@
              <tr>
               <th></th>
               <th>{{ form.width }}</th>
-              <th>{{ form.lenght }}</th>
+              <th>{{ form.length }}</th>
               <th>{{ form.quantity }}</th>
               <th>{{ form.description|default_if_none:"" }}</th>
               <th class="bg-success text-light">{{ form.width1 }}</th>
               <th class="bg-success text-light">{{ form.width2 }}</th>
-              <th class="bg-success text-light">{{ form.lenght1 }}</th>
-              <th class="bg-success text-light">{{ form.lenght2 }}</th>
+              <th class="bg-success text-light">{{ form.length1 }}</th>
+              <th class="bg-success text-light">{{ form.length2 }}</th>
               <th><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
             </tr>
             </form>

@@ -37,14 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    
+
     'account',
     'order',
     
     'randomslugfield',
-    
 
-  
 ]
 
 MIDDLEWARE = [
@@ -132,9 +130,11 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Custom user model
 AUTH_USER_MODEL = 'account.UserBase'
-LOGIN_REDIRECT_URL = '/account/dashboard'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/account/login/'
 
 # Default primary key field type

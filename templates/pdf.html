@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="iso-8859-2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zamówienie {{ order.title }}</title>
+    <style>
+    @page {
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 50pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+
+    th, td{
+        padding: 5px 5px;
+    }
+    th{
+        font-size: 15px;
+        font-weight: bold;
+    }
+    td{
+        font-size: 10px;
+        text-align: center;
+    }
+    img {
+        width: 150px;
+    }
+
+    #upp {
+      width: 100%;
+      
+  }
+  .alignleft,
+  .alignright {
+      display: inline-block;
+      background: red;
+  }
+  .alignleft {
+    padding-right: 0px; 
+}
+.alignright {
+    text-align: left;
+  padding-right: 100px; 
+}
+
+
+</style>
+</head>
+<body>
+    <table id="upp">
+      <tr>
+        <td align="left">
+            <img src="https://serving.photos.photobox.com/4569023162d8aa466e8fca8570aa342167a117a0b6252691679a1a4f94c6b24327124d26.jpg">
+        </td>
+        <td></td>
+        <td align="right">
+            <p>Clever Space</br>
+            ul. Odlewnicza 5</br>
+        02-204 Warszawa</br>
+    tel. 404-242-242</p>
+</td>
+</tr>
+</table>
+<h1 style="text-align: center;" >Zamówienie: {{ order.title }} o numerze ID#{{ order.slug }}</h1>
+<table id="upp">
+  <tr>
+    <td align="left">
+       <p>Podsumowanie</br></br>
+       Ilosc elementów: {{ items_quantity }}szt.</br>
+       Powierzchnia elementów: {{ items_area }}m2 </br>
+       Liczba plyt: {{ panel_sum }}</br>
+       Szacunkowy koszt: {{ cost }}zl</br>
+</p>
+</td>
+<td></td>
+<td align="right">
+    <p>Klient: {{ order.user.first_name }} {{ order.user.last_name }}</br>
+    </p>
+</td>
+</tr>
+</table>
+
+
+<!-- Content for Static Frame 'header_frame' -->
+<h1 style="text-align: center;" >Zestawienie elementów</h1>
+<!-- Content for Static Frame 'footer_frame' -->
+<div id="footer_content"><h5 style="text-align: center;" >Clever Space - wszelkie prawa zastrzezone (c) 2022 - strona <pdf:pagenumber> 
+    of <pdf:pagecount> </h1>
+</div>
+
+<table border="0.5" style="border-collapse: collapse;" >
+    <thead>
+      <tr>
+        <th> </th>
+        <th> </th>
+        <th> </th>
+        <th> </th>
+        <th> </th>
+        <th colspan="4">okleina</th>
+    </tr>
+</thead>
+<thead>
+  <tr>
+    <th>lp.</th>
+    <th>dl</th>
+    <th>szer</th>
+    <th>szt.</th>
+    <th>opis</th>
+    <th>1-dl.</th>
+    <th>1-szer.</th>
+    <th>2-dl.</th>
+    <th>2-szer.</th>
+</tr>
+</thead>
+<tbody>
+    {% for i in items %}
+    <tr>
+        <td>{{ i.item_number }}</id>
+            <td>{{ i.width }}mm</td>
+            <td>{{ i.length }}mm</td>
+            <td>{{ i.quantity }}</td>
+            <td>{{ i.description }}</td>
+            <td>{{ i.width1|yesno:"*,  "}}</td>
+            <td>{{ i.width2|yesno:"*,  "}}</td>
+            <td>{{ i.length1|yesno:"*,  "}}</td>
+            <td>{{ i.length2|yesno:"*,  " }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    
+</table>       
+</body>
+</html>

@@ -15,6 +15,7 @@ class Order(models.Model):
         (DONE, 'Zakończone'),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='order_user')
+    title = models.CharField(max_length=255, blank=False, null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     slug = RandomSlugField(length=7, exclude_lower=True, exclude_upper=True, exclude_vowels=True)
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
@@ -62,13 +63,12 @@ class Item(models.Model):
 
     item_number = models.CharField(max_length=255, blank=True, null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
-    lenght = models.DecimalField(max_digits=4, decimal_places=0)
+    length = models.DecimalField(max_digits=4, decimal_places=0)
     width = models.DecimalField(max_digits=4, decimal_places=0)
-    lenght = models.PositiveSmallIntegerField(blank=False)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
     description = models.CharField(max_length=255, blank=True, null=True)
-    lenght1 = CustomBooleanField()
-    lenght2 = CustomBooleanField()
+    length1 = CustomBooleanField()
+    length2 = CustomBooleanField()
     width1 = CustomBooleanField()
     width2 = CustomBooleanField()
 
@@ -78,4 +78,4 @@ class Item(models.Model):
         verbose_name_plural = "formatki"
 
     def __str__(self):
-        return "{} x {}".format(self.width, self.lenght)
+        return "{} x {}".format(self.width, self.length)

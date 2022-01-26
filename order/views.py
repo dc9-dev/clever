@@ -1,11 +1,19 @@
 import csv
-
+import math
+from datetime import datetime
+from io import BytesIO
+from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, response
+from django.template.loader import get_template
 from django.shortcuts import redirect, render
+from xhtml2pdf import pisa
+from django.views import View
+from django.db.models import Sum
 from .models import Order, Item
 from .forms import ItemForm
 from account.models import UserBase
+
 
 @login_required(login_url='login')
 def home(request):
@@ -33,9 +41,12 @@ def home(request):
 
 @login_required(login_url='login')
 def new(request):
-
+    user = request.user
     user_id = request.user.id
     order = Order.objects.create(user_id=user_id)
+    dt = datetime.now()
+    order.title = "{}_{}".format(dt.strftime('%d_%m_%y'), user.last_name)
+    order.save()
 
     return redirect('edit', slug=order.slug)
 @login_required(login_url='login')
@@ -97,13 +108,52 @@ def export_csv(request, slug):
     order = Order.objects.get(slug=slug)
     items = order.item_set.all()
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=zamID#{}.csv'.format(order.slug)
+    response['Content-Disposition'] = 'attachment; filename=zam_{}.csv'.format(order.title)
     writer = csv.writer(response)
     # Add column headings to the csv file
     #writer.writerow(['lp.', 'Długość', 'Szerokość', 'Ilość', 'Opis', 'dlugosc-1', 'szerokosc-1', 'dlugosc-2', 'szerokosc2'])
 
     # Loop Thu and output
     for i in items:
-        writer.writerow([i.item_number, i.lenght, i.width, i.quantity, i. description, i.lenght1, i.width1, i.lenght2, i.width2])
+        writer.writerow([i.item_number, i.length, i.width, i.quantity, i. description, i.length1, i.width1, i.length2, i.width2])
 
     return response
+
+
+
+
+def export_pdf(request, slug):
+
+    order = Order.objects.get(slug=slug)
+    items = order.item_set.all()
+    items_quantity = sum(items.values_list('quantity', flat=True))
+    items_width = sum(items.values_list('width', flat=True))
+    items_length = sum(items.values_list('length', flat=True))
+    #caluculate m2, where 1000000 is used to convert mm2 to m2
+    items_area = float(round((items_width * items_length)/1000000, 2))
+    panel = 5.70
+    panel_sum = round(items_area / panel)
+    cost = panel_sum * 150 + items_quantity * 3 
+
+    template_path = 'pdf.html'
+    context = {'order': order,
+               'items': items,
+               'items_quantity': items_quantity,
+               'items_area': items_area,
+               'panel_sum': panel_sum,
+               'cost': cost,
+                }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="zam_%s.pdf"' % (order.title)
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
