@@ -6,12 +6,13 @@
         <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
         <link rel="stylesheet" href=" {% static 'assets/css/login.css' %} ">
     </head>
-    <body class="bg-image" style="background-image: url({% static 'assets/img/bg.jpg' %}); background-repeat: no-repeat;
+    <body>
+    <div class="img-responsive" style="background-image: url({% static 'assets/img/bg.jpg' %}); background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;">
         {% block content %}
         
         {% endblock %}
-
+    </div>
     </body>
 </html>

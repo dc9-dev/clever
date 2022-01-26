@@ -21,12 +21,14 @@ def home(request):
     orders_during = Order.objects.filter(user_id=user_id, status='1').count()
     orders_done = Order.objects.filter(user_id=user_id, status='2').count()
 
-    context = { 'orders': orders,
-                'orders_total': orders_total,
-                'orders_pending': orders_pending,
-                'orders_during': orders_during,
-                'orders_done': orders_done,
-                }
+    context = {
+        'orders': orders,
+        'orders_total': orders_total,
+        'orders_pending': orders_pending,
+        'orders_during': orders_during,
+        'orders_done': orders_done,
+}
+
     return render(request, "order/home.html", context)
 
 @login_required(login_url='login')
@@ -52,6 +54,7 @@ def edit(request, slug):
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
+
     form = ItemForm()
     if request.method == 'POST':
         form = ItemForm(request.POST)
@@ -67,18 +70,27 @@ def edit(request, slug):
             form = ItemForm()
             return redirect('edit', slug=slug)
 
+    for index, i in enumerate(item):
+        i.item_number = index + 1
+        i.save()
+
     context = {
         'order': order,
         'item': item,
         'form': form,
+
     }
     return render(request, "order/edit.html", context)
+
+
 @login_required(login_url='login')
 def deleteItem(request, slug, item_id):
 
     item = Item.objects.get(id=item_id)
     item.delete()
     return redirect('edit', slug=slug)
+
+
 @login_required(login_url='login')
 def export_csv(request, slug):
 
@@ -88,10 +100,10 @@ def export_csv(request, slug):
     response['Content-Disposition'] = 'attachment; filename=zamID#{}.csv'.format(order.slug)
     writer = csv.writer(response)
     # Add column headings to the csv file
-    writer.writerow(['Długość', 'Szerokość', 'Ilość', 'Opis', 'dlugosc-1', 'szerokosc-1', 'dlugosc-2', 'szerokosc2'])
+    #writer.writerow(['lp.', 'Długość', 'Szerokość', 'Ilość', 'Opis', 'dlugosc-1', 'szerokosc-1', 'dlugosc-2', 'szerokosc2'])
 
     # Loop Thu and output
     for i in items:
-        writer.writerow([i.lenght, i.width, i.quantity, i. description, i.lenght1, i.width1, i.lenght2, i.width2])
+        writer.writerow([i.item_number, i.lenght, i.width, i.quantity, i. description, i.lenght1, i.width1, i.lenght2, i.width2])
 
     return response

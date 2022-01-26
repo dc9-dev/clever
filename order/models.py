@@ -41,29 +41,36 @@ class Pattern(models.Model):
         return self.name
 
 class Milling(models.Model):
-    
+
     name = models.CharField(max_length=30)
-    
+
     class Meta:
         verbose_name = "frez"
         verbose_name_plural = "frezy"
 
     def __str__(self):
         return self.name
-     
+
+class CustomBooleanField(models.BooleanField):
+
+    def from_db_value(self, value, expression, connection, context=None):
+        if value is None:
+            return ''
+        return int(value) # return 0/1
 
 class Item(models.Model):
 
+    item_number = models.CharField(max_length=255, blank=True, null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     lenght = models.DecimalField(max_digits=4, decimal_places=0)
     width = models.DecimalField(max_digits=4, decimal_places=0)
     lenght = models.PositiveSmallIntegerField(blank=False)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
     description = models.CharField(max_length=255, blank=True, null=True)
-    lenght1 = models.BooleanField(default=False)
-    lenght2 = models.BooleanField(default=False)
-    width1 = models.BooleanField(default=False)
-    width2 = models.BooleanField(default=False)
+    lenght1 = CustomBooleanField()
+    lenght2 = CustomBooleanField()
+    width1 = CustomBooleanField()
+    width2 = CustomBooleanField()
 
     class Meta:
 
