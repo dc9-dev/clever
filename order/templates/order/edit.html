@@ -48,7 +48,8 @@
                 {% endfor %}
             </tbody>
             <tfooter>
-              <form method="POST">{% csrf_token %}
+              <form method="POST" id="ItemForm">{% csrf_token %}
+              <input type="hidden" name="form_type" value="ItemForm">
              <tr>
               <th></th>
               <th>{{ form.width }}</th>
@@ -65,6 +66,28 @@
             </form>
             </tfooter>
           </table>
+          <div class="col-sm-6">
+          <h5 class="card-title">Załączniki: </h5>
+          {% for i in attachment %}
+            <img src="{{ i.attachment.url }}" alt="" class="img-fluid img-thumbnail">
+          {% endfor %}
+          <form method="POST" id="AttachmentFormm">{% csrf_token %}
+             <input type="hidden" name="form_type" value="AttachmentForm">
+             {{ attachmentForm }}
+             <button class="btn btn-primary btn-sm" type="submit">Dodaj</button>
+            </form>
+          </div>
+           <div class="col-sm-6">
+          <h5 class="card-title">Uwagi: </h5>
+          <p> Jakas tam uwaga</p>
+          </div>
+     
+          <span>
+              {% if user.is_staff %}
+            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
+            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
+              {% endif %}
+          </span>
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ from xhtml2pdf import pisa
 from django.views import View
 from django.db.models import Sum
 from .models import Order, Item
-from .forms import ItemForm
+from .forms import ItemForm, AttachmentForm
 from account.models import UserBase
 
 
@@ -54,10 +54,13 @@ def detail(request, slug):
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
+    attachment = order.attachment_set.all()
+
     context = {
         'order': order,
         'item': item,
-    }
+        'attachment': attachment,
+            }
 
     return render(request, 'order/detail.html', context)
 @login_required(login_url='login')
@@ -65,21 +68,33 @@ def edit(request, slug):
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
+    attachment = order.attachment_set.all()
 
     form = ItemForm()
+    attachmentForm = AttachmentForm()
+
     if request.method == 'POST':
-        form = ItemForm(request.POST)
-        if form.is_valid():
+        if request.POST.get('form_type') == 'ItemForm':
             form = ItemForm(request.POST)
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.order = order
-            obj.save()
-            form = ItemForm()
-            return redirect('edit', slug=slug)
-        else:
-            form = ItemForm()
-            return redirect('edit', slug=slug)
+            if form.is_valid():
+                form = ItemForm(request.POST)
+                obj = form.save(commit=False)
+                obj.user = request.user
+                obj.order = order
+                obj.save()
+                form = ItemForm()
+                return redirect('edit', slug=slug)
+            else:
+                form = ItemForm()
+                return redirect('edit', slug=slug)
+        elif request.POST.get('form_type') == 'AttachmentForm':
+            attachment = AttachmentForm(request.POST, request.FILES)
+            if form.is_valid():
+                
+                return redirect('edit', slug=slug)
+            else:
+                attachment = AttachmentForm()
+                return redirect('edit', slug=slug)
 
     for index, i in enumerate(item):
         i.item_number = index + 1
@@ -89,6 +104,8 @@ def edit(request, slug):
         'order': order,
         'item': item,
         'form': form,
+        'attachmentForm': attachmentForm,
+        'attachment': attachment,
 
     }
     return render(request, "order/edit.html", context)

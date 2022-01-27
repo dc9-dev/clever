@@ -18,7 +18,7 @@ class Order(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     slug = RandomSlugField(length=7, exclude_lower=True, exclude_upper=True, exclude_vowels=True)
-    attachment = models.FileField(upload_to ='zamowienie/')
+    
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
 
     class Meta:
@@ -30,6 +30,10 @@ class Order(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'slug': self.slug})
+
+class Attachment(models.Model):
+    attachment = models.FileField(blank=True, upload_to='attachemnts')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True)
 
 
 class Pattern(models.Model):
@@ -72,12 +76,6 @@ class Material(models.Model):
     def __str__(self):
         return self.short_name
 
-class Stock(models.Model):
-
-    stock_id = models.CharField(max_length=255, blank=True, null=True)
-    length = models.DecimalField(max_digits=4, decimal_places=0)
-    width = models.DecimalField(max_digits=4, decimal_places=0)
-    material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE)
 
 class Item(models.Model):
 

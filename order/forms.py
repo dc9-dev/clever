@@ -1,5 +1,5 @@
 from django import forms
-from order.models import Item
+from order.models import Item, Attachment
 
 class ItemForm(forms.ModelForm):
     class Meta:
@@ -13,3 +13,8 @@ class ItemForm(forms.ModelForm):
                                                   'rows': 2,
                                                   'cols': 2,}),}
         labels = {'description': 'Opis',}
+
+class AttachmentForm(forms.ModelForm):
+    class Meta:
+        model = Attachment
+        exclude = ('order',)
