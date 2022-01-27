@@ -18,6 +18,7 @@ class Order(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     slug = RandomSlugField(length=7, exclude_lower=True, exclude_upper=True, exclude_vowels=True)
+    attachment = models.FileField(upload_to ='zamowienie/')
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
 
     class Meta:
@@ -59,12 +60,32 @@ class CustomBooleanField(models.BooleanField):
             return ''
         return int(value) # return 0/1
 
+class Material(models.Model):
+
+    short_name = models.CharField(max_length=255, blank=False, null=False)
+    name = models.CharField(max_length=255, blank=False, null=False)
+
+    class Meta:
+        verbose_name = "materiał"
+        verbose_name_plural = "materiały"
+
+    def __str__(self):
+        return self.short_name
+
+class Stock(models.Model):
+
+    stock_id = models.CharField(max_length=255, blank=True, null=True)
+    length = models.DecimalField(max_digits=4, decimal_places=0)
+    width = models.DecimalField(max_digits=4, decimal_places=0)
+    material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE)
+
 class Item(models.Model):
 
     item_number = models.CharField(max_length=255, blank=True, null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     length = models.DecimalField(max_digits=4, decimal_places=0)
     width = models.DecimalField(max_digits=4, decimal_places=0)
+    material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
     description = models.CharField(max_length=255, blank=True, null=True)
     length1 = CustomBooleanField()

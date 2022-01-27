@@ -7,23 +7,16 @@
     <div class="card recent-sales">
       
       <div class="card-body">
-        <h5 class="card-title">Zamówienie #{{ order.title }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span>
+        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span>
             {% if order.status == 0 %}
             <a href="{% url 'edit' order.slug %}" class="btn btn-warning btn-sm">edytuj</a>
             {% endif %}
-            {% if user.is_staff %}
-            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
-            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
-            {% endif %}
         </h5>
+
         <div class="table-responsive">
         <table class="table">
             <thead>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th colspan="6" style="text-align: left;">Tytułem: {{ order.title }}</th>
                 <th colspan="4" class="bg-success text-light">Okleina</th>
               <tr>
                 <th scope="col">lp.</th>
@@ -31,6 +24,7 @@
                 <th scope="col">Szer(mm)</th>
                 <th scope="col">Szt.</th>
                 <th scope="col">Opis</th>
+                <th scope="col">Materiał</th>
                 <th scope="col" class="bg-success text-light">1-dł.</th>
                 <th scope="col" class="bg-success text-light">1-szer.</th>
                 <th scope="col" class="bg-success text-light">2-dł.</th>
@@ -40,20 +34,28 @@
             <tbody>
                 {% for i in item %}
                 <tr>
-                <td class="bg-dark text-light text-right">{{ i.item_number }}</id>
+                 <td class="bg-dark text-light text-right">{{ i.item_number }}</td>
                 <td>{{ i.width }}</td>
                 <td>{{ i.length }}</td>
                 <td>{{ i.quantity }}</td>
                 <td>{{ i.description|default_if_none:'' }}</td>
-                <td class="bg-success text-light">{{ i.width1|yesno:"Tak, Nie"}}</td>
-                <td class="bg-success text-light">{{ i.width2|yesno:"Tak, Nie"}}</td>
-                <td class="bg-success text-light">{{ i.length1|yesno:"Tak, Nie"}}</td>
-                <td class="bg-success text-light">{{ i.length2|yesno:"Tak, Nie" }}</td>
+                <td title="{{ i.material.name }}">{{ i.material }}</td>
+                <td class="bg-success text-light">{{ i.length1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.length2|yesno:"Tak,brak" }}</td>
+                <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
+                <td>
                 </tr>
                 {% endfor %}
             </tbody>
     
           </table>
+          <span>
+              {% if user.is_staff %}
+            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
+            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
+            {% endif %}
+          </span>
         </div>
       </div>
     </div>

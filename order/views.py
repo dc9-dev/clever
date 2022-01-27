@@ -115,7 +115,7 @@ def export_csv(request, slug):
 
     # Loop Thu and output
     for i in items:
-        writer.writerow([i.item_number, i.length, i.width, i.quantity, i. description, i.length1, i.width1, i.length2, i.width2])
+        writer.writerow([i.item_number, i.length, i.width, i.quantity, i.description, i.material, i.length1, i.width1, i.length2, i.width2])
 
     return response
 
@@ -133,7 +133,7 @@ def export_pdf(request, slug):
     items_area = float(round((items_width * items_length)/1000000, 2))
     panel = 5.70
     panel_sum = round(items_area / panel)
-    cost = panel_sum * 150 + items_quantity * 3 
+    cost = panel_sum * 180 + items_quantity * 3 
 
     template_path = 'pdf.html'
     context = {'order': order,

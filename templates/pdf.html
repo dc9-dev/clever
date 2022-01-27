@@ -66,12 +66,12 @@
         <td align="right">
             <p>Clever Space</br>
             ul. Odlewnicza 5</br>
-        02-204 Warszawa</br>
-    tel. 404-242-242</p>
+            03-231 Warszawa</br>
+            tel. 404-242-242</p>
 </td>
 </tr>
 </table>
-<h1 style="text-align: center;" >Zamówienie: {{ order.title }} o numerze ID#{{ order.slug }}</h1>
+<h1 style="text-align: center;" >Zamówienie </h1>
 <table id="upp">
   <tr>
     <td align="left">
@@ -84,7 +84,9 @@
 </td>
 <td></td>
 <td align="right">
-    <p>Klient: {{ order.user.first_name }} {{ order.user.last_name }}</br>
+    <p>
+    Zamówienie #ID: {{ order.slug }} </br>
+    Klient: {{ order.user.first_name }} {{ order.user.last_name }}</br>
     </p>
 </td>
 </tr>
@@ -101,11 +103,8 @@
 <table border="0.5" style="border-collapse: collapse;" >
     <thead>
       <tr>
-        <th> </th>
-        <th> </th>
-        <th> </th>
-        <th> </th>
-        <th> </th>
+     
+        <th colspan="6">{{ order.title }}</th>
         <th colspan="4">okleina</th>
     </tr>
 </thead>
@@ -116,6 +115,7 @@
     <th>szer</th>
     <th>szt.</th>
     <th>opis</th>
+    <th>material</th>
     <th>1-dl.</th>
     <th>1-szer.</th>
     <th>2-dl.</th>
@@ -130,10 +130,11 @@
             <td>{{ i.length }}mm</td>
             <td>{{ i.quantity }}</td>
             <td>{{ i.description }}</td>
-            <td>{{ i.width1|yesno:"*,  "}}</td>
-            <td>{{ i.width2|yesno:"*,  "}}</td>
+            <td>{{ i.material }}</td>
             <td>{{ i.length1|yesno:"*,  "}}</td>
-            <td>{{ i.length2|yesno:"*,  " }}</td>
+            <td>{{ i.width1|yesno:"*,  "}}</td>
+            <td>{{ i.length2|yesno:"*,  "}}</td>
+            <td>{{ i.width2|yesno:"*,  "}}</td>
         </tr>
         {% endfor %}
     </tbody>
