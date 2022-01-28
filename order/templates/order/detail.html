@@ -10,6 +10,10 @@
         <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span>
             {% if order.status == 0 %}
             <a href="{% url 'edit' order.slug %}" class="btn btn-warning btn-sm">edytuj</a>
+            {% if user.is_staff %}
+            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
+            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
+              {% endif %}
             {% endif %}
         </h5>
 
