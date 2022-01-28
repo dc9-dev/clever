@@ -62,13 +62,6 @@
           <h5 class="card-title">Uwagi: </h5>
           <p> Jakas tam uwaga</p>
           </div>
-     
-          <span>
-              {% if user.is_staff %}
-            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
-            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
-              {% endif %}
-          </span>
         </div>
       </div>
     </div>

@@ -5,8 +5,12 @@
 
   <div class="col-sm-8">
     <div class="card recent-sales">
+
       <div class="card-body">
-        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span></h5>
+
+        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span> 
+</h5>
+
         <!-- Bordered Table -->
         <div class="table-responsive">
         <table class="table">
@@ -48,8 +52,7 @@
                 {% endfor %}
             </tbody>
             <tfooter>
-              <form method="POST" id="ItemForm">{% csrf_token %}
-              <input type="hidden" name="form_type" value="ItemForm">
+              <form method="POST">{% csrf_token %}
              <tr>
               <th></th>
               <th>{{ form.width }}</th>
@@ -61,36 +64,60 @@
               <th class="bg-success text-light">{{ form.width1 }}</th>
               <th class="bg-success text-light">{{ form.length2 }}</th>
               <th class="bg-success text-light">{{ form.width2 }}</th>
-              <th><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
+              <th><button class="btn btn-primary btn-sm" name="itembtn" type="submit">Dodaj</button></th>
             </tr>
             </form>
             </tfooter>
           </table>
-          <div class="col-sm-6">
-          <h5 class="card-title">Załączniki: </h5>
+
+     
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+    <div class="card">
+            <div class="card-header"><i class="bi bi-paperclip"></i>Załączniki </div>
+            <div class="card-body">
+                
+            
+             
           {% for i in attachment %}
-            <img src="{{ i.attachment.url }}" alt="" class="img-fluid img-thumbnail">
+             <div class="attachment-body">
+                <div class="attachment-thumbail">
+                    <img src="{{ i.attachment_thumbnail.url }}">
+                </div>
+                <div class="attachment-content">
+                    <h8>test </h8>
+                    <p>Dodano 01:02 28/01/22 - <a id="a" href="">skasuj</a></p> 
+
+                </div>
+             </div> 
           {% endfor %}
-          <form method="POST" id="AttachmentFormm">{% csrf_token %}
-             <input type="hidden" name="form_type" value="AttachmentForm">
-             {{ attachmentForm }}
-             <button class="btn btn-primary btn-sm" type="submit">Dodaj</button>
-            </form>
+            
+           </div>
+            <div class="card-footer">
+              <form method="POST" enctype="multipart/form-data" >{% csrf_token %}
+             {{ attachmentForm.attachment }}
+             <button class="btn btn-primary btn-sm" name="attachmentbtn" type="submit">Dodaj</button>
+
+            </form> 
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<img class="img-fluid img-thumbnail" src="{{ i.attachment.url }}" alt="">
+        
+
+
+          <div class="col-sm-4">
+          <h5 class="card-title">Załączniki: <</h5>
+             
+         
+
           </div>
            <div class="col-sm-6">
           <h5 class="card-title">Uwagi: </h5>
           <p> Jakas tam uwaga</p>
           </div>
-     
-          <span>
-              {% if user.is_staff %}
-            <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
-            <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
-              {% endif %}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}

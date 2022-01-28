@@ -1089,3 +1089,30 @@ h1, h2, h3, h4, h5, h6 {
   font-size: small;
 
 }
+
+.attachment-body {
+    background-color: #f6f9ff;
+    margin-top: 20px;
+    height: 88px;
+    padding: 20px;
+
+}
+
+.attachment-thumbail {
+    height: 88px;
+    width: 120px;
+    background-color: #000;
+    margin: -20px;
+    float: left;
+}
+
+.attachment-content {
+  position: absolute;
+  left: 150px;
+  
+}
+
+.attachment-content p {
+    font-size: 10px;
+}
+

@@ -1,18 +1,12 @@
 import csv
-import math
 from datetime import datetime
-from io import BytesIO
-from datetime import date
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, response
+
 from django.template.loader import get_template
 from django.shortcuts import redirect, render
 from xhtml2pdf import pisa
-from django.views import View
-from django.db.models import Sum
 from .models import Order, Item
 from .forms import ItemForm, AttachmentForm
-from account.models import UserBase
 
 
 @login_required(login_url='login')
@@ -34,10 +28,10 @@ def home(request):
         'orders_total': orders_total,
         'orders_pending': orders_pending,
         'orders_during': orders_during,
-        'orders_done': orders_done,
-}
+        'orders_done': orders_done, }
 
     return render(request, "order/home.html", context)
+
 
 @login_required(login_url='login')
 def new(request):
@@ -49,6 +43,8 @@ def new(request):
     order.save()
 
     return redirect('edit', slug=order.slug)
+
+
 @login_required(login_url='login')
 def detail(request, slug):
 
@@ -59,10 +55,11 @@ def detail(request, slug):
     context = {
         'order': order,
         'item': item,
-        'attachment': attachment,
-            }
+        'attachment': attachment, }
 
     return render(request, 'order/detail.html', context)
+
+
 @login_required(login_url='login')
 def edit(request, slug):
 
@@ -73,28 +70,34 @@ def edit(request, slug):
     form = ItemForm()
     attachmentForm = AttachmentForm()
 
-    if request.method == 'POST':
-        if request.POST.get('form_type') == 'ItemForm':
+    if request.method == 'POST' and 'itembtn' in request.POST:
+        form = ItemForm(request.POST)
+        if form.is_valid():
             form = ItemForm(request.POST)
-            if form.is_valid():
-                form = ItemForm(request.POST)
-                obj = form.save(commit=False)
-                obj.user = request.user
-                obj.order = order
-                obj.save()
-                form = ItemForm()
-                return redirect('edit', slug=slug)
-            else:
-                form = ItemForm()
-                return redirect('edit', slug=slug)
-        elif request.POST.get('form_type') == 'AttachmentForm':
-            attachment = AttachmentForm(request.POST, request.FILES)
-            if form.is_valid():
-                
-                return redirect('edit', slug=slug)
-            else:
-                attachment = AttachmentForm()
-                return redirect('edit', slug=slug)
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.order = order
+            obj.save()
+            form = ItemForm()
+            return redirect('edit', slug=slug)
+        else:
+            form = ItemForm()
+            return redirect('edit', slug=slug)
+
+    if request.method == 'POST' and 'attachmentbtn' in request.POST:
+        attachmentForm = AttachmentForm(request.POST)
+        if attachmentForm.is_valid():
+            print('test')
+            attachmentForm = AttachmentForm(request.POST, request.FILES)
+            obj = attachmentForm.save(commit=False)
+            obj.user = request.user
+            obj.order = order
+            obj.save()
+            attachmentForm = AttachmentForm()
+            return redirect('edit', slug=slug)
+        else:
+            attachment = AttachmentForm()
+            return redirect('edit', slug=slug)
 
     for index, i in enumerate(item):
         i.item_number = index + 1
@@ -103,11 +106,10 @@ def edit(request, slug):
     context = {
         'order': order,
         'item': item,
-        'form': form,
-        'attachmentForm': attachmentForm,
         'attachment': attachment,
+        'form': form,
+        'attachmentForm': attachmentForm, }
 
-    }
     return render(request, "order/edit.html", context)
 
 
@@ -127,16 +129,11 @@ def export_csv(request, slug):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=zam_{}.csv'.format(order.title)
     writer = csv.writer(response)
-    # Add column headings to the csv file
-    #writer.writerow(['lp.', 'Długość', 'Szerokość', 'Ilość', 'Opis', 'dlugosc-1', 'szerokosc-1', 'dlugosc-2', 'szerokosc2'])
-
     # Loop Thu and output
     for i in items:
         writer.writerow([i.item_number, i.length, i.width, i.quantity, i.description, i.material, i.length1, i.width1, i.length2, i.width2])
 
     return response
-
-
 
 
 def export_pdf(request, slug):
@@ -158,8 +155,7 @@ def export_pdf(request, slug):
                'items_quantity': items_quantity,
                'items_area': items_area,
                'panel_sum': panel_sum,
-               'cost': cost,
-                }
+               'cost': cost, }
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="zam_%s.pdf"' % (order.title)
@@ -173,4 +169,3 @@ def export_pdf(request, slug):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-

@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+
 from randomslugfield import RandomSlugField
 
 
@@ -18,7 +21,6 @@ class Order(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     slug = RandomSlugField(length=7, exclude_lower=True, exclude_upper=True, exclude_vowels=True)
-    
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
 
     class Meta:
@@ -31,8 +33,14 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse('detail', kwargs={'slug': self.slug})
 
+
 class Attachment(models.Model):
-    attachment = models.FileField(blank=True, upload_to='attachemnts')
+    attachment = models.FileField(blank=True, upload_to='images/')
+    attachment_thumbnail = ImageSpecField(source='attachment',
+                                      processors=[ResizeToFill(120, 80)],
+                                      format='JPEG',
+                                      options={'quality': 60})
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True)
 
 
