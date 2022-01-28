@@ -1,0 +1,31 @@
+ <div class="card">
+            <div class="card-header"><i class="bi bi-paperclip"></i>Załączniki </div>
+            <div class="card-body">
+                
+            
+             
+          {% for i in attachment %}
+             <div class="attachment-body">
+                <div class="attachment-thumbail">
+                    <img src="{{ i.attachment_thumbnail.url }}">
+                </div>
+                <div class="attachment-content">
+                    <h8>test </h8>
+                    <p>Dodano 01:02 28/01/22 - <a id="a" href="">skasuj</a></p> 
+
+                </div>
+             </div> 
+          {% endfor %}
+            
+           </div>
+            <div class="card-footer">
+              {% if request.resolver_match.view_name == 'edit' %}
+              <form method="POST" enctype="multipart/form-data" >{% csrf_token %}
+             {{ attachmentForm.attachment }}
+             <button class="btn btn-primary btn-sm" name="attachmentbtn" type="submit">Dodaj</button>
+
+
+            </form> 
+             {% endif %}
+            </div>
+        </div>

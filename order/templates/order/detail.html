@@ -54,20 +54,13 @@
             </tbody>
     
           </table>
-         
-          <div class="col-sm-6">
-          <h5 class="card-title">Załączniki: </h5>
-          {% for i in attachment %}
-            <img src="{{ i.attachment.url }}" alt="" class="img-fluid img-thumbnail">
-          {% endfor %}
-          
-          </div>
-           <div class="col-sm-6">
-          <h5 class="card-title">Uwagi: </h5>
-          <p> Jakas tam uwaga</p>
+  
           </div>
         </div>
       </div>
+      <div class="col-sm-6">
+    {% include "order/attachments.html" %}
+    </div>
     </div>
   </div>
 </div>
