@@ -8,7 +8,7 @@
 
       <div class="card-body">
 
-        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-secondary {% endif %} ">{{ order.get_status_display }}</span> 
+        <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-danger {% endif %} ">{{ order.get_status_display }}</span> 
 </h5>
 
         <!-- Bordered Table -->

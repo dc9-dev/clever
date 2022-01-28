@@ -1,6 +1,9 @@
 from django import forms
-from order.models import Item, Attachment
+from order.models import Item, Attachment, Order
 
+class StatusForm(forms.Form):
+    
+    status = forms.ChoiceField(choices=Order.STATUS, widget=forms.Select(attrs={'onchange': 'submit();'}))
 
 class ItemForm(forms.ModelForm):
     class Meta:

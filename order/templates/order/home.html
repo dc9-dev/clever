@@ -10,19 +10,25 @@
         <table class="table table-borderless">
           <thead>
             <tr>
-              <th scope="col">#ID</th>
-              <th scope="col">Klient</th>
-              <th scope="col">Data</th>
-              <th scope="col">Status</th>
+              <th>#ID</th>
+              {% if request.user.is_staff %}
+              <th>Tytułem</th>
+              {% endif %}
+              <th>Klient</th>
+              <th>Data</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             {% for i in orders %}
             <tr>
-              <th scope="row"><a href="{% url 'detail' i.slug %}">#{{ i.slug }}</a></th>
+              <th><a href="{% url 'detail' i.slug %}">#{{ i.slug }}</a></th>
+              {% if request.user.is_staff %}
+              <th >{{ i.title }}</th>
+              {% endif %}
               <td>{{ i.user.first_name }} {{ i.user.last_name|first }}.</td>
               <td>{{ i.date_created|date:"d/m/y" }}</td>
-              <td><span class="badge {% if i.status == 2 %} bg-success {% elif i.status == 1 %} bg-warning {% elif i.status == 0 %} bg-secondary {% endif %} ">{{ i.get_status_display }}</span></td>
+              <td><span class="badge {% if i.status == 3 %} bg-success  {% elif i.status == 2 %} bg-warning {% elif i.status == 1 %} bg-secondary {% elif i.status == 0 %} bg-danger {% endif %} ">{{ i.get_status_display }}</span></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -74,10 +80,10 @@
       <div class="col-sm-6">
         <div class="card info-card">
           <div class="card-body">
-            <h5 class="card-title text-muted">Zamówienia <span class="text-muted">| oczekujące</span><i class="bi bi-hourglass-top"></i></h5>
+            <h5 class="card-title text-secondary">Zamówienia <span class="text-secondary">| oczekujące</span><i class="bi bi-hourglass-top"></i></h5>
             <div class="d-flex align-items-center">
               <div class="mx-auto">
-                <h1 class="text-muted">{{ orders_pending }}</h1>
+                <h1 class="text-secondary">{{ orders_pending }}</h1>
               </div>
             </div>
           </div>

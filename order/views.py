@@ -7,22 +7,27 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from xhtml2pdf import pisa
 from .models import Order, Item
-from .forms import ItemForm, AttachmentForm
+from .forms import ItemForm, AttachmentForm, StatusForm
 
 
 @login_required(login_url='login')
 def home(request):
 
     user_id = request.user.id
+
     if request.user.is_staff:
         orders = Order.objects.all()
+        orders_total = Order.objects.all().count()
+        orders_pending = Order.objects.filter(status='1').count()
+        orders_during = Order.objects.filter(status='2').count()
+        orders_done = Order.objects.filter(status='3').count()
     else:
         orders = Order.objects.filter(user_id=user_id)[0:10]
-
-    orders_total = Order.objects.filter(user_id=user_id).count()
-    orders_pending = Order.objects.filter(user_id=user_id, status='0').count()
-    orders_during = Order.objects.filter(user_id=user_id, status='1').count()
-    orders_done = Order.objects.filter(user_id=user_id, status='2').count()
+        orders_total = Order.objects.filter(user_id=user_id).count()
+        orders_pending = Order.objects.filter(user_id=user_id, status='1').count()
+        orders_during = Order.objects.filter(user_id=user_id, status='2').count()
+        orders_done = Order.objects.filter(user_id=user_id, status='3').count()
+ 
 
     context = {
         'orders': orders,
@@ -48,15 +53,29 @@ def new(request):
 
 @login_required(login_url='login')
 def detail(request, slug):
+    
 
     order = Order.objects.get(slug=slug)
     item = order.item_set.all()
     attachment = order.attachment_set.all()
 
+    form = StatusForm()
+    
+    if request.method == 'POST':
+        form = StatusForm(request.POST)
+        if form.is_valid():
+            order.status = request.POST.get("status", "")
+            order.save()
+            return redirect('detail', slug=slug)
+        else:
+            form = StatusForm()
+            return redirect('detail', slug=slug)
+
     context = {
         'order': order,
         'item': item,
-        'attachment': attachment, }
+        'attachment': attachment, 
+        'form': form,}
 
     return render(request, 'order/detail.html', context)
 

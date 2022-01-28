@@ -9,10 +9,13 @@ from randomslugfield import RandomSlugField
 
 
 class Order(models.Model):
-    PENDING = 0
-    DURING = 1
-    DONE = 2
+    PREPARATION = 0
+    PENDING = 1
+    DURING = 2
+    DONE = 3
     STATUS = (
+        ('zmień status', 'zmień status'),
+        (PREPARATION, 'Przygotowywanie'),
         (PENDING, 'Oczekuję'),
         (DURING, 'W trakcie'),
         (DONE, 'Zakończone'),
@@ -21,7 +24,7 @@ class Order(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False, default=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     slug = RandomSlugField(length=7, exclude_lower=True, exclude_upper=True, exclude_vowels=True)
-    status = models.SmallIntegerField(choices=STATUS, default=PENDING)
+    status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     class Meta:
         verbose_name = "zamówienie"
