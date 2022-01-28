@@ -6,7 +6,17 @@
   <div class="col-sm-6">
     <div class="card recent-sales">
       <div class="card-body">
-        <h5 class="card-title">Magazyn - Formatki</h5>
+        <h5 class="card-title">Magazyn - Formatki </h5>
+        <div class="dataTable-top">
+          
+          <form method="get">
+        {{myFilter.form}}
+
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+
+        </div>
+       
         <table class="table table-borderless">
           <thead>
             <tr>
@@ -14,6 +24,7 @@
               <th scope="col">Długość</th>
               <th scope="col">Szerokość</th>
               <th scope="col">Materiał</th>
+              <th>Akcja</th>
             </tr>
           </thead>
           <tbody>
@@ -22,7 +33,13 @@
               <th scope="row">{{ i.stock_id }}</th>
               <td>{{ i.length }}</td>
               <td>{{ i.width }}</td>
-              <td>{{ i.material }}</td>
+              <td>{% if i.width == 0 and i.length == 0 %}
+                    ----
+                  {% else %}
+                {{ i.material }}
+                  {% endif %}
+              </td>
+              <td><button class="btn bg-danger text-white bt-small"><a href="{% url 'stock_take' i.stock_id %}">użyj</a></button></td>
             </tr>
             {% endfor %}
           </tbody>

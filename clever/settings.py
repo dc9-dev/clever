@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'randomslugfield',
     'imagekit',
+    'django_filters',
 
 ]
 
