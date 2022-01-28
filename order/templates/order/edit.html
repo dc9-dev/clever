@@ -15,7 +15,7 @@
         <div class="table-responsive">
         <table class="table">
             <thead>
-                <th colspan="6" style="text-align: left;">Tytułem: {{ order.title }}</th>
+                <th colspan="6" style="text-align: left;">{% if user.request.is_staff %} Tytułem: {{ order.title }} {% endif %}</th>
                 <th colspan="4" class="bg-success text-light">Okleina</th>
                 <th></th>
               <tr>
@@ -74,9 +74,16 @@
         </div>
       </div>
     </div>
+    <div class="row">
     <div class="col-sm-6">
     {% include "order/attachments.html" %}
     </div>
+    <div class="col-sm-6 ">
+    <span class="align-items-center justify-content-center h-100"> Ok, zamawiam !</span>
+    </div>
   </div>
+
+  </div>
+
 </div>
 {% endblock %}
