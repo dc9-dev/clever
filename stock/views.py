@@ -1,12 +1,11 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.views import View
 from django.views.generic import ListView
 
 from .filters import StockFilter
 from .models import Stock
 
-@staff_member_required
-class stock(ListView):
+
+class Stock(ListView):
     model = Stock
     template_name = 'stock/home.html'
 
