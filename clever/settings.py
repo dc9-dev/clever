@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'randomslugfield',
     'imagekit',
     'django_filters',
+    'django_fastdev',
 
 ]
 

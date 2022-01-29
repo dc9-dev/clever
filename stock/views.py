@@ -1,21 +1,37 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from .models import Stock
+from order.models import Material
 from .filters import StockFilter
+
 
 @staff_member_required
 def stock(request):
-    
+
+    qs = Stock.objects.all()
+    material = Material.objects.all()
+
+    materials = Material.objects.all()
     stock = Stock.objects.all()
-    
-    myFilter = StockFilter(request.GET, queryset=stock)
-    stock = myFilter.qs 
+
+    length = request.GET.get('length')
+    width = request.GET.get('width')
+    material = request.GET.get('material')
+
+    print(length, width, material)
+ 
+ 
 
     context = {
         'stock': stock,
-        'myFilter': myFilter,
-    }
+        'materials': materials,
+     
+        
+       }
     return render(request, 'stock/home.html', context)
+
+
+
 
 @staff_member_required
 def stock_take(request, stock_id):
@@ -27,4 +43,3 @@ def stock_take(request, stock_id):
 
 
     return render(request, 'stock/search.html', {})
-
