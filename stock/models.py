@@ -3,9 +3,11 @@ from order.models import Material
 
 
 class Warehouse(models.Model):
-
+	name = models.CharField(max_length=255, default="magazyn")
 	size = models.IntegerField(default=100)
 
+	def __str__(self):
+		return self.name
 
 class Stock(models.Model):
 
