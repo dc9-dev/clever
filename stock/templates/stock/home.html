@@ -8,11 +8,12 @@
       <div class="card-body">
         <h5 class="card-title">Magazyn - Formatki </h5>
         <div class="dataTable-top">
-          {% include 'stock/search.html' %}
+          
           
         </div>
-       
+        <div class="table-responsive">
         <table class="table table-borderless">
+          {% include 'stock/search.html' %}
           <thead>
             <tr>
               <th scope="col">#ID</th>
@@ -23,56 +24,25 @@
             </tr>
           </thead>
           <tbody>
-              {% for i in stock %}
+            {% for stock in filter.qs %}
             <tr>
-              <th scope="row">{{ i.stock_id }}</th>
-              <td>{{ i.length }}</td>
-              <td>{{ i.width }}</td>
-              <td>{% if i.width == 0 and i.length == 0 %}
-                    ----
-                  {% else %}
-                {{ i.material }}
-                  {% endif %}
-              </td>
-              <td><button class="btn bg-danger text-white bt-small"><a href="{% url 'stock_take' i.stock_id %}">użyj</a></button></td>
+              <th scope="row">{{ stock.id }}</th>
+              <td>{{ stock.length }}mm</td>
+              <td>{{ stock.width }}mm</td>
+              <td>{{ stock.material }}</td>
+              <td><button class="btn bg-danger text-white bt-small"><a href="">użyj</a></button></td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   </div>
 
   <div class="col-sm-6">
     <div class="row">
-      <div class="table-wrap">
-            <table class="table table-bordered table-dark table-hover">
-              <thead>
-                <tr>
-                  <th>Materiał</th>
-                  <th>Liczba formatek</th>
-                  <th>Łączna powierzchnia</th>
-                </tr>
-
-
-  
-              </thead>
-              <tbody>
-                {% for material in materials %}
-                <tr>
-                    
-                  <td>{{ material.name }}</td>
-               
-                  <td></td>
-                  <td></td>
-                </tr>
-                {% endfor %}
-
-               
-              
-              </tbody>
-            </table>
-          </div>
+      
     </div>
     <div class="row">
       <div class="col-sm-6">
@@ -103,7 +73,3 @@
   </div>
 </div>
 {% endblock %}
-<form method="get">
-              {{myFilter.form}}
-        <button class="btn btn-primary" type="submit">Search</button>
-      </form>

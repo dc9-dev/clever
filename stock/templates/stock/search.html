@@ -1,27 +1,10 @@
 <form method="GET" class="row" >{% csrf_token %}
-  
-                <div class="col-3 position-relative">
-                  
-                  <input type="text" class="form-control" placeholder="dl" name="length">
-                 
-                </div>
-                <div class="col-3 position-relative">
-                  
-                  <input type="text" class="form-control" placeholder="szer" name="width">
-                 
-                </div>
-                 <div class="col-3 position-relative">
-                  
-                  <select class="form-select" placeholder="material" name="material">
-                    <option selected="" disabled="" value="">materiał</option>
-                    <option>...</option>
-                  </select>
-                </div>
-             
-                <div class="col-3">
-                  <button class="btn btn-primary" type="submit">szukaj</button>
-                </div>
-         
-               
-              </form>
-
+  {% for field in filter.form %}
+  <td>
+    {{ field }}
+  </td>
+  {% endfor %}
+  <td>
+    <button class="btn btn-primary" type="submit">szukaj</button>
+  </td>
+</form>

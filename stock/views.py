@@ -1,45 +1,16 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, redirect
-from .models import Stock
-from order.models import Material
+from django.views import View
+from django.views.generic import ListView
+
 from .filters import StockFilter
-
-
-@staff_member_required
-def stock(request):
-
-    qs = Stock.objects.all()
-    material = Material.objects.all()
-
-    materials = Material.objects.all()
-    stock = Stock.objects.all()
-
-    length = request.GET.get('length')
-    width = request.GET.get('width')
-    material = request.GET.get('material')
-
-    print(length, width, material)
- 
- 
-
-    context = {
-        'stock': stock,
-        'materials': materials,
-     
-        
-       }
-    return render(request, 'stock/home.html', context)
-
-
-
+from .models import Stock
 
 @staff_member_required
-def stock_take(request, stock_id):
+class stock(ListView):
+    model = Stock
+    template_name = 'stock/home.html'
 
-    stock = Stock.objects.filter(stock_id=stock_id)
-    stock.update(width=0, length=0, material=1)
-
-    return redirect('stock')
-
-
-    return render(request, 'stock/search.html', {})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = StockFilter(self.request.GET, queryset=self.get_queryset())
+        return context

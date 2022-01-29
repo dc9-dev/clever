@@ -2,13 +2,10 @@
 {% load static %}
 {% block content %}
 <div class="row">
-
   <div class="col-sm-6">
     <div class="card recent-sales">
-      
       <div class="card-body">
         <h5 class="card-title">Zamówienie #{{ order.slug }} 
-          
           <span class="badge text-light {% if order.status == 3 %} bg-success {% elif order.status == 2 %} bg-warning  {% elif order.status == 1 %} bg-secondary {% elif order.status == 0 %} bg-danger {% endif %} ">{{ order.get_status_display }}</span> 
             {% if order.status == 0 %}
             <a href="{% url 'edit' order.slug %}" class="btn btn-warning btn-sm">edytuj</a>
@@ -17,9 +14,7 @@
             <a href="{% url  'export_csv' order.slug %}" class="btn btn-success btn-sm">exportuj csv</a>
             <a href="{% url  'export_pdf' order.slug %}" class="btn btn-danger btn-sm">exportuj pdf</a>
               {% endif %}
-
         </h5>
-
         <div class="table-responsive">
         <table class="table">
             <thead>
@@ -57,9 +52,7 @@
                 </tr>
                 {% endfor %}
             </tbody>
-    
           </table>
-  
           </div>
         </div>
       </div>
@@ -69,6 +62,4 @@
     </div>
   </div>
 </div>
-
-  
 {% endblock %}
