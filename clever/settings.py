@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'imagekit',
     'django_filters',
     'django_fastdev',
-    'bootstrapform',
 
 ]
 

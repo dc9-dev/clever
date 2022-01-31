@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 

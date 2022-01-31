@@ -8,11 +8,9 @@
       <div class="card-body">
         <h5 class="card-title">Magazyn - Formatki </h5>
         <div class="dataTable-top">
-          
-          
         </div>
         <div class="table-responsive">
-        <table class="table table-borderless stock">
+        <table class="table table-hover">
           {% include 'stock/search.html' %}
           <thead>
             <tr>
@@ -20,13 +18,13 @@
               <th scope="col">Długość</th>
               <th scope="col">Szerokość</th>
               <th scope="col">Materiał</th>
-              <th>Akcja</th>
+              <th>Akcja</th> 
             </tr>
           </thead>
           <tbody>
             {% for stock in filter.qs %}
             <tr>
-              <th scope="row">{{ stock.id }}</th>
+              <td scope="row">{{ stock.id }}</th>
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
               <td>{{ stock.material }}</td>
@@ -42,9 +40,42 @@
 
   <div class="col-sm-6">
     <div class="row">
-      
+      <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Dark Table</h5>
+
+              <!-- Dark Table -->
+              <table class="table table-dark text-left" style="text-align: left">
+                <thead>
+                  <tr>
+                    <th scope="col">Materiał</th>
+                    <th scope="col">Liczba Formatek</th>
+                    
+                    <th scope="col">Powierzchnia Formatek</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for material in materials %}
+                  <tr>
+                    <th scope="row">{{ material.name }}</th>
+                    <td>{{ material.stocks.count }}</td>
+                   
+                    <td>
+                        {{ total_area }}
+                    </td>
+                        
+                  </tr>
+                  {% endfor %}
+               
+                </tbody>
+              </table>
+              <!-- End Dark Table -->
+
+            </div>
+          </div>
     </div>
 
   </div>
+
 </div>
 {% endblock %}

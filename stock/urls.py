@@ -7,4 +7,5 @@ urlpatterns = [
 	#path('search', views.stock_search, name='stock_search'),
 	path('', staff_member_required(views.Stock.as_view()), name='stock'),
 	#path('stock_take/<stock_id>', views.stock_take, name='stock_take'),
+	#path('test/', views.test, name='test'),
 ]
