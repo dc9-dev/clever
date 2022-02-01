@@ -26,7 +26,7 @@ class Stock(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'filter': StockFilter(self.request.GET, queryset=self.get_queryset()),
-            'materials': Material.objects.all(),
+            'materials': Material.objects.all().order_by('name'),
             'result': result,
             })
         return context
