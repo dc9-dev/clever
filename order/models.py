@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 
 
+
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
@@ -88,13 +89,33 @@ class Material(models.Model):
     def __str__(self):
         return self.short_name
 
+    def caluclate_area(self):
+
+        material = Material.objects.get(short_name=self.short_name)
+        total_area = 0
+
+        for stock in material.stocks.all():
+            result = stock.length * stock.width / 1000000
+            total_area += result
+
+        return total_area
+
+
+class IntegerRangeField(models.IntegerField):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
+        defaults.update(kwargs)
+        return super(IntegerRangeField, self).formfield(**defaults)
 
 class Item(models.Model):
 
     item_number = models.CharField(max_length=255, blank=True, null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
-    length = models.DecimalField(max_digits=4, decimal_places=0)
-    width = models.DecimalField(max_digits=4, decimal_places=0)
+    length = IntegerRangeField(min_value=50, max_value=2800)
+    width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE)
     quantity = models.SmallIntegerField(default=1, blank=False, null=False)
     description = models.CharField(max_length=255, blank=True, null=True)

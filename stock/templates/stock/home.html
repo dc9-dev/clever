@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 <div class="row">
-
   <div class="col-sm-6">
     <div class="card recent-sales">
       <div class="card-body">
@@ -34,48 +33,40 @@
           </tbody>
         </table>
       </div>
-      </div>
     </div>
   </div>
+</div>
 
-  <div class="col-sm-6">
+<div class="col-sm-6">
     <div class="row">
       <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Dark Table</h5>
+        <div class="card-body">
+          <h5 class="card-title">Podsumowanie magazynu</h5>
+          <!-- Dark Table -->
+          <table class="table table-dark text-left" style="text-align: left">
+            <thead>
+              <tr>
+                <th scope="col">Materiał</th>
+                <th scope="col">Liczba Formatek</th>
 
-              <!-- Dark Table -->
-              <table class="table table-dark text-left" style="text-align: left">
-                <thead>
-                  <tr>
-                    <th scope="col">Materiał</th>
-                    <th scope="col">Liczba Formatek</th>
-                    
-                    <th scope="col">Powierzchnia Formatek</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for material in materials %}
-                  <tr>
-                    <th scope="row">{{ material.name }}</th>
-                    <td>{{ material.stocks.count }}</td>
-                   
-                    <td>
-                        {{ total_area }}
-                    </td>
-                        
-                  </tr>
-                  {% endfor %}
-               
-                </tbody>
-              </table>
-              <!-- End Dark Table -->
-
-            </div>
-          </div>
-    </div>
-
-  </div>
-
-</div>
+                <th scope="col">Powierzchnia Formatek</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for material in materials %}
+              <tr>
+                <th scope="row">{{ material.name }}</th>
+                <td>{{ material.stocks.count }}</td>
+                <td>
+                 {{ material.caluclate_area|floatformat:2 }}m2
+               </td>
+             </tr>
+             {% endfor %}
+           </tbody>
+         </table>
+         <!-- End Dark Table -->
+       </div>
+     </div>
+   </div>
+ </div>
 {% endblock %}
