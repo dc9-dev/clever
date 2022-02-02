@@ -1,19 +1,13 @@
 {% extends 'main.html' %}
 {% block content %}
-
 <div class="row">
-
   <div class="col-sm-8">
     <div class="card recent-sales">
-
       <div class="card-body">
-
         <h5 class="card-title">Zamówienie #{{ order.slug }} <span class="badge text-light {% if order.status == 2 %} bg-success {% elif order.status == 1 %} bg-warning {% elif order.status == 0 %} bg-danger {% endif %} ">{{ order.get_status_display }}</span> 
-</h5>
-
-        <!-- Bordered Table -->
+        </h5>
         <div class="table-responsive">
-        <table class="table">
+        <table class="table table-borderless table-hover">
             <thead>
                 <th colspan="6" style="text-align: left;">{% if user.request.is_staff %} Tytułem: {{ order.title }} {% endif %}</th>
                 <th colspan="4" class="bg-success text-light">Okleina</th>
@@ -69,8 +63,6 @@
             </form>
             </tfooter>
           </table>
-
-     
         </div>
       </div>
     </div>
@@ -82,8 +74,6 @@
     <span class="align-items-center justify-content-center h-100"> Ok, zamawiam !</span>
     </div>
   </div>
-
   </div>
-
 </div>
 {% endblock %}

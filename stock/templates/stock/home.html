@@ -9,7 +9,7 @@
         <div class="dataTable-top">
         </div>
         <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-borderless table-hover">
           {% include 'stock/search.html' %}
           <thead>
             <tr>
@@ -17,7 +17,7 @@
               <th scope="col">Długość</th>
               <th scope="col">Szerokość</th>
               <th scope="col">Materiał</th>
-              <th>Akcja</th> 
+              <th colspan="2">Akcja</th>
             </tr>
           </thead>
           <tbody>
@@ -27,7 +27,12 @@
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
               <td>{{ stock.material }}</td>
-              <td><button class="btn bg-danger text-white bt-small"><a href="">użyj</a></button></td>
+              <td><button type="button" class="btn btn-danger btn-sm">weź</button></td>
+              <td>{% if stock.length == 0 %}
+                  <button type="button" class="btn btn-primary btn-sm">dodaj</button>
+                  {% endif %}
+              </td>
+                
             </tr>
             {% endfor %}
           </tbody>

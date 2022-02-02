@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'order',
     'stock',
+    'production',
 
     'randomslugfield',
     'imagekit',

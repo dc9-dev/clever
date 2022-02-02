@@ -7,7 +7,6 @@ from imagekit.processors import ResizeToFill
 
 from randomslugfield import RandomSlugField
 
-
 class Order(models.Model):
     PREPARATION = 0
     PENDING = 1
@@ -68,12 +67,6 @@ class Milling(models.Model):
     def __str__(self):
         return self.name
 
-class CustomBooleanField(models.BooleanField):
-
-    def from_db_value(self, value, expression, connection, context=None):
-        if value is None:
-            return ''
-        return int(value) # return 0/1
 
 class Material(models.Model):
 
@@ -100,13 +93,23 @@ class Material(models.Model):
 
 
 class IntegerRangeField(models.IntegerField):
+
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
         self.min_value, self.max_value = min_value, max_value
         models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+
     def formfield(self, **kwargs):
         defaults = {'min_value': self.min_value, 'max_value':self.max_value}
         defaults.update(kwargs)
         return super(IntegerRangeField, self).formfield(**defaults)
+
+
+class CustomBooleanField(models.BooleanField):
+
+    def from_db_value(self, value, expression, connection, context=None):
+        if value is None:
+            return ''
+        return int(value) # return 0/1
 
 class Item(models.Model):
 
