@@ -5,11 +5,33 @@
   <div class="col-sm-6">
     <div class="card recent-sales">
       <div class="card-body">
-        <h5 class="card-title">Magazyn - Formatki </h5>
-        <div class="dataTable-top">
-        </div>
-        <div class="table-responsive">
-        <table class="table table-borderless table-hover">
+        <h5 class="card-title">Stan magazynu </h5>
+        <table class="table table-hover table-sm text-left" style="text-align: left">
+          <thead>
+            <tr>
+              <th scope="col">Materiał(szt.)</th>
+              <th scope="col">Ilość formatek</th>
+              <th scope="col">Powierzchnia formatek</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for material in materials %}
+            <tr>
+              <th scope="row">
+                {{ material.name }}({{ material.quantity }})
+              </th>
+              <td>{{ material.stocks.count }}</td>
+              <td>
+               {{ material.caluclate_area|floatformat:2 }}m2
+             </td>
+           </tr>
+           {% endfor %}
+         </tbody>
+       </table>
+       <h5 class="card-title">Formatki </h5>
+       <div class="dataTable-top"></div>
+       <div class="table-responsive">
+        <table class="table table-borderless table-hover table-sm">
           {% include 'stock/search.html' %}
           <thead>
             <tr>
@@ -17,59 +39,47 @@
               <th scope="col">Długość</th>
               <th scope="col">Szerokość</th>
               <th scope="col">Materiał</th>
-              <th colspan="2">Akcja</th>
+              <th scope="col">Akcja</th>
             </tr>
           </thead>
           <tbody>
             {% for stock in filter.qs %}
             <tr>
-              <td scope="row">{{ stock.id }}</th>
+              <td scope="row">{{ stock.id }}</td>
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
               <td>{{ stock.material }}</td>
-              <td><button type="button" class="btn btn-danger btn-sm">weź</button></td>
-              <td>{% if stock.length == 0 %}
-                  <button type="button" class="btn btn-primary btn-sm">dodaj</button>
-                  {% endif %}
+              <td>
+                {% if stock.length == 0 %}
+                <button type="button" class="btn btn-primary btn-sm">dodaj</button>
+                {% else %}
+                <button type="button" class="btn btn-danger btn-sm">weź</button>
+                {% endif %}
               </td>
-                
             </tr>
             {% endfor %}
           </tbody>
         </table>
+
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card recent-sales">
+      <div class="card-body">
+        <h5 class="card-title">Produkcja</h5>
+        <div class="dataTable-top"></div>
+        <ul class="list-group list-sm">
+          {% for production in productioins %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <small>{{ production.order }}</small>
+            <span class="badge bg-primary bg-sm ">{{ production.operator.first_name }} {{ production.operator.last_name }}</span>
+          </li>
+          {% endfor %}   
+        </ul>
       </div>
     </div>
   </div>
 </div>
-<div class="col-sm-6">
-    <div class="row">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Podsumowanie magazynu</h5>
-          <!-- Dark Table -->
-          <table class="table table-dark text-left" style="text-align: left">
-            <thead>
-              <tr>
-                <th scope="col">Materiał</th>
-                <th scope="col">Liczba Formatek</th>
-                <th scope="col">Powierzchnia Formatek</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for material in materials %}
-              <tr>
-                <th scope="row">{{ material.name }}</th>
-                <td>{{ material.stocks.count }}</td>
-                <td>
-                 {{ material.caluclate_area|floatformat:2 }}m2
-               </td>
-             </tr>
-             {% endfor %}
-           </tbody>
-         </table>
-         <!-- End Dark Table -->
-       </div>
-     </div>
-   </div>
- </div>
 {% endblock %}

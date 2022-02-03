@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from order.models import Material, IntegerRangeField
 
@@ -8,6 +9,10 @@ class Warehouse(models.Model):
 
 	def __str__(self):
 		return self.name
+
+
+
+
 
 class Stock(models.Model):
 
@@ -20,3 +25,14 @@ class Stock(models.Model):
 
     def __str__(self):
     	return "#{} {}x{} {}".format(self.stock_id, self.length, self.width, self.material)
+
+
+
+class Production(models.Model):
+
+    operator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    order = models.CharField(max_length=255)
+    comments = models.TextField(blank=True)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, default=None, blank=True)
+    date = models.DateTimeField(auto_now_add=True)

@@ -72,6 +72,7 @@ class Material(models.Model):
 
     short_name = models.CharField(max_length=255, blank=False, null=False)
     name = models.CharField(max_length=255, blank=False, null=False)
+    quantity = models.SmallIntegerField(default=0, blank=False, null=False)
 
     class Meta:
         verbose_name = "materiał"

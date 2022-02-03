@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Stock),
 admin.site.register(Warehouse),
+admin.site.register(Production),
