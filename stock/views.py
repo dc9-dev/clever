@@ -6,7 +6,7 @@ from django.forms.models import inlineformset_factory
 
 from .filters import StockFilter
 from .forms import ProductionForm
-from .models import Stock, Material, Production, Formatka, Spad
+from .models import Stock, Material, Production, ProductionStock
 
 
 class Stock(ListView):
@@ -41,29 +41,31 @@ def EditProduction(request, id):
     
     production = Production.objects.get(id=id)
     stocks = production.stocks.all()
-    formatka = production.formatka_set.all()
-    spad = production.spad_set.all()
+    productionStocks = production.productionStocks.all()
+    
     form = ProductionForm()
 
     if request.method == 'POST':
         form = ProductionForm(request.POST, instance=production)
         if form.is_valid():
-            print(request.POST)
-            for stock in request.POST['stocks']:
-                print("test")
-                print(stock)
-            print(request.POST['stocks'])
+            
             material = Material.objects.get(id=request.POST['material'])
             material.quantity -= int(request.POST['materialUsed'])
             material.save()
-
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-
-            # for stock in addstocks:
-            #     production.stocks.add(stock)
-
+            
+            for stock in production.stocks.all():
+                stock.width = 0
+                stock.length = 0
+                stock.material.short_name = ""
+                stock.save
+                print(stock)
+# for stock in production.stocks.all():
+#     ...:     production.productionStocks.create(
+#     ...:         width=stock.width,
+#     ...:         length=stock.length,
+#     ...:         material=stock.material.short_name,
+#     ...:     )
+            form.save()
 
             return redirect('edit-production', id=id)
         else:
@@ -74,9 +76,8 @@ def EditProduction(request, id):
     context = {
         'form': form,
         'stocks': stocks,
-        'formatka': formatka,
-        'spad': spad,
         'production': production,
+        'productionStocks': productionStocks,
     }
     return render(request, 'stock/edit_production.html', context)
 
@@ -84,12 +85,10 @@ def EditProduction(request, id):
 def DetailProduction(request, id):
 
     production = Production.objects.get(id=id)
-    materials = production.materials.all()
     stocks = production.stocks.all()
 
     context = {
         'production': production,
-        'materials': materials,
         'stocks': stocks,
     }
     return render(request, 'stock/detail_production.html', context)

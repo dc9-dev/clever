@@ -23,8 +23,8 @@
                     <th scope="col">{{ production.materialUsed }}</th>
                     <th scope="col">{{ production.comments }}</th>
                     <th scope="col">
-                      {% for stock in stocks %}
-                      #{{ stock.id }} {{ stock.length }}x{{ stock.width }} {{ stock.material }}<br>
+                      {% for stock in productionStocks %}
+                        {{ stock.length }}x{{ stock.width }} {{ stock.material }}<br>
                      {% endfor %}
                   </th>
                   </tr>
@@ -44,37 +44,6 @@
         </div>
      </div>
 
-      <div class="col-sm-6">
-       <div class="table-responsive"> 
-       <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    
-                    <th scope="col">Nowa Formatka</th>
-                    <th scope="col">Odpad</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    
-                    <th scope="col">{{ production.materialUsed }}</th>
-                    <th scope="col">{{ production.comments }}</th>
-                  </tr>
-                  <form method="POST">{% csrf_token %}
-                  <tr>
-                    <th scope="row">{{ form.material }}</th>
-                    <td>{{ form.materialUsed }}</td>
-                    <td>{{ form.comments }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3"><button type="submit" class="btn btn-primary col-sm-12">Ok</button></td>
-                   
-                  </tr>
-                  </form>
-                </tbody>
-         </table>
-        </div>
-     </div>
    </div>
 
     </div>

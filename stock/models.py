@@ -22,6 +22,13 @@ class Stock(models.Model):
     	return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
 
 
+class ProductionStock(models.Model):
+
+    length = IntegerRangeField(min_value=50, max_value=2800)
+    width = IntegerRangeField(min_value=50, max_value=2070)
+    material = models.CharField(max_length=200)
+    #production = models.ForeignKey(Production, null=True, on_delete=models.CASCADE)
+
 
 class Production(models.Model):
 
@@ -32,15 +39,12 @@ class Production(models.Model):
     material = models.ForeignKey(Material, null=True, on_delete=models.CASCADE)
     stocks = models.ManyToManyField(Stock, blank=True)
     materialUsed = models.IntegerField(default=0)
+    productionStocks = models.ManyToManyField(ProductionStock, blank=True)
 
     def __str__(self):
         return "{} | {} {}".format(self.order, self.user.first_name, self.user.last_name)
 
-class Formatka(models.Model):
 
-    length = IntegerRangeField(min_value=50, max_value=2800)
-    width = IntegerRangeField(min_value=50, max_value=2070)
-    production = models.ForeignKey(Production, null=True, on_delete=models.CASCADE)
 
 class Spad(models.Model):
 
