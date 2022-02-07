@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+  <div class="col">
+    <div class="card recent-sales">
+      <div class="card-body">
+       <h5 class="card-title">Karta Produkcyjna<span> | {{ production.order }} </span></h5>
+       <div class="col-sm-12">
+        
+       <table class="table table-bordered">
+        
+                <thead>
+                  <tr>
+                    <th colspan="6">Zlecenie: {{ production.order }} | Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col">Materiał</th>
+                    <th scope="col">Płyty z Magazynu</th>
+                    <th scope="col" colspan="2">Formatka z Magazynu</th>
+                    <th scope="col" colspan="2">Odpad</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for material in materials %}
+                  <tr>
+                    <td scope="row">{{ material }}</td>
+                    <td></td>
+                    <td>28</td>
+                    <td>28</td>
+                    <td>2016-05-25</td>
+                  </tr>
+                  {% endfor %}
+                  
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Bridie Kessler</td>
+                    <td>Developer</td>
+                    <td>35</td>
+                    <td>28</td>
+                    <td>2014-12-05</td>
+                  </tr>
+           
+                  
+                </tbody>
+              </table>
+     </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

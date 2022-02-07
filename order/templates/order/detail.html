@@ -16,7 +16,7 @@
               {% endif %}
         </h5>
         <div class="table-responsive">
-        <table class="table">
+        <table class="table table-borderless table-hover table-sm">
             <thead>
                 <th colspan="6" style="text-align: left;">{% if user.is_staff %}Tytułem: {{ order.title }}   <form method="POST">{% csrf_token %}
             {{ form.status }}
@@ -38,17 +38,16 @@
             <tbody>
                 {% for i in item %}
                 <tr>
-                 <td class="bg-dark text-light text-right">{{ i.item_number }}</td>
-                <td>{{ i.width }}</td>
-                <td>{{ i.length }}</td>
-                <td>{{ i.quantity }}</td>
-                <td>{{ i.description|default_if_none:'' }}</td>
-                <td title="{{ i.material.name }}">{{ i.material }}</td>
-                <td class="bg-success text-light">{{ i.length1|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.length2|yesno:"Tak,brak" }}</td>
-                <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
-                <td>
+                  <td class="bg-dark text-light text-right">{{ i.id }}</td>
+                  <td>{{ i.width }}</td>
+                  <td>{{ i.length }}</td>
+                  <td>{{ i.quantity }}</td>
+                  <td>{{ i.description|default_if_none:'' }}</td>
+                  <td title="{{ i.material.name }}">{{ i.material }}</td>
+                  <td class="bg-success text-light">{{ i.length1|yesno:"Tak,brak" }}</td>
+                  <td class="bg-success text-light">{{ i.width1|yesno:"Tak,brak" }}</td>
+                  <td class="bg-success text-light">{{ i.length2|yesno:"Tak,brak" }}</td>
+                  <td class="bg-success text-light">{{ i.width2|yesno:"Tak,brak" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

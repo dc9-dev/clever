@@ -11,28 +11,39 @@ class Warehouse(models.Model):
 		return self.name
 
 
-
-
-
 class Stock(models.Model):
 
-    stock_id = models.CharField(max_length=255, blank=True, null=True, unique=True)
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-
-
+   
     def __str__(self):
-    	return "#{} {}x{} {}".format(self.stock_id, self.length, self.width, self.material)
+    	return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
 
 
 
 class Production(models.Model):
 
-    operator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     comments = models.TextField(blank=True)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, default=None, blank=True)
     date = models.DateTimeField(auto_now_add=True)
+    material = models.ForeignKey(Material, null=True, on_delete=models.CASCADE)
+    stocks = models.ManyToManyField(Stock, blank=True)
+    materialUsed = models.IntegerField(default=0)
+
+    def __str__(self):
+        return "{} | {} {}".format(self.order, self.user.first_name, self.user.last_name)
+
+class Formatka(models.Model):
+
+    length = IntegerRangeField(min_value=50, max_value=2800)
+    width = IntegerRangeField(min_value=50, max_value=2070)
+    production = models.ForeignKey(Production, null=True, on_delete=models.CASCADE)
+
+class Spad(models.Model):
+
+    length = IntegerRangeField(min_value=50, max_value=2800)
+    width = IntegerRangeField(min_value=50, max_value=2070)
+    production = models.ForeignKey(Production, null=True, on_delete=models.CASCADE)

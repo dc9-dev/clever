@@ -69,12 +69,12 @@
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Produkcja</h5>
-        <div class="dataTable-top"></div>
-        <ul class="list-group list-sm">
+        <ul class="list-group list-sm gap-3">
+          <a href="{% url 'create-production' %}"<button type="button" class="btn btn-outline-dark col-sm-3 btn-sm">Nowa Karta</button></a>
           {% for production in productioins %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <small>{{ production.order }}</small>
-            <span class="badge bg-primary bg-sm ">{{ production.operator.first_name }} {{ production.operator.last_name }}</span>
+            <small><a href="{% url 'detail-production' production.id %}">{{ production.order }}</a></small>
+            <span class="badge bg-light text-dark">{{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</span>
           </li>
           {% endfor %}   
         </ul>

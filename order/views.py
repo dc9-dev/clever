@@ -107,7 +107,6 @@ def edit(request, slug):
     if request.method == 'POST' and 'attachmentbtn' in request.POST:
         attachmentForm = AttachmentForm(request.POST)
         if attachmentForm.is_valid():
-            print('test')
             attachmentForm = AttachmentForm(request.POST, request.FILES)
             obj = attachmentForm.save(commit=False)
             obj.user = request.user
@@ -118,9 +117,10 @@ def edit(request, slug):
         else:
             attachment = AttachmentForm()
             return redirect('edit', slug=slug)
-
+            
+    #Make items ID count from 1 for each Order
     for index, i in enumerate(item):
-        i.item_number = index + 1
+        i.id = index + 1
         i.save()
 
     context = {

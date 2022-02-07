@@ -85,9 +85,9 @@ class Material(models.Model):
 
         material = Material.objects.get(short_name=self.short_name)
         total_area = 0
-
+        # for loop for calculating area off child - division by 1000000 to convert mm2 to m2
         for stock in material.stocks.all():
-            result = stock.length * stock.width / 1000000
+            result = stock.length * stock.width / 1000000 
             total_area += result
 
         return total_area
@@ -114,7 +114,6 @@ class CustomBooleanField(models.BooleanField):
 
 class Item(models.Model):
 
-    item_number = models.CharField(max_length=255, blank=True, null=True)
     order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL)
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)
@@ -133,3 +132,5 @@ class Item(models.Model):
 
     def __str__(self):
         return "{} x {}".format(self.width, self.length)
+
+ 
