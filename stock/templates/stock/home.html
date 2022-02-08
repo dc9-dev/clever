@@ -69,12 +69,15 @@
       </div>
     </div>
   </div>
+
+  
+
   <div class="col-sm-6">
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Produkcja</h5>
         <ul class="list-group list-sm gap-3">
-          <a href="{% url 'create-production' %}"<button type="button" class="btn btn-outline-dark col-sm-3 btn-sm">Nowa Karta</button></a>
+          <a href="{% url 'create-production' %}"><button type="button" class="btn btn-outline-dark col-sm-3 btn-sm">Nowa Karta</button></a>
           {% for production in productioins %}
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <small><a href="{% url 'detail-production' production.id %}">{{ production.order }}</a></small>
@@ -86,4 +89,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
