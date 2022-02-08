@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card recent-sales">
+      <div class="card-body">
+       <h5 class="card-title">Nowa formatka do magazynu </h5>
+       <div class="dataTable-top">
+        <table class="table table-borderless table-sm">
+          <form method="POST">{% csrf_token %}
+            <tr>
+              <th scope="col">Długość(mm)</th>
+              <th scope="col">Szerokość(mm)</th>
+              <th scope="col">Materiał</th>
+              <th scope="col">Akcja</th>
+            </tr>
+            <tr>
+              <th scope="col">{{ form.length }}</th>
+              <th scope="col">{{ form.width }}</th>
+              <th scope="col">{{ form.material }}</th>
+              <th scope="col"><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
+            </tr>
+        
+          </form>
+        </table>
+      </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

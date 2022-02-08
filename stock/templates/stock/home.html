@@ -28,7 +28,7 @@
            {% endfor %}
          </tbody>
        </table>
-       <h5 class="card-title">Formatki </h5>
+       <h5 class="card-title">Formatki <a href="{% url 'create-stock' %}"><button class="btn btn-primary btn-sm">Nowa Formatka</button></a></h5>
        <div class="dataTable-top"></div>
        <div class="table-responsive">
         <table class="table table-borderless table-hover table-sm">
@@ -48,12 +48,16 @@
               <td scope="row">{{ stock.id }}</td>
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
+              {% if stock.length == 0 %}
+              <td><p>------</p></td>
+              {% else %}
               <td>{{ stock.material }}</td>
+              {% endif %}
               <td>
                 {% if stock.length == 0 %}
-                <button type="button" class="btn btn-primary btn-sm">dodaj</button>
+                <a href="{% url 'add-stock' stock.id %}"><button type="button" class="btn btn-primary btn-sm">dodaj</button></a>
                 {% else %}
-                <button type="button" class="btn btn-danger btn-sm">weź</button>
+                <a href="{% url 'take-stock' stock.id %}"><button type="button" class="btn btn-danger btn-sm">weź</button></a>
                 {% endif %}
               </td>
             </tr>
