@@ -36,3 +36,13 @@ class Production(models.Model):
 
     def __str__(self):
         return "{} | {} {}".format(self.order, self.user.first_name, self.user.last_name)
+
+
+class Cutter(models.Model):
+    name = models.CharField(max_length=200)
+    quantity = models.IntegerField(blank=False, null=True)
+    toBuy = models.IntegerField(blank=True, null=True, default=0)
+    forSharpening = models.IntegerField(blank=True, null=True, default=0)
+
+    def __str__(self):
+        return self.name

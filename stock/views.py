@@ -6,7 +6,7 @@ from django.forms.models import inlineformset_factory
 
 from .filters import StockFilter
 from .forms import ProductionForm, StockCreateForm
-from .models import Stock, Material, Production, ProductionStock
+from .models import Stock, Material, Production, ProductionStock, Cutter
 
 
 class StockView(ListView):
@@ -20,6 +20,7 @@ class StockView(ListView):
             'filter': StockFilter(self.request.GET, queryset=self.get_queryset()),
             'materials': Material.objects.all().order_by('name'),
             'productioins': Production.objects.all().order_by('-date'),
+            'cutters': Cutter.objects.all().order_by('-name'),
             })
         return context
 
@@ -69,10 +70,18 @@ def AddStock(request, id):
             stock.save()
             return redirect('stock')
 
-
-
-
     return render(request, 'stock/create_stock.html', {'form': form})
+
+
+def CutterSharp(request, id):
+
+    cutter = Cutter.objects.get(id=id)
+
+    return redirect('stock')
+
+def CutterBuy(request, id):
+
+    cutter = Cutter.objects.get(id=id)
 
 def CreateProduction(request):
 
@@ -93,8 +102,6 @@ def EditProduction(request, id):
     #stocks = production.stocks.all()
     productionStocks = production.productionStocks.all()
     
-    
-
     form = ProductionForm()
 
     if request.method == 'POST':
