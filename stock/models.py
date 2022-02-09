@@ -29,7 +29,7 @@ class Production(models.Model):
     order = models.CharField(max_length=255)
     comments = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    material = models.ForeignKey(Material, null=True, on_delete=models.CASCADE)
+    materials = models.ForeignKey(Material, null=True, on_delete=models.CASCADE)
     stocks = models.ManyToManyField(Stock, blank=True)
     materialUsed = models.IntegerField(default=0)
     productionStocks = models.ManyToManyField(ProductionStock, blank=True)

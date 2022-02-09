@@ -2,8 +2,10 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+from decimal import Decimal
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+
 
 from randomslugfield import RandomSlugField
 
@@ -73,6 +75,7 @@ class Material(models.Model):
     short_name = models.CharField(max_length=255, blank=False, null=False)
     name = models.CharField(max_length=255, blank=False, null=False)
     quantity = models.SmallIntegerField(default=0, blank=False, null=False)
+    material_area = models.DecimalField(default=Decimal('5.796'), decimal_places=4, blank=False, max_digits=10)
 
     class Meta:
         verbose_name = "materiał"
@@ -80,6 +83,10 @@ class Material(models.Model):
 
     def __str__(self):
         return self.short_name
+
+    def caluclate_material(self):
+
+        return self.quantity * self.material_area
 
     def caluclate_area(self):
 

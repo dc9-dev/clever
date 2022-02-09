@@ -9,23 +9,24 @@
         <table class="table table-hover table-sm text-left" style="text-align: left">
           <thead>
             <tr>
-              <th scope="col">Materiał(szt.)</th>
-              <th scope="col">Ilość formatek</th>
+              <th scope="col">Materiał</th>
+              <th scope="col">Płyty</th>
+              <th scope="col">Powierzchnia płyt</th>
+              <th scope="col">Formatki</th>
               <th scope="col">Powierzchnia formatek</th>
             </tr>
           </thead>
           <tbody>
             {% for material in materials %}
             <tr>
-              <th scope="row">
-                {{ material.name }}({{ material.quantity }})
-              </th>
-              <td>{{ material.stocks.count }}</td>
-              <td>
-               {{ material.caluclate_area|floatformat:2 }}m2
-             </td>
-           </tr>
-           {% endfor %}
+              <th scope="col">{{ material.name }}</th>
+              <td scope="col">{{ material.quantity }}</td>
+              <td scope="col">{{ material.caluclate_material|floatformat:2 }}m2</td>
+              <td scope="col">{{ material.stocks.count }}</td>
+              <td scope="col">{{ material.caluclate_area|floatformat:2 }}m2</td>
+            </tr>
+            {% endfor %}
+          
          </tbody>
        </table>
        <h5 class="card-title">Formatki <a href="{% url 'create-stock' %}"><button class="btn btn-primary btn-sm">Nowa Formatka</button></a></h5>
@@ -74,6 +75,23 @@
 
   <div class="col-sm-6">
 
+    
+
+    <div class="card recent-sales">
+      <div class="card-body">
+        <h5 class="card-title">Produkcja</h5>
+        <ul class="list-group list-sm gap-3">
+          <a href="{% url 'create-production' %}"><button type="button" class="btn btn-outline-dark col-sm-3 btn-sm">Nowa Karta</button></a>
+          {% for production in productioins %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <small><a href="{% url 'detail-production' production.id %} " class="link-dark">{{ production.order }}</a></small>
+            <span class="badge bg-light text-dark">{{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</span>
+          </li>
+          {% endfor %}   
+        </ul>
+      </div>
+    </div>
+
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Frezy</h5>
@@ -97,21 +115,6 @@
                   {% endfor %}
                 </tbody>
               </table>
-      </div>
-    </div>
-
-    <div class="card recent-sales">
-      <div class="card-body">
-        <h5 class="card-title">Produkcja</h5>
-        <ul class="list-group list-sm gap-3">
-          <a href="{% url 'create-production' %}"><button type="button" class="btn btn-outline-dark col-sm-3 btn-sm">Nowa Karta</button></a>
-          {% for production in productioins %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <small><a href="{% url 'detail-production' production.id %}">{{ production.order }}</a></small>
-            <span class="badge bg-light text-dark">{{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</span>
-          </li>
-          {% endfor %}   
-        </ul>
       </div>
     </div>
 
