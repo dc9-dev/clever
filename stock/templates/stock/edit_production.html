@@ -1,52 +1,76 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-  <div class="col">
+  <div class="col-sm-10">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">Karta Produkcyjna<span> | Zlecenie: {{ production.order }} | Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} </span></h5>
+       <h5 class="card-title">Karta Produkcyjna</h5>
        <div class="row">
-       <div class="col-sm-12">
-       <div class="table-responsive"> 
-       <table class="table table-bordered">
-                <thead>
+         <div class="col-sm-12">
+           <div class="table-responsive"> 
+             <table class="table table-borderless table-hover">
+              <thead>
+                <tr>
+                  <td colspan="4">{{ production.order }}</td>
+                  <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
+                </tr>
+                
+                <tr>
+                  <th scope="col">Materiał</th>
+                  <th scope="col">Ilość m2</th>
+                  <th scope="col">Płyty z Magazynu</th>
+                  <th scope="col">Formatka z Magazynu</th>
+                  <th scope="col">Formatka do Magazynu</th>
+                  <th scope="col">Uwagi</th>                  
+                </tr>
+
+                
+              </thead>
+              <tbody>
+                {% for material in materials %}
+                <tr>
+                  <td scope="col">{{ material.material }}</td>
+                  <td scope="col">{{ material.area}}</td>
+                  <td scope="col">{{ material.quantity }}</td>
+                  <td scope="col" class="text-start">
+                    <a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-primary btn-sm">Dodaj</button></a>
+
+                    {% for stock in material.stocks.all %}
+                    #{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}<br>
+                    {% endfor %}
+                    
+                    
+                  </td>
+                  <td scope="col"></td>
+                  <td scope="col"></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfooter>
+                <form method="POST">{% csrf_token %}
                   <tr>
-                    <th scope="col">Materiał</th>
-                    <th scope="col">Płyty z Magazynu</th>
-                    <th scope="col">Uwagi</th>
-                    <th scope="col">Formatka z Magazynu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="col">{{ production.material }}</th>
-                    <th scope="col">{{ production.materialUsed }}</th>
-                    <th scope="col">{{ production.comments }}</th>
-                    <th scope="col">
-                      
-                  </th>
-                  </tr>
-                  <form method="POST">{% csrf_token %}
-                  <tr>
-                    <th scope="row">{{ form.material }}</th>
-                    <td>{{ form.materialUsed }}</td>
-                    <td>{{ form.comments }}</td>
-                    <td>{{ form.stocks }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="4"><button type="submit" class="btn btn-primary col-sm-12">Ok</button></td>
-                  </tr>
+                    <td scope="col">{{ materialForm.material }}</td>
+                    <td scope="col">{{ materialForm.area }}</td>
+                    <td scope="col">{{ materialForm.quantity }}</td>
+                    <td colspan="3" class="text-start"><button class="btn btn-primary btn-sm" type="submit">Dodaj materiał</td>                 
+                    </tr>
                   </form>
-                </tbody>
-         </table>
+                </tfooter>
+              </table>
+            </div>
+          </div>
         </div>
-     </div>
-
-   </div>
-
+      </div>
     </div>
   </div>
-</div>
-</div>
-{% endblock %}
- 
+  <div class="col-sm-2">
+    <div class="card recent-sales">
+      <div class="card-body">
+       <h5 class="card-title">Podusmowanie</h5>
+       <div class="row">
+       </div>
+     </div>
+   </div>
+ </div>
+
+ {% endblock %}

@@ -5,9 +5,8 @@ from django.urls import reverse
 from decimal import Decimal
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
-
-
 from randomslugfield import RandomSlugField
+
 
 class Order(models.Model):
     PREPARATION = 0

@@ -5,8 +5,9 @@ from django.shortcuts import render, redirect
 from django.forms.models import inlineformset_factory
 
 from .filters import StockFilter
-from .forms import ProductionForm, StockCreateForm
-from .models import Stock, Material, Production, ProductionStock, Cutter
+from .forms import StockCreateForm, ProductionMaterialForm
+from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, Cutter
+
 
 
 class StockView(ListView):
@@ -99,83 +100,49 @@ def CreateProduction(request):
 def EditProduction(request, id):
 
     production = Production.objects.get(id=id)
-    
+    materials = production.productionmaterial_set.all()
 
-    form = ProductionForm()
+
+    materialForm = ProductionMaterialForm()
+
+    if request.method == 'POST':
+        materialForm = ProductionMaterialForm(request.POST)
+        if materialForm.is_valid():
+            obj = materialForm.save(commit=False)
+            obj.production = production
+            obj.save()
+            return redirect('edit-production', id=production.id)
 
     ctx = {
         'production': production,
-        #'materials': materials,
-        'form': form,
+        'materials': materials,
+        'materialForm': materialForm,
     }
 
     return render(request, 'stock/edit_production.html', ctx)
 
-# def EditProduction(request, id):
+
+def ProductionStockFilter(request, id):
+
+    productionMaterial = ProductionMaterial.objects.get(id=id)
     
-#     production = Production.objects.get(id=id)
-#     stocks = production.stocks.all()
-#     productionStocks = production.productionStocks.all()
-    
-#     form = ProductionForm()
+    f = StockFilter(request.GET, queryset=Stock.objects.filter(material=productionMaterial.material))
 
-#     if request.method == 'POST':
-#         form = ProductionForm(request.POST, instance=production)
-#         if form.is_valid():
-            
-#             material = Material.objects.get(id=request.POST['material'])
-#             material.quantity -= int(request.POST['materialUsed'])
-#             material.save()
+    ctx = {
 
-#             stocks = form.cleaned_data['stocks']
-#             print("Stocks: {}".format(stocks))
+        'filter': f,
+    }
 
-#             for stock in stocks:
-#                 productionStock = ProductionStock.objects.create(
-#                     width=stock.width,
-#                     length=stock.length,
-#                     material=stock.material.short_name,
-#                     )
-#                 print(productionStock)
-
-               
-
-#             #stocks = request.POST.getlist['stocks']
-#             # print(stocks)
-
-#             # for stock in stocks:
-
-
-#                 # production.productionStocks.create(
-#                 #         width=stock.width,
-#                 #         length=stock.length,
-#                 #         material=stock.material.short_name)
-               
-
-#             form.save()
-
-#             return redirect('edit-production', id=id)
-#         else:
-#             form = ProductionForm()
-#             return redirect('edit-production', id=id) 
-
-
-#     context = {
-#         'form': form,
-#         # 'stocks': stocks,
-#         'production': production,
-#         'productionStocks': productionStocks,
-#     }
-#     return render(request, 'stock/edit_production.html', context)
+    return render(request, 'stock/produciton_stock_filter.html', ctx)
 
 
 def DetailProduction(request, id):
 
     production = Production.objects.get(id=id)
-    stocks = production.stocks.all()
+    
 
     context = {
         'production': production,
-        'stocks': stocks,
+        
     }
     return render(request, 'stock/detail_production.html', context)

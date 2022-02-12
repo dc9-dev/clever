@@ -10,3 +10,4 @@ class StockFilter(django_filters.FilterSet):
     class Meta:
         model = Stock
         exclude = ['warehouse']
+

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from order.models import Material, IntegerRangeField
 
+from decimal import Decimal
 
 
 class Stock(models.Model):
@@ -14,28 +15,39 @@ class Stock(models.Model):
     	return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
 
 
-class ProductionStock(models.Model):
-
-    length = IntegerRangeField(min_value=50, max_value=2800)
-    width = IntegerRangeField(min_value=50, max_value=2070)
-    material = models.CharField(max_length=200)
-
-    def __str__(self):
-        return "{} x {} {}".format(self.length, self.width, self.material)
-
 class Production(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
-    comments = models.TextField(blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    materials = models.ForeignKey(Material, null=True, on_delete=models.CASCADE)
-    stocks = models.ManyToManyField(Stock, blank=True)
-    materialUsed = models.IntegerField(default=0)
-    productionStocks = models.ManyToManyField(ProductionStock, blank=True)
 
     def __str__(self):
         return "{} | {} {}".format(self.order, self.user.first_name, self.user.last_name)
+
+
+class ProductionMaterial(models.Model):
+    production = models.ForeignKey(Production, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
+    quantity = models.SmallIntegerField(default=0, blank=False, null=False)
+
+    def __str__(self):
+        return "{} {}".format(self.production, self.material)
+
+    # def get_stocks(self):
+
+    #     stocks = ProductionStock.objects.filter(material=self.material)
+    #     return stocks
+
+
+class ProductionStock(models.Model):
+    productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
+    length = IntegerRangeField(min_value=50, max_value=2800)
+    width = IntegerRangeField(min_value=50, max_value=2070)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{} x {} {}".format(self.length, self.width, self.productionMaterial)
 
 
 class Cutter(models.Model):
@@ -46,3 +58,4 @@ class Cutter(models.Model):
 
     def __str__(self):
         return self.name
+
