@@ -6,7 +6,9 @@
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Dodaj formatki do karty</h5>
-       <div class="dataTable-top"></div>
+       <div class="dataTable-top">
+        <p> {{ material.production }} </p>
+       </div>
        <div class="table-responsive">
         <table class="table table-borderless table-hover table-sm">
           {% include 'stock/search.html' %}
@@ -20,6 +22,7 @@
             </tr>
           </thead>
           <tbody>
+            
             {% for stock in filter.qs %}
             <tr>
               <td scope="row">{{ stock.id }}</td>
@@ -34,11 +37,14 @@
                 {% if stock.length == 0 %}
                 <a href="{% url 'add-stock' stock.id %}"><button type="button" class="btn btn-primary btn-sm">dodaj</button></a>
                 {% else %}
-                <a href="{% url 'take-stock' stock.id %}"><button type="button" class="btn btn-danger btn-sm">weź</button></a>
+                
+                <a href="{% url 'take-stock' material.id stock.id %}"><button type="sumbit" class="btn btn-danger btn-sm" name="take">weź</button></a>
+               
                 {% endif %}
               </td>
             </tr>
             {% endfor %}
+             
           </tbody>
         </table>
 

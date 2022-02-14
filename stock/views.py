@@ -46,14 +46,23 @@ class CreateStock(CreateView):
 
         return render(request, 'stock/create_stock.html', {'form': form})
 
-def TakeStock(request, id):
+def TakeStock(request, id1, id2):
     
-    stock = Stock.objects.get(id=id)
+    productionMaterial = ProductionMaterial.objects.get(id=id1)
+    stock = Stock.objects.get(id=id2)
+
+    productionStocks = productionMaterial.stocks.get_or_create(
+        id=id2,
+        length=stock.length,
+        width=stock.width,
+        material=stock.material,
+        )
+
     stock.width = 0
     stock.length = 0
     stock.save()
 
-    return redirect('stock')
+    return redirect('edit-production', productionMaterial.production.id )
 
 def AddStock(request, id):
 
@@ -101,7 +110,7 @@ def EditProduction(request, id):
 
     production = Production.objects.get(id=id)
     materials = production.productionmaterial_set.all()
-
+    
 
     materialForm = ProductionMaterialForm()
 
@@ -125,11 +134,16 @@ def EditProduction(request, id):
 def ProductionStockFilter(request, id):
 
     productionMaterial = ProductionMaterial.objects.get(id=id)
+    productionStocks = productionMaterial.stocks.all()
+
+
+        
     
     f = StockFilter(request.GET, queryset=Stock.objects.filter(material=productionMaterial.material))
 
     ctx = {
-
+        'material': productionMaterial,
+        'stocks': productionStocks,
         'filter': f,
     }
 
@@ -139,10 +153,13 @@ def ProductionStockFilter(request, id):
 def DetailProduction(request, id):
 
     production = Production.objects.get(id=id)
-    
+    materials = production.productionmaterial_set.all()
 
-    context = {
+
+    ctx = {
         'production': production,
-        
+        'materials': materials,
+       
     }
-    return render(request, 'stock/detail_production.html', context)
+
+    return render(request, 'stock/detail_production.html', ctx)

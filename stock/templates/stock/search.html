@@ -1,10 +1,22 @@
 <form method="GET" class="row" >{% csrf_token %}
-   <td></td>
-  {% for field in filter.form %}
+   <td>
+     
+   </td>
+  
   <td>
-    {{ field }}
+    {{ filter.form.length }}
   </td>
-  {% endfor %}
+   <td>
+    {{ filter.form.width }}
+   </td>
+   {% if request.resolver_match.view_name == 'stock' %}
+   <td>
+    {{ filter.form.material }}
+   </td>
+   {% else %}
+   <td>
+   </td>
+   {% endif %}
   <td>
     <button class="btn btn-dark btn-sm" type="submit">szukaj</button>
   </td>

@@ -14,17 +14,16 @@
                   <td colspan="4">{{ production.order }}</td>
                   <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
                 </tr>
-                
                 <tr>
                   <th scope="col">Materiał</th>
                   <th scope="col">Ilość m2</th>
                   <th scope="col">Płyty z Magazynu</th>
-                  <th scope="col">Formatka z Magazynu</th>
+                  <th scope="col" colspan="2">Formatka z Magazynu</th>
+                  
                   <th scope="col">Formatka do Magazynu</th>
+
                   <th scope="col">Uwagi</th>                  
                 </tr>
-
-                
               </thead>
               <tbody>
                 {% for material in materials %}
@@ -33,14 +32,11 @@
                   <td scope="col">{{ material.area}}</td>
                   <td scope="col">{{ material.quantity }}</td>
                   <td scope="col" class="text-start">
-                    <a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-primary btn-sm">Dodaj</button></a>
-
                     {% for stock in material.stocks.all %}
-                    #{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}<br>
+                    <p>{{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
                     {% endfor %}
-                    
-                    
                   </td>
+                  <td scope="col"><a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-primary btn-sm">pobierz</button></a></td>
                   <td scope="col"></td>
                   <td scope="col"></td>
                 </tr>
@@ -63,14 +59,27 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-10">
     <div class="card recent-sales">
-      <div class="card-body">
+      <div class="card-body activity-content">
        <h5 class="card-title">Podusmowanie</h5>
-       <div class="row">
-       </div>
+       
+        {% for material in materials %}
+          <p>{{ material.material }}</p>
+          <h6>Całkowicie pobrano {{ material.total_area }}</h6>
+          <h1>
+            
+            {% for stock in material.stocks.all %}
+            {{ stock.total_area }}
+            {% endfor %}
+
+          </h1>
+        {% endfor %}
+       
      </div>
    </div>
  </div>
+</div>
+  
 
  {% endblock %}

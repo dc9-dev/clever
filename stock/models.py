@@ -32,12 +32,11 @@ class ProductionMaterial(models.Model):
     quantity = models.SmallIntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
-        return "{} {}".format(self.production, self.material)
+        return self.material
 
-    # def get_stocks(self):
-
-    #     stocks = ProductionStock.objects.filter(material=self.material)
-    #     return stocks
+    def total_area(self):
+        
+        return self.quantity * self.material.material_area
 
 
 class ProductionStock(models.Model):
@@ -48,6 +47,13 @@ class ProductionStock(models.Model):
 
     def __str__(self):
         return "{} x {} {}".format(self.length, self.width, self.productionMaterial)
+
+    def total_area(self):
+
+        total_area = 0
+        for stock in ProductionStock.objects.filter(material=self.material):
+            result = stock.length * stock.width / 1000000
+            total_area += result
 
 
 class Cutter(models.Model):

@@ -1,51 +1,77 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-  <div class="col">
+  <div class="col-sm-10">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">Karta Produkcyjna<span> | {{ production.order }} </span></h5>
-       <div class="col-sm-12">
-        
-       <table class="table table-bordered">
-        
-                <thead>
-                  <tr>
-                    <th colspan="6">Zlecenie: {{ production.order }} | Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</th>
-                  </tr>
-                  <tr>
-                    <th scope="col">Materiał</th>
-                    <th scope="col">Płyty z Magazynu</th>
-                    <th scope="col" colspan="2">Formatka z Magazynu</th>
-                    <th scope="col" colspan="2">Odpad</th>
-                  </tr>
-                </thead>
-                <tbody>
+       <h5 class="card-title">Karta Produkcyjna <a href="{% url 'edit-production' production.id %}">Edytuj</a></h5>
+       <div class="row">
+         <div class="col-sm-12">
+           <div class="table-responsive"> 
+             <table class="table table-borderless table-hover">
+              <thead>
+                <tr>
+                  <td colspan="4">{{ production.order }}</td>
+                  <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Materiał</th>
+                  <th scope="col">Ilość m2</th>
+                  <th scope="col">Płyty z Magazynu</th>
+                  <th scope="col" colspan="2">Formatka z Magazynu</th>
                   
-                  <tr>
-                    <td scope="row"></td>
-                    <td></td>
-                    <td>28</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
+                  <th scope="col">Formatka do Magazynu</th>
+
+                  <th scope="col">Uwagi</th>                  
+                </tr>
+              </thead>
+              <tbody>
+                {% for material in materials %}
+                <tr>
+                  <td scope="col">{{ material.material }}</td>
+                  <td scope="col">{{ material.area}}</td>
+                  <td scope="col">{{ material.quantity }}</td>
+                  <td scope="col" class="text-start">
+                    {% for stock in material.stocks.all %}
+                    <p>{{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                    {% endfor %}
+                  </td>
                   
-                  
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>28</td>
-                    <td>2014-12-05</td>
-                  </tr>
-           
-                  
-                </tbody>
+                  <td scope="col"></td>
+                  <td scope="col"></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfooter>
+                </tfooter>
               </table>
-     </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="col-sm-10">
+    <div class="card recent-sales">
+      <div class="card-body activity-content">
+       <h5 class="card-title">Podusmowanie</h5>
+       
+        {% for material in materials %}
+          <p>{{ material.material }}</p>
+          <h6>Całkowicie pobrano {{ material.total_area }}</h6>
+          <h1>
+            
+            {% for stock in material.stocks.all %}
+            {{ stock.total_area }}
+            {% endfor %}
+
+          </h1>
+        {% endfor %}
+       
+     </div>
+   </div>
+ </div>
 </div>
-</div>
-{% endblock %}
+  
+
+ {% endblock %}
