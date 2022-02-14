@@ -71,9 +71,9 @@ class Milling(models.Model):
 
 class Material(models.Model):
 
-    short_name = models.CharField(max_length=255, blank=False, null=False)
-    name = models.CharField(max_length=255, blank=False, null=False)
-    quantity = models.SmallIntegerField(default=0, blank=False, null=False)
+    short_name = models.CharField(max_length=255, blank=False, null=True)
+    name = models.CharField(max_length=255, blank=False, null=True)
+    quantity = models.SmallIntegerField(default=0, blank=False, null=True)
     material_area = models.DecimalField(default=Decimal('5.796'), decimal_places=4, blank=False, max_digits=10)
 
     class Meta:

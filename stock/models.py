@@ -31,12 +31,49 @@ class ProductionMaterial(models.Model):
     area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.SmallIntegerField(default=0, blank=False, null=False)
 
-    def __str__(self):
+    def _str__(self):
         return self.material
+    
+
+    def sum_area(self):
+
+        return self.quantity * float(self.material.material_area)
+
+    def stock_area(self):
+
+        material = ProductionMaterial.objects.get(id=self.id)
+
+        stock_area = 0
+
+        for stock in material.stocks.all():
+            result = stock.length * stock.width / 1000000
+            stock_area += result
+
+        return stock_area
 
     def total_area(self):
+
+        material = ProductionMaterial.objects.get(id=self.id)
+
+        total_area = 0
         
-        return self.quantity * self.material.material_area
+        for stock in material.stocks.all():
+            result = stock.length * stock.width / 1000000
+            total_area += result
+        return total_area + self.quantity * float(self.material.material_area)
+
+    def waste(self):
+
+        material = ProductionMaterial.objects.get(id=self.id)
+
+        total_area = 0 + self.quantity * float(self.material.material_area)
+        
+        for stock in material.stocks.all():
+            result = stock.length * stock.width / 1000000
+            total_area += result
+
+        return float(self.area) - total_area
+
 
 
 class ProductionStock(models.Model):
@@ -46,14 +83,7 @@ class ProductionStock(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} x {} {}".format(self.length, self.width, self.productionMaterial)
-
-    def total_area(self):
-
-        total_area = 0
-        for stock in ProductionStock.objects.filter(material=self.material):
-            result = stock.length * stock.width / 1000000
-            total_area += result
+        return "{} x {}".format(self.length, self.width)
 
 
 class Cutter(models.Model):

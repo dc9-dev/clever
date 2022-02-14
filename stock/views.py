@@ -111,15 +111,20 @@ def EditProduction(request, id):
     production = Production.objects.get(id=id)
     materials = production.productionmaterial_set.all()
     
-
     materialForm = ProductionMaterialForm()
 
     if request.method == 'POST':
         materialForm = ProductionMaterialForm(request.POST)
         if materialForm.is_valid():
+
             obj = materialForm.save(commit=False)
             obj.production = production
             obj.save()
+
+            material = Material.objects.get(id=request.POST['material'])
+            material.quantity -= int(request.POST['quantity'])
+            material.save()
+            
             return redirect('edit-production', id=production.id)
 
     ctx = {
@@ -136,9 +141,6 @@ def ProductionStockFilter(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     productionStocks = productionMaterial.stocks.all()
 
-
-        
-    
     f = StockFilter(request.GET, queryset=Stock.objects.filter(material=productionMaterial.material))
 
     ctx = {

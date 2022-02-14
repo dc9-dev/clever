@@ -33,7 +33,7 @@
                   <td scope="col">{{ material.quantity }}</td>
                   <td scope="col" class="text-start">
                     {% for stock in material.stocks.all %}
-                    <p>{{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                    <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
                     {% endfor %}
                   </td>
                   <td scope="col"><a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-primary btn-sm">pobierz</button></a></td>
@@ -66,14 +66,13 @@
        
         {% for material in materials %}
           <p>{{ material.material }}</p>
-          <h6>Całkowicie pobrano {{ material.total_area }}</h6>
-          <h1>
-            
-            {% for stock in material.stocks.all %}
-            {{ stock.total_area }}
-            {% endfor %}
-
-          </h1>
+          <h6>Całkowicie pobrano {{ material.total_area|floatformat:2 }}m2</h6>
+          <h6>Powierzchnia pełnej płyty z magazynu {{ material.sum_area|floatformat:2 }}m2</h6>
+          <h6>Powierzchnia formatek z magazynu: {{ material.stock_area|floatformat:2 }}m2</h6>
+          <h6>Powierzchnia opadu {{ material.waste|floatformat:2 }}m2
+          
+          </h6>
+          <br>
         {% endfor %}
        
      </div>
