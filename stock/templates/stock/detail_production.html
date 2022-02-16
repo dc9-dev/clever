@@ -1,28 +1,28 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-  <div class="col-sm-10">
+  <div class="col-sm-12">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">Karta Produkcyjna <a href="{% url 'edit-production' production.id %}">Edytuj</a></h5>
+       <h5 class="card-title">Karta Produkcyjna {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}">Edytuj</a>{% endif %}</h5>
        <div class="row">
          <div class="col-sm-12">
            <div class="table-responsive"> 
              <table class="table table-borderless table-hover">
               <thead>
                 <tr>
-                  <td colspan="4">{{ production.order }}</td>
+                  <td colspan="4">{{ production.order }} Status: {{ production.get_status_display }}</td>
                   <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
                 </tr>
                 <tr>
                   <th scope="col">Materiał</th>
                   <th scope="col">Ilość m2</th>
                   <th scope="col">Płyty z Magazynu</th>
-                  <th scope="col" colspan="2">Formatka z Magazynu</th>
+                  <th scope="col">Formatka z Magazynu</th>
                   
                   <th scope="col">Formatka do Magazynu</th>
 
-                  <th scope="col">Uwagi</th>                  
+                             
                 </tr>
               </thead>
               <tbody>
@@ -33,12 +33,14 @@
                   <td scope="col">{{ material.quantity }}</td>
                   <td scope="col" class="text-start">
                     {% for stock in material.stocks.all %}
-                    <p>{{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                    <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
                     {% endfor %}
                   </td>
-                  
-                  <td scope="col"></td>
-                  <td scope="col"></td>
+                  <td scope="col">
+                    {% for stock in material.productionstockin_set.all %}
+                    <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                    {% endfor %}
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -51,25 +53,7 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-10">
-    <div class="card recent-sales">
-      <div class="card-body activity-content">
-       <h5 class="card-title">Podusmowanie</h5>
-       
-          {% for material in materials %}
-          <p>{{ material.material }}</p>
-          <h6>Całkowicie pobrano {{ material.total_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia pełnej płyty z magazynu {{ material.sum_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia formatek z magazynu: {{ material.stock_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia opadu {{ material.waste|floatformat:2 }}m2
-          
-          </h6>
-          <br>
-        {% endfor %}
-       
-     </div>
-   </div>
- </div>
+{% include 'stock/summary.html' %}
 </div>
   
 

@@ -13,30 +13,31 @@ from .forms import ItemForm, AttachmentForm, StatusForm
 @login_required(login_url='login')
 def home(request):
 
-    user_id = request.user.id
+    # user_id = request.user.id
 
-    if request.user.is_staff:
-        orders = Order.objects.all()
-        orders_total = Order.objects.all().count()
-        orders_pending = Order.objects.filter(status='1').count()
-        orders_during = Order.objects.filter(status='2').count()
-        orders_done = Order.objects.filter(status='3').count()
-    else:
-        orders = Order.objects.filter(user_id=user_id)[0:10]
-        orders_total = Order.objects.filter(user_id=user_id).count()
-        orders_pending = Order.objects.filter(user_id=user_id, status='1').count()
-        orders_during = Order.objects.filter(user_id=user_id, status='2').count()
-        orders_done = Order.objects.filter(user_id=user_id, status='3').count()
+    # if request.user.is_staff:
+    #     orders = Order.objects.all()
+    #     orders_total = Order.objects.all().count()
+    #     orders_pending = Order.objects.filter(status='1').count()
+    #     orders_during = Order.objects.filter(status='2').count()
+    #     orders_done = Order.objects.filter(status='3').count()
+    # else:
+    #     orders = Order.objects.filter(user_id=user_id)[0:10]
+    #     orders_total = Order.objects.filter(user_id=user_id).count()
+    #     orders_pending = Order.objects.filter(user_id=user_id, status='1').count()
+    #     orders_during = Order.objects.filter(user_id=user_id, status='2').count()
+    #     orders_done = Order.objects.filter(user_id=user_id, status='3').count()
  
 
-    context = {
-        'orders': orders,
-        'orders_total': orders_total,
-        'orders_pending': orders_pending,
-        'orders_during': orders_during,
-        'orders_done': orders_done, }
+    # context = {
+    #     'orders': orders,
+    #     'orders_total': orders_total,
+    #     'orders_pending': orders_pending,
+    #     'orders_during': orders_during,
+    #     'orders_done': orders_done, }
 
-    return render(request, "order/home.html", context)
+    # return render(request, "order/home.html", context)
+    return redirect('stock')
 
 
 @login_required(login_url='login')

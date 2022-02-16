@@ -15,3 +15,10 @@ class ProductionMaterialForm(forms.ModelForm):
 	class Meta:
 		model = ProductionMaterial
 		exclude = ['production']
+
+
+class StockCreateInForm(forms.ModelForm):
+    
+    class Meta:
+    	model = Stock
+    	exclude = ['material']

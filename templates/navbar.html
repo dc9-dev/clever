@@ -67,19 +67,19 @@
           <span>Strona główna</span>
         </a>
       </li><!-- End Dashboard Nav -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'new' %}">
           <i class="bi bi-file-earmark-plus"></i>
           <span>Nowe zamówienie</span>
         </a>
-      </li><!-- End Profile Page Nav -->
+      </li>End Profile Page Nav
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home' %}">
           <i class="bi bi-list-columns-reverse"></i>
           <span>Moje zamówienia</span>
         </a>
-      </li>
-      {% if user.is_staff %}
+      </li> -->
+      {% if user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:index' %}">
           <i class="bi bi-gear"></i>

@@ -1,24 +1,21 @@
 <form method="GET" class="row" >{% csrf_token %}
-   <td>
-     
-   </td>
-  
-  <td>
-    {{ filter.form.length }}
-  </td>
-   <td>
-    {{ filter.form.width }}
-   </td>
-   {% if request.resolver_match.view_name == 'stock' %}
-   <td>
-    {{ filter.form.material }}
-   </td>
-   {% else %}
-   <td>
-   </td>
-   {% endif %}
-  <td>
-    <button class="btn btn-dark btn-sm" type="submit">szukaj</button>
-  </td>
-
+ <td>
+ </td>
+ <td>
+  {{ filter.form.length }}
+</td>
+<td>
+  {{ filter.form.width }}
+</td>
+{% if request.resolver_match.view_name == 'stock' %}
+<td>
+  {{ filter.form.material }}
+</td>
+{% else %}
+<td>
+</td>
+{% endif %}
+<td>
+  <button class="btn btn-dark btn-sm" type="submit">szukaj</button>
+</td>
 </form>

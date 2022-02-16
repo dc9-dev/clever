@@ -18,7 +18,11 @@
             <tr>
               <th scope="col">{{ form.length }}</th>
               <th scope="col">{{ form.width }}</th>
+              {% if request.resolver_match.view_name == 'stockin' %}
+               <th>{{ material.material }}</th>
+              {% else %}
               <th scope="col">{{ form.material }}</th>
+              {% endif %}
               <th scope="col"><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
             </tr>
         

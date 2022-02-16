@@ -12,5 +12,6 @@ urlpatterns = [
     path('production/<int:id>/edit', views.EditProduction, name='edit-production'),
     path('production/<int:id>/detail', views.DetailProduction, name='detail-production'),
     path('production/<int:id>/filter', views.ProductionStockFilter, name='production-filter'),
+    path('production/<int:id>/stockin', views.ProductionStockIn, name='stockin'),
 ]
 

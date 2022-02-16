@@ -1,84 +1,71 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-  <div class="col-sm-10">
-    <div class="card recent-sales">
+  <div class="col-sm-12">
+    <div class="card ">
       <div class="card-body">
        <h5 class="card-title">Karta Produkcyjna</h5>
-       <div class="row">
-         <div class="col-sm-12">
-           <div class="table-responsive"> 
-             <table class="table table-borderless table-hover">
-              <thead>
+       <div class="col-sm-12">
+         <div class="table-responsive"> 
+           <table class="table table-borderless table-hover table-sm text-start">
+            <thead>
+              <tr>
+                <td colspan="4">{{ production.order }}</td>
+                <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
+              </tr>
+              <tr>
+                <th scope="col">Materiał</th>
+                <th scope="col">Ilość m2</th>
+                <th scope="col">Płyty z Magazynu</th>
+                <th scope="col" colspan="2">Formatka z Magazynu</th>
+                <th scope="col" colspan="2">Formatka do Magazynu</th>
+                <th scope="col">Uwagi</th>                  
+              </tr>
+            </thead>
+            <tbody>
+              {% for material in materials %}
+              <tr>
+                <td scope="col">{{ material.material }}</td>
+                <td scope="col">{{ material.area}}</td>
+                <td scope="col">{{ material.quantity }}</td>
+                <td scope="col" class="">
+                  {% for stock in material.stocks.all %}
+                  <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                  {% endfor %}
+                </td>
+                <td scope="col"><a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-success btn-sm">pobierz</button></a></td>
+                <td scope="col">
+                  {% for stock in material.productionstockin_set.all %}
+                  <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                  {% endfor %}
+                </td>
+                <td>
+                  <a href="{% url 'stockin' material.id %}"><button type="text" class="btn btn-warning btn-sm">dodaj</button></a>
+                </td>
+                <td scope="col"></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfooter>
+              <form method="POST">{% csrf_token %}
                 <tr>
-                  <td colspan="4">{{ production.order }}</td>
-                  <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
+                  <td scope="col">{{ materialForm.material }}</td>
+                  <td scope="col">{{ materialForm.area }}</td>
+                  <td scope="col">{{ materialForm.quantity }}</td>
+                  <td colspan="3" class="text-start"><button class="btn btn-primary btn-sm" type="submit">Dodaj materiał</button></td>                 
                 </tr>
-                <tr>
-                  <th scope="col">Materiał</th>
-                  <th scope="col">Ilość m2</th>
-                  <th scope="col">Płyty z Magazynu</th>
-                  <th scope="col" colspan="2">Formatka z Magazynu</th>
-                  
-                  <th scope="col">Formatka do Magazynu</th>
-
-                  <th scope="col">Uwagi</th>                  
-                </tr>
-              </thead>
-              <tbody>
-                {% for material in materials %}
-                <tr>
-                  <td scope="col">{{ material.material }}</td>
-                  <td scope="col">{{ material.area}}</td>
-                  <td scope="col">{{ material.quantity }}</td>
-                  <td scope="col" class="text-start">
-                    {% for stock in material.stocks.all %}
-                    <p>#{{ stock.id }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
-                    {% endfor %}
-                  </td>
-                  <td scope="col"><a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-primary btn-sm">pobierz</button></a></td>
-                  <td scope="col"></td>
-                  <td scope="col"></td>
-                </tr>
-                {% endfor %}
-              </tbody>
-              <tfooter>
-                <form method="POST">{% csrf_token %}
-                  <tr>
-                    <td scope="col">{{ materialForm.material }}</td>
-                    <td scope="col">{{ materialForm.area }}</td>
-                    <td scope="col">{{ materialForm.quantity }}</td>
-                    <td colspan="3" class="text-start"><button class="btn btn-primary btn-sm" type="submit">Dodaj materiał</td>                 
-                    </tr>
-                  </form>
-                </tfooter>
-              </table>
-            </div>
-          </div>
+              </form>
+            </tfooter>
+          </table>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-10">
-    <div class="card recent-sales">
-      <div class="card-body activity-content">
-       <h5 class="card-title">Podusmowanie</h5>
-       
-        {% for material in materials %}
-          <p>{{ material.material }}</p>
-          <h6>Całkowicie pobrano {{ material.total_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia pełnej płyty z magazynu {{ material.sum_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia formatek z magazynu: {{ material.stock_area|floatformat:2 }}m2</h6>
-          <h6>Powierzchnia opadu {{ material.waste|floatformat:2 }}m2
-          
-          </h6>
-          <br>
-        {% endfor %}
-       
-     </div>
-   </div>
- </div>
 </div>
-  
+{% include 'stock/summary.html' %}
+</div>
 
- {% endblock %}
+
+{% endblock %}
+
+

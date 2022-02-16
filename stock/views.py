@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.forms.models import inlineformset_factory
 
 from .filters import StockFilter
-from .forms import StockCreateForm, ProductionMaterialForm
+from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm
 from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, Cutter
 
 
@@ -51,7 +51,7 @@ def TakeStock(request, id1, id2):
     productionMaterial = ProductionMaterial.objects.get(id=id1)
     stock = Stock.objects.get(id=id2)
 
-    productionStocks = productionMaterial.stocks.get_or_create(
+    productionStocks = productionMaterial.stocks.update_or_create(
         id=id2,
         length=stock.length,
         width=stock.width,
@@ -150,6 +150,53 @@ def ProductionStockFilter(request, id):
     }
 
     return render(request, 'stock/produciton_stock_filter.html', ctx)
+
+
+def ProductionStockIn(request, id):
+
+    productionMaterial = ProductionMaterial.objects.get(id=id)
+    stock = Stock.objects.filter(length=0, width=0).first()
+
+    form = StockCreateInForm()
+
+    if request.method == 'POST':
+        form = StockCreateInForm(request.POST)
+        if form.is_valid():
+            form = StockCreateInForm(request.POST)
+            form.save(commit=False)
+
+            if stock is None:
+
+                newStock = Stock.objects.create(
+                                     length=request.POST['length'],
+                                     width=request.POST['width'],
+                                     material=productionMaterial.material,
+                                     )
+
+                productionMaterial.productionstockin_set.create(id=newStock.id,
+                                                                length=request.POST['length'],
+                                                                width=request.POST['width'],
+                                                                material=productionMaterial.material)
+            else:
+                stock.length = request.POST['length']
+                stock.width = request.POST['width']
+                stock.material = productionMaterial.material
+                stock.save()
+                productionMaterial.productionstockin_set.create(id=stock.id, 
+                                                                length=request.POST['length'],
+                                                                width=request.POST['width'],
+                                                                material=productionMaterial.material)
+
+            return redirect('edit-production', id=productionMaterial.production_id)
+
+    ctx = {
+
+        'form': form,
+        'material': productionMaterial,
+    }
+
+    return render(request, 'stock/create_stock.html', ctx)
+
 
 
 def DetailProduction(request, id):
