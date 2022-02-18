@@ -100,6 +100,16 @@ def ProductionHome(request):
       
     return render(request, 'production/home.html', ctx)
 
+def ProductionStatus(request, id):
+
+    production = Production.objects.get(id=id)\
+    
+    if request.method == 'POST':
+        production.status = 1
+        production.save()
+        return redirect('detail-production', id=production.id)
+
+
 def CreateProduction(request):
 
     user = request.user
@@ -117,7 +127,6 @@ def EditProduction(request, id):
 
     production = Production.objects.get(id=id)
     materials = production.productionmaterial_set.all()
-    
     materialForm = ProductionMaterialForm()
 
     if request.method == 'POST':
@@ -138,6 +147,7 @@ def EditProduction(request, id):
         'production': production,
         'materials': materials,
         'materialForm': materialForm,
+
     }
 
     return render(request, 'stock/edit_production.html', ctx)

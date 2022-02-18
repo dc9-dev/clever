@@ -4,18 +4,16 @@
   <div class="col-sm-12">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">Karta Produkcyjna {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}">Edytuj</a>{% endif %}</h5>
+       <h5 class="card-title">{{ production.order }} {% if production.status != 1 %} {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}">Edytuj</a>{% endif %}{% endif %}</h5>
        <div class="row">
          <div class="col-sm-12">
            <div class="table-responsive"> 
-             <table class="table table-borderless table-hover">
+              <table class="table table-borderless table-hover table-sm text-start">
               <thead>
-                <tr>
-                  <td colspan="4">{{ production.order }} </td>
-                  <td colspan="2">  <span class="badge {% if production.status == 1 %} bg-success  {% elif production.status == 0 %} bg-dark  {% endif %} ">
-
+               <tr>
+                <td colspan="6"><span class="badge {% if production.status == 1 %} bg-success  {% elif production.status == 0 %} bg-dark  {% endif %} ">
              Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span></td>
-                </tr>
+              </tr>
                 <tr>
                   <th scope="col">Materiał</th>
                   <th scope="col">Ilość m2</th>

@@ -19,7 +19,7 @@ class Production(models.Model):
     PREPARATION = 0
     DONE = 1
     STATUS = (
-        (PREPARATION, 'w trakice'),
+        (PREPARATION, 'w trakcie'),
         (DONE, 'zakończone'),
     )
 
