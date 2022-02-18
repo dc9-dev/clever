@@ -8,6 +8,7 @@ urlpatterns = [
     path('add/<int:id>', views.AddStock, name='add-stock'),
     path('take/<int:id1>/<int:id2>', views.TakeStock, name='take-stock'),
     path('cutter/sharp/<int:id>', views.CutterSharp, name='cutter-sharp'),
+    path('production/', views.ProductionHome, name='home-production'),
     path('production/new/', views.CreateProduction, name='create-production'),
     path('production/<int:id>/edit', views.EditProduction, name='edit-production'),
     path('production/<int:id>/detail', views.DetailProduction, name='detail-production'),

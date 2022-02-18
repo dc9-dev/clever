@@ -11,7 +11,9 @@
             <thead>
               <tr>
                 <td colspan="4">{{ production.order }}</td>
-                <td colspan="2">Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }}</td>
+                <td colspan="2">  <span class="badge {% if production.status == 1 %} bg-success  {% elif production.status == 0 %} bg-dark  {% endif %} ">
+
+             Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span></td>
               </tr>
               <tr>
                 <th scope="col">Materiał</th>

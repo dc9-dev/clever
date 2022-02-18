@@ -19,8 +19,8 @@ class Production(models.Model):
     PREPARATION = 0
     DONE = 1
     STATUS = (
-        (PREPARATION, 'Przygotowywanie'),
-        (DONE, 'Zakończone'),
+        (PREPARATION, 'w trakice'),
+        (DONE, 'zakończone'),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -99,6 +99,7 @@ class ProductionMaterial(models.Model):
 
 class ProductionStock(models.Model):
 
+    number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)
@@ -109,6 +110,7 @@ class ProductionStock(models.Model):
 
 class ProductionStockIn(models.Model):
 
+    number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE)
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)

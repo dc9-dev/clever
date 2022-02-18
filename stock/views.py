@@ -20,7 +20,6 @@ class StockView(ListView):
         context.update({
             'filter': StockFilter(self.request.GET, queryset=self.get_queryset()),
             'materials': Material.objects.all().order_by('name'),
-            'productioins': Production.objects.all().order_by('-date'),
             'cutters': Cutter.objects.all().order_by('-name'),
             })
         return context
@@ -52,7 +51,7 @@ def TakeStock(request, id1, id2):
     stock = Stock.objects.get(id=id2)
 
     productionStocks = productionMaterial.stocks.update_or_create(
-        id=id2,
+        number=id2,
         length=stock.length,
         width=stock.width,
         material=stock.material,
@@ -92,6 +91,14 @@ def CutterSharp(request, id):
 def CutterBuy(request, id):
 
     cutter = Cutter.objects.get(id=id)
+
+def ProductionHome(request):
+
+    productions = Production.objects.all().order_by('-date')
+
+    ctx = {'productions': productions,}
+      
+    return render(request, 'production/home.html', ctx)
 
 def CreateProduction(request):
 
@@ -173,7 +180,7 @@ def ProductionStockIn(request, id):
                                      material=productionMaterial.material,
                                      )
 
-                productionMaterial.productionstockin_set.create(id=newStock.id,
+                productionMaterial.productionstockin_set.create(number=newStock.id,
                                                                 length=request.POST['length'],
                                                                 width=request.POST['width'],
                                                                 material=productionMaterial.material)
@@ -182,7 +189,7 @@ def ProductionStockIn(request, id):
                 stock.width = request.POST['width']
                 stock.material = productionMaterial.material
                 stock.save()
-                productionMaterial.productionstockin_set.create(id=stock.id, 
+                productionMaterial.productionstockin_set.create(number=stock.id, 
                                                                 length=request.POST['length'],
                                                                 width=request.POST['width'],
                                                                 material=productionMaterial.material)

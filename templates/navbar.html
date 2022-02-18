@@ -41,7 +41,13 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="{% url 'stock' %}">
                 <i class="bi bi-square"></i>
-                <span>Magazyn/Produkcja</span>
+                <span>Magazyn</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-production' %}">
+                <i class="bi bi-square"></i>
+                <span>Produkcja</span>
               </a>
             </li>
             {% endif %}
@@ -89,7 +95,13 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'stock' %}">
           <i class="bi bi-square"></i>
-          <span>Magazyn/Produkcja</span>
+          <span>Magazyn</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home-production' %}">
+          <i class="bi bi-square"></i>
+          <span>Produkcja</span>
         </a>
       </li>
       {% endif %}
