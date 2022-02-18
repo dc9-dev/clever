@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.forms.models import inlineformset_factory
 
 from .filters import StockFilter
-from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm
-from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, Cutter
+from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm
+from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, ProductionComments, Cutter
 
 
 
@@ -127,7 +127,9 @@ def EditProduction(request, id):
 
     production = Production.objects.get(id=id)
     materials = production.productionmaterial_set.all()
+    #comments = ProductionComments.objects.filter(productionMaterials)
     materialForm = ProductionMaterialForm()
+    commentsForm = ProductionCommentsForm()
 
     if request.method == 'POST':
         materialForm = ProductionMaterialForm(request.POST)
@@ -144,10 +146,12 @@ def EditProduction(request, id):
             return redirect('edit-production', id=production.id)
 
     ctx = {
+
         'production': production,
         'materials': materials,
         'materialForm': materialForm,
-
+        'comments': commentsForm,
+        #'comments': comments,
     }
 
     return render(request, 'stock/edit_production.html', ctx)

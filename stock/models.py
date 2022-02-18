@@ -38,7 +38,6 @@ class ProductionMaterial(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.SmallIntegerField(default=0, blank=False, null=False)
-    comments = models.TextField(blank=True, null=True)
 
     def _str__(self):
         return self.material
@@ -118,6 +117,11 @@ class ProductionStockIn(models.Model):
 
     def __str__(self):
         return "{} x {}".format(self.length, self.width)
+
+class ProductionComments(models.Model):
+
+    productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="comments")
+    comment = models.TextField(blank=True, null=True)
 
 
 class Cutter(models.Model):

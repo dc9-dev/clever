@@ -16,4 +16,3 @@ urlpatterns = [
     path('production/<int:id>/stockin', views.ProductionStockIn, name='stockin'),
     path('production/status/<int:id>', views.ProductionStatus, name='status'),
 ]
-

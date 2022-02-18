@@ -1,5 +1,5 @@
 from django import forms
-from stock.models import Production, Stock, ProductionMaterial
+from stock.models import Production, Stock, ProductionMaterial, ProductionComments
 from order.models import Material
 
 
@@ -23,3 +23,8 @@ class StockCreateInForm(forms.ModelForm):
     	model = Stock
     	exclude = ['material']
 
+class ProductionCommentsForm(forms.ModelForm):
+
+	class Meta:
+		model = ProductionComments
+		fields = '__all__'
