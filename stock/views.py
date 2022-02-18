@@ -190,7 +190,7 @@ def ProductionStockIn(request, id):
                                      material=productionMaterial.material,
                                      )
 
-                productionMaterial.productionstockin_set.create(number=newStock.id,
+                productionMaterial.productionstockin_set.create(number=stock.id,
                                                                 length=request.POST['length'],
                                                                 width=request.POST['width'],
                                                                 material=productionMaterial.material)
