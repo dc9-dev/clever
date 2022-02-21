@@ -4,7 +4,7 @@
      <h5 class="card-title">Podusmowanie</h5>
      {% for material in materials %}
      <p class="fw-bold">{{ material.material }}</p>
-     <h6>Powierzchnia zlecona {{ material.area}}m2 </h6></br>
+     <h6>Powierzchnia zlecona {{ material.area|floatformat:3 }}m2 </h6></br>
      <h6>Całkowicie pobrano {{ material.total_area|floatformat:3 }}m2</h6>
      <h6>Powierzchnia pełnej płyty z magazynu {{ material.sum_area|floatformat:3 }}m2</h6>
      <h6>Powierzchnia formatek z magazynu: {{ material.stock_area|floatformat:3 }}m2</h6>
@@ -12,11 +12,19 @@
      <br>
      <h6 class="fw-bold">Powierzchnia odpadu {{ material.waste|floatformat:3 }}m2</h6>
      <br>
-     <h6>Uwagi:</h6>
+     {% if not material.comments.all %}
+         <h6>Uwagi:</h6>
+         <a href="{% url 'comments' material.id %}" class="link-secondary">Napisz komentarz</a>
+     {% else %}
+     <h6>Uwagi: <a href="{% url 'comments' material.id %}" class="link-secondary">Napisz komentarz</a></h6>
         {% for comment in material.comments.all %}
-            {{ comment.comment }}
+            {{ comment.comment }} <br>
+            
         {% endfor %}
-     {% endfor %}
+     {% endif %}   
+      <hr>
+      {% endfor %}
+
    </div>
  </div>
 </div>

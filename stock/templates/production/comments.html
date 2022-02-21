@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+  <div class="col">
+    <div class="card recent-sales">
+      <div class="card-body">
+       <h5 class="card-title">Komenatrz do zamówienia {{ productionMaterial.production }} - materiał {{ productionMaterial.material }}</h5>
+       <div class="col-sm-5">
+       <form method="POST">{% csrf_token %}
+        {{ form.comment }}
+        <br>
+        <button type="submit" class="btn btn-primary btn-sm">Skomentuj</button>
+       </form>
+     </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

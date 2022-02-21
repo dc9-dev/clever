@@ -29,7 +29,7 @@ class Production(models.Model):
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def __str__(self):
-        return "{} | {} {}".format(self.order, self.user.first_name, self.user.last_name)
+        return self.order
 
 
 class ProductionMaterial(models.Model):
@@ -37,9 +37,10 @@ class ProductionMaterial(models.Model):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
-    quantity = models.SmallIntegerField(default=0, blank=False, null=False)
+    quantity = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     def _str__(self):
+
         return self.material
     
 
@@ -92,8 +93,10 @@ class ProductionMaterial(models.Model):
             result = stock.length * stock.width / 1000000
             total_area += result
 
-        return abs(float(self.area) - total_area + self.stockIn_area)
-
+        if float(self.area) - total_area + self.stockIn_area > 0:
+            return 0
+        else: 
+            return abs(float(self.area) - total_area + self.stockIn_area)
 
 
 class ProductionStock(models.Model):

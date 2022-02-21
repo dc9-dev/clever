@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="iso-8859-2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Raport Produkcji</title>
+    <style>
+    @page {
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 50pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+
+    th, td{
+        padding: 5px 5px;
+    }
+    th{
+        font-size: 15px;
+        font-weight: bold;
+    }
+    td{
+        font-size: 10px;
+        text-align: center;
+    }
+    img {
+        width: 150px;
+    }
+
+    #upp {
+      width: 100%;
+      
+  }
+  .alignleft,
+  .alignright {
+      display: inline-block;
+      background: red;
+  }
+  .alignleft {
+    padding-right: 0px; 
+}
+.alignright {
+    text-align: left;
+  padding-right: 100px; 
+}
+
+
+</style>
+</head>
+<body>
+    <table id="upp">
+      
+</table>
+<h1 style="text-align: center;" >Zamówienie </h1>
+<table id="upp">
+  {}
+  <tr>
+    <td></td>
+  </tr>
+    
+</table>
+
+
+<!-- Content for Static Frame 'header_frame' -->
+<h1 style="text-align: center;" >Zestawienie elementów</h1>
+<!-- Content for Static Frame 'footer_frame' -->
+<div id="footer_content"><h5 style="text-align: center;" >Clever Space - wszelkie prawa zastrzezone (c) 2022 - strona <pdf:pagenumber> 
+    of <pdf:pagecount> </h1>
+</div>
+
+  
+</body>
+</html>

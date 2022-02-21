@@ -1,13 +1,20 @@
-from django.forms import inlineformset_factory
+from django.http import HttpResponse, FileResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
-from django.shortcuts import render, redirect
-from django.forms.models import inlineformset_factory
+from django.shortcuts import render, redirect, get_object_or_404
+
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.pagesizes import letter
+
+
+from datetime import datetime 
+
 
 from .filters import StockFilter
 from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm
 from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, ProductionComments, Cutter
-
 
 
 class StockView(ListView):
@@ -23,6 +30,7 @@ class StockView(ListView):
             'cutters': Cutter.objects.all().order_by('-name'),
             })
         return context
+
 
 class CreateStock(CreateView):
 
@@ -45,6 +53,7 @@ class CreateStock(CreateView):
 
         return render(request, 'stock/create_stock.html', {'form': form})
 
+
 def TakeStock(request, id1, id2):
     
     productionMaterial = ProductionMaterial.objects.get(id=id1)
@@ -62,6 +71,7 @@ def TakeStock(request, id1, id2):
     stock.save()
 
     return redirect('edit-production', productionMaterial.production.id )
+
 
 def AddStock(request, id):
 
@@ -88,9 +98,11 @@ def CutterSharp(request, id):
 
     return redirect('stock')
 
+
 def CutterBuy(request, id):
 
     cutter = Cutter.objects.get(id=id)
+
 
 def ProductionHome(request):
 
@@ -100,13 +112,15 @@ def ProductionHome(request):
       
     return render(request, 'production/home.html', ctx)
 
+
 def ProductionStatus(request, id):
 
-    production = Production.objects.get(id=id)\
+    production = Production.objects.get(id=id)
     
     if request.method == 'POST':
         production.status = 1
         production.save()
+
         return redirect('detail-production', id=production.id)
 
 
@@ -125,16 +139,17 @@ def CreateProduction(request):
 
 def EditProduction(request, id):
 
-    production = Production.objects.get(id=id)
+    try:
+        production = Production.objects.get(id=id)
+    except Production.DoesNotExist:
+        return redirect('stock')
+
     materials = production.productionmaterial_set.all()
-    #comments = ProductionComments.objects.filter(productionMaterials)
     materialForm = ProductionMaterialForm()
-    commentsForm = ProductionCommentsForm()
 
     if request.method == 'POST':
         materialForm = ProductionMaterialForm(request.POST)
         if materialForm.is_valid():
-
             obj = materialForm.save(commit=False)
             obj.production = production
             obj.save()
@@ -142,20 +157,45 @@ def EditProduction(request, id):
             material = Material.objects.get(id=request.POST['material'])
             material.quantity -= int(request.POST['quantity'])
             material.save()
-            
+
             return redirect('edit-production', id=production.id)
+        else:
+            materialForm = ProductionMaterialForm()
 
     ctx = {
 
         'production': production,
         'materials': materials,
         'materialForm': materialForm,
-        'comments': commentsForm,
-        #'comments': comments,
+
     }
 
     return render(request, 'stock/edit_production.html', ctx)
 
+
+def ProductionComments(request, id):
+
+    productionMaterial = ProductionMaterial.objects.get(id=id)
+    comments = productionMaterial.comments.all()
+    form = ProductionCommentsForm()
+
+    if request.method == 'POST':
+        form = ProductionCommentsForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.comment = request.POST['comment']
+            obj.productionMaterial = productionMaterial
+            obj.save()
+
+            return redirect('edit-production', id=productionMaterial.production.id)
+
+    ctx = {
+        'productionMaterial': productionMaterial,
+        'form': form,
+    }
+
+    return render(request, 'production/comments.html', ctx)
+        
 
 def ProductionStockFilter(request, id):
 
@@ -219,7 +259,6 @@ def ProductionStockIn(request, id):
     return render(request, 'stock/create_stock.html', ctx)
 
 
-
 def DetailProduction(request, id):
 
     production = Production.objects.get(id=id)
@@ -233,3 +272,53 @@ def DetailProduction(request, id):
     }
 
     return render(request, 'stock/detail_production.html', ctx)
+
+
+def ProductionRaport(request):
+
+    today = datetime.today()
+    productions = Production.objects.all()#filter(date__date=today)
+
+    response = HttpResponse(content_type='application/pdf')
+    
+    filename = 'pdf_demo' + today.strftime('%Y-%m-%d') + '.pdf'
+    #response['Content-Disposition'] = 'attachement; filename={}.pdf'.format(filename)
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter, bottomup=0)
+
+    textob = c.beginText()
+    textob.setTextOrigin(cm, cm)
+    textob.setFont("Helvetica",15)
+    
+    lines = []
+
+    for production in productions:
+        lines.append(production.order)
+        lines.append(" ")
+
+    for line in lines:
+        textob.textLine(line)
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buffer.seek(0)
+
+    return FileResponse(buffer, as_attachment=True, filename=filename)
+
+
+    # for production in productions:
+    #     p.setFont("Helvetica",15,leading=None)
+    #     p.drawString(x1,y1-12,production.order)
+
+    # p.setTitle("Raport")
+    # p.showPage()
+    # p.save()
+
+    # pdf = buffer.getvalue()
+    # buffer.close()
+    # response.write(pdf)
+
+    return response
+

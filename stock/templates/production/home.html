@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="row">
-<div class="col-sm-12">
+<div class="col-sm-9">
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Produkcja</h5>
@@ -20,5 +20,15 @@
       </div>
     </div>
   </div>
+  {% if request.user.is_superuser %}
+  <div class="col-sm-3">
+    <div class="card recent-sales">
+      <div class="card-body">
+        <h5 class="card-title">Produkcja</h5>
+        <a href="{% url 'raport-production' %}">test</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

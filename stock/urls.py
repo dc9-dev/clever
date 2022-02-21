@@ -2,6 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('', staff_member_required(views.StockView.as_view()), name='stock'),
     path('new/', staff_member_required(views.CreateStock.as_view()), name='create-stock'),
@@ -14,5 +15,7 @@ urlpatterns = [
     path('production/<int:id>/detail', views.DetailProduction, name='detail-production'),
     path('production/<int:id>/filter', views.ProductionStockFilter, name='production-filter'),
     path('production/<int:id>/stockin', views.ProductionStockIn, name='stockin'),
+    path('production/comments/<int:id>', views.ProductionComments, name='comments'),
     path('production/status/<int:id>', views.ProductionStatus, name='status'),
+    path('production/raport', views.ProductionRaport, name='raport-production'),
 ]
