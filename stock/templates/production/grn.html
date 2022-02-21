@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+<div class="col-sm-9">
+  <div class="card">
+    <div class="card-body">
+     <h5 class="card-title">Przyjęcie z zewnątrz</h5>
+     	<div class="col-sm-6">
+    	 <form method="POST" action="">{% csrf_token %} 
+           <p>Numer dokumentu: {{ form.documentID }}</p>
+           <p>Kontrahent: {{ form.contractor }}</p>
+           <p>Material: {{ form.material }}</p>
+           <p>Ilość &#13217;: {{ form.area }}</p>
+           <button type="submit" class="btn btn-primary">Przyjmij</button>
+         </form>
+         </div>
+   </div>
+ </div>
+</div>
+<div class="col-sm-3">
+  <div class="card">
+    <div class="card-body">
+     <h5 class="card-title">Historia</h5>
+        {% for grn in grns %}
+        	<h6 class="small">{{ grn.quantity|floatformat:2 }}x{{ grn.material }} | {{ grn.date }}</h6>
+        {% endfor %}	
+   </div>
+ </div>
+</div>
+</div>
+{% endblock %}

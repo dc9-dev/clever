@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'account',
     'order',
     'stock',
-    
+
+    'address',
+    'phonenumber_field',
+    'localflavor',
 
     'randomslugfield',
     'imagekit',
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
     'django_extensions',
 
 ]
+
+GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

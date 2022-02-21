@@ -1,5 +1,5 @@
 from django import forms
-from stock.models import Production, Stock, ProductionMaterial, ProductionComments
+from stock.models import Production, Stock, ProductionMaterial, ProductionComments, GoodsReceivedNote
 from order.models import Material
 
 
@@ -25,9 +25,28 @@ class StockCreateInForm(forms.ModelForm):
         model = Stock
         exclude = ['material']
 
+
 class ProductionCommentsForm(forms.ModelForm):
 
     class Meta:
         model = ProductionComments
         fields = ['comment',]
-       
+
+
+class grnForm(forms.ModelForm):
+    area = forms.DecimalField()
+
+    class Meta:
+        model = GoodsReceivedNote
+        exclude = ['user', 'quantity']
+
+    def __init__(self, *args, **kwargs):
+        super(grnForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    def save(self, commit=True):
+        self.instance.material.quantity += self.cleaned_data['area'] / self.instance.material.material_area
+        self.instance.material.save()
+
+        return super(grnForm, self).save(commit=commit)

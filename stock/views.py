@@ -13,8 +13,8 @@ from datetime import datetime
 
 
 from .filters import StockFilter
-from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm
-from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, ProductionComments, Cutter
+from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm, grnForm
+from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, ProductionComments, Cutter, GoodsReceivedNote
 
 
 class StockView(ListView):
@@ -275,50 +275,72 @@ def DetailProduction(request, id):
 
 
 def ProductionRaport(request):
+    pass
+#     today = datetime.today()
+#     productions = Production.objects.all()#filter(date__date=today)
 
-    today = datetime.today()
-    productions = Production.objects.all()#filter(date__date=today)
-
-    response = HttpResponse(content_type='application/pdf')
+#     response = HttpResponse(content_type='application/pdf')
     
-    filename = 'pdf_demo' + today.strftime('%Y-%m-%d') + '.pdf'
-    #response['Content-Disposition'] = 'attachement; filename={}.pdf'.format(filename)
+#     filename = 'pdf_demo' + today.strftime('%Y-%m-%d') + '.pdf'
+#     #response['Content-Disposition'] = 'attachement; filename={}.pdf'.format(filename)
 
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=letter, bottomup=0)
+#     buffer = BytesIO()
+#     c = canvas.Canvas(buffer, pagesize=letter, bottomup=0)
 
-    textob = c.beginText()
-    textob.setTextOrigin(cm, cm)
-    textob.setFont("Helvetica",15)
+#     textob = c.beginText()
+#     textob.setTextOrigin(cm, cm)
+#     textob.setFont("Helvetica",15)
     
-    lines = []
+#     lines = []
 
-    for production in productions:
-        lines.append(production.order)
-        lines.append(" ")
+#     for production in productions:
+#         lines.append(production.order)
+#         lines.append(" ")
 
-    for line in lines:
-        textob.textLine(line)
+#     for line in lines:
+#         textob.textLine(line)
 
-    c.drawText(textob)
-    c.showPage()
-    c.save()
-    buffer.seek(0)
+#     c.drawText(textob)
+#     c.showPage()
+#     c.save()
+#     buffer.seek(0)
 
-    return FileResponse(buffer, as_attachment=True, filename=filename)
+#     return FileResponse(buffer, as_attachment=True, filename=filename)
 
 
-    # for production in productions:
-    #     p.setFont("Helvetica",15,leading=None)
-    #     p.drawString(x1,y1-12,production.order)
+#     # for production in productions:
+#     #     p.setFont("Helvetica",15,leading=None)
+#     #     p.drawString(x1,y1-12,production.order)
 
-    # p.setTitle("Raport")
-    # p.showPage()
-    # p.save()
+#     # p.setTitle("Raport")
+#     # p.showPage()
+#     # p.save()
 
-    # pdf = buffer.getvalue()
-    # buffer.close()
-    # response.write(pdf)
+#     # pdf = buffer.getvalue()
+#     # buffer.close()
+#     # response.write(pdf)
 
-    return response
+#     return response
 
+
+def GRN(request):
+
+    grns = GoodsReceivedNote.objects.all()
+    form = grnForm()
+
+    if request.method == 'POST':
+        form = grnForm(request.POST)
+        if form.is_valid():
+            print(request.POST)
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+
+            return redirect('home')
+        else:
+            form = grnForm()
+
+    ctx = {'grns': grns,
+           'form': form,}
+    
+    return render(request, 'production/grn.html', ctx)
