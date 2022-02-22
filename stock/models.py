@@ -154,16 +154,17 @@ class Contractor(models.Model):
 class GoodsReceivedNote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE, blank=False)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, blank=False)
+    material = models.ManyToManyField(Material, blank=False)
     documentID = models.CharField(max_length=255, blank=False, null=False)
-    area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.CharField(max_length=255, blank=False, null=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "{} | {} - {}".format(self.material, self.documentID, self.contractor)
 
-    def save(self, *args, **kwargs):
+class GRNMaterial(models.Model):
 
-        self.quantity = self.area / Material.objects.get(short_name=self.material).material_area
-        super(GoodsReceivedNote, self).save(*args, **kwargs)
+    grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
+    quantity = models.PositiveIntegerField(default=0, blank=False, null=False)

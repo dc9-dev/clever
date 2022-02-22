@@ -1,28 +1,38 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-<div class="col-sm-9">
+<div class="col-sm-6">
   <div class="card">
     <div class="card-body">
      <h5 class="card-title">Przyjęcie z zewnątrz</h5>
-     	<div class="col-sm-6">
-    	 <form method="POST" action="">{% csrf_token %} 
-           <p>Numer dokumentu: {{ form.documentID }}</p>
-           <p>Kontrahent: {{ form.contractor }}</p>
-           <p>Material: {{ form.material }}</p>
-           <p>Ilość &#13217;: {{ form.area }}</p>
-           <button type="submit" class="btn btn-primary">Przyjmij</button>
+     	<div class="col-sm-12">
+     		<form method="POST" action="">{% csrf_token %} 
+               <div class="row">
+               	<div class="col-sm-6"><p class="text-center fw-bold">numer dokumentu</p> {{ form.documentID }} </div>
+      			<div class="col-sm-6"><p class="text-center fw-bold">kontrahent</p> {{ form.contractor }}</div>
+               </div>
+               {{ form }}
+               <div class="row">
+               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">materiał</p> {{ form.material }}</div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">ilość(szt.)</p> {{ form.quantity }}</div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">akcja</p><button type="submit" class="btn btn-primary">dodaj</button></div>
+               </div>
+                <div class="row">
+               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><button type="submit" class="btn btn-danger">usuń</button></div>
+               </div>
          </form>
          </div>
    </div>
  </div>
 </div>
-<div class="col-sm-3">
+<div class="col-sm-6">
   <div class="card">
     <div class="card-body">
      <h5 class="card-title">Historia</h5>
         {% for grn in grns %}
-        	<h6 class="small">{{ grn.quantity|floatformat:2 }}x{{ grn.material }} | {{ grn.date }}</h6>
+        	<h6 class="small">{{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
         {% endfor %}	
    </div>
  </div>

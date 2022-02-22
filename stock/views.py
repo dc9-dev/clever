@@ -2,7 +2,7 @@ from django.http import HttpResponse, FileResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.forms.models import modelformset_factory
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
@@ -327,9 +327,10 @@ def GRN(request):
 
     grns = GoodsReceivedNote.objects.all()
     form = grnForm()
-
+  
     if request.method == 'POST':
         form = grnForm(request.POST)
+        formset = materialFormset(request.POST)
         if form.is_valid():
             print(request.POST)
             obj = form.save(commit=False)
@@ -338,9 +339,11 @@ def GRN(request):
 
             return redirect('home')
         else:
+            print(form.errors.as_data()) # here you print errors to terminal
             form = grnForm()
 
     ctx = {'grns': grns,
-           'form': form,}
+           'form': form,
+           }
     
     return render(request, 'production/grn.html', ctx)

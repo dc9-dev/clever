@@ -34,11 +34,10 @@ class ProductionCommentsForm(forms.ModelForm):
 
 
 class grnForm(forms.ModelForm):
-    area = forms.DecimalField()
 
     class Meta:
         model = GoodsReceivedNote
-        exclude = ['user', 'quantity']
+        exclude = ['user']
 
     def __init__(self, *args, **kwargs):
         super(grnForm, self).__init__(*args, **kwargs)
@@ -46,7 +45,8 @@ class grnForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
 
     def save(self, commit=True):
-        self.instance.material.quantity += self.cleaned_data['area'] / self.instance.material.material_area
+      
+        self.instance.material.quantity += int(self.cleaned_data['quantity'])
         self.instance.material.save()
 
         return super(grnForm, self).save(commit=commit)
