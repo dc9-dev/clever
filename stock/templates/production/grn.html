@@ -11,17 +11,10 @@
                	<div class="col-sm-6"><p class="text-center fw-bold">numer dokumentu</p> {{ form.documentID }} </div>
       			<div class="col-sm-6"><p class="text-center fw-bold">kontrahent</p> {{ form.contractor }}</div>
                </div>
-               {{ form }}
                <div class="row">
-               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">materiał</p> {{ form.material }}</div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">ilość(szt.)</p> {{ form.quantity }}</div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">akcja</p><button type="submit" class="btn btn-primary">dodaj</button></div>
+      			<div class="col-sm-12 d-grid gap-2 mt-3"><button type="submit" class="btn btn-primary float-end ">dalej</button></div>
                </div>
-                <div class="row">
-               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><button type="submit" class="btn btn-danger">usuń</button></div>
-               </div>
+                
          </form>
          </div>
    </div>
@@ -32,10 +25,18 @@
     <div class="card-body">
      <h5 class="card-title">Historia</h5>
         {% for grn in grns %}
-        	<h6 class="small">{{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
+        	<h6 class="small"><a href="{% url 'detail-grn' grn.id %}" class="link-dark">{{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
         {% endfor %}	
    </div>
  </div>
 </div>
 </div>
 {% endblock %}
+<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">materiał</p> {{ form.material }}</div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">ilość(szt.)</p> {{ form.quantity }}</div>
+
+      			<div class="row">
+               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
+      			<div class="col-sm-4 d-grid gap-2 mt-3"><button type="submit" class="btn btn-danger">usuń</button></div>
+               </div>

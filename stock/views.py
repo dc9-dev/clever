@@ -13,7 +13,7 @@ from datetime import datetime
 
 
 from .filters import StockFilter
-from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm, grnForm
+from .forms import StockCreateForm, ProductionMaterialForm, StockCreateInForm, ProductionCommentsForm, grnCreateForm, GRNMaterailForm
 from .models import Stock, Material, Production, ProductionStock, ProductionMaterial, ProductionComments, Cutter, GoodsReceivedNote
 
 
@@ -274,76 +274,71 @@ def DetailProduction(request, id):
     return render(request, 'stock/detail_production.html', ctx)
 
 
-def ProductionRaport(request):
-    pass
-#     today = datetime.today()
-#     productions = Production.objects.all()#filter(date__date=today)
-
-#     response = HttpResponse(content_type='application/pdf')
-    
-#     filename = 'pdf_demo' + today.strftime('%Y-%m-%d') + '.pdf'
-#     #response['Content-Disposition'] = 'attachement; filename={}.pdf'.format(filename)
-
-#     buffer = BytesIO()
-#     c = canvas.Canvas(buffer, pagesize=letter, bottomup=0)
-
-#     textob = c.beginText()
-#     textob.setTextOrigin(cm, cm)
-#     textob.setFont("Helvetica",15)
-    
-#     lines = []
-
-#     for production in productions:
-#         lines.append(production.order)
-#         lines.append(" ")
-
-#     for line in lines:
-#         textob.textLine(line)
-
-#     c.drawText(textob)
-#     c.showPage()
-#     c.save()
-#     buffer.seek(0)
-
-#     return FileResponse(buffer, as_attachment=True, filename=filename)
-
-
-#     # for production in productions:
-#     #     p.setFont("Helvetica",15,leading=None)
-#     #     p.drawString(x1,y1-12,production.order)
-
-#     # p.setTitle("Raport")
-#     # p.showPage()
-#     # p.save()
-
-#     # pdf = buffer.getvalue()
-#     # buffer.close()
-#     # response.write(pdf)
-
-#     return response
-
-
 def GRN(request):
 
     grns = GoodsReceivedNote.objects.all()
-    form = grnForm()
+    form = grnCreateForm()
   
     if request.method == 'POST':
-        form = grnForm(request.POST)
-        formset = materialFormset(request.POST)
+        form = grnCreateForm(request.POST)
         if form.is_valid():
-            print(request.POST)
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
-
-            return redirect('home')
+            return redirect('edit-grn', id=obj.id)
         else:
-            print(form.errors.as_data()) # here you print errors to terminal
             form = grnForm()
 
-    ctx = {'grns': grns,
-           'form': form,
+    ctx = {
+        'grns': grns,
+        'form': form,
            }
     
     return render(request, 'production/grn.html', ctx)
+
+
+def EditGRN(request, id):
+
+    grns = GoodsReceivedNote.objects.all().order_by('date')
+    grn = GoodsReceivedNote.objects.get(id=id)
+    materials = grn.grnmaterial_set.all()
+    form = GRNMaterailForm()
+
+    if request.method == 'POST':
+        form = GRNMaterailForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            
+            if int(obj.material.material_area * 1000) % int(request.POST['area']) * 1000  == 0:
+                obj.grn = grn
+                obj.save()
+                return redirect('edit-grn', id=grn.id)
+            else:
+                print('error')
+        else:
+            form = GRNMaterailForm()
+
+    ctx = {
+        'grns': grns,
+        'grn': grn,
+        'form': form,
+        'materials': materials,
+        }
+
+    return render(request, 'production/edit_grn.html', ctx)
+
+
+def DetailGRN(request, id):
+
+    grns = GoodsReceivedNote.objects.all().order_by('date')
+    grn = GoodsReceivedNote.objects.get(id=id)
+    materials = grn.grnmaterial_set.all()
+
+   
+    ctx = {
+        'grns': grns,
+        'grn': grn,
+        'materials': materials,
+        }
+
+    return render(request, 'production/detail_grn.html', ctx)
