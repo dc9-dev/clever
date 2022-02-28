@@ -25,7 +25,7 @@
     <div class="card-body">
      <h5 class="card-title">Historia</h5>
         {% for grn in grns %}
-        	<h6 class="small"><a href="{% url 'detail-grn' grn.id %}" class="link-dark">{{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
+        	<h6 class="small"><a href="{% url 'detail-grn' grn.id %}" class="link-dark">PZ{{ grn.id|stringformat:"05d"}} {{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
         {% endfor %}	
    </div>
  </div>

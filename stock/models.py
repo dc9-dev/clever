@@ -145,7 +145,7 @@ class Contractor(models.Model):
     regon = models.CharField(max_length=13, blank=True)
     phone = PhoneNumberField(blank=True)
     fax = PhoneNumberField(blank=True)
-    address = AddressField(on_delete=models.CASCADE)
+    #address = AddressField(on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

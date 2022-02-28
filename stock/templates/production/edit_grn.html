@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-<div class="col-sm-9">
+<div class="col-sm-12">
   <div class="card">
     <div class="card-body">
      <h5 class="card-title">Przyjęcie z zewnątrz</h5>
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">#{{ grn.id|stringformat:"05d" }}</th>
+                    <th scope="row">PZ{{ grn.id|stringformat:"05d" }}</th>
                     <td>{{ grn.documentID }}</td>
                     <td>{{ grn.contractor }}</td>
                     <td>{{ grn.user.first_name }} {{ grn.user.last_name }}</td>
