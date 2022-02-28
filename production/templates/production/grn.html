@@ -25,18 +25,10 @@
     <div class="card-body">
      <h5 class="card-title">Historia</h5>
         {% for grn in grns %}
-        	<h6 class="small"><a href="{% url 'detail-grn' grn.id %}" class="link-dark">PZ{{ grn.id|stringformat:"05d"}} {{ grn.documentID }} | {{ grn.date }} - {{ grn.user.first_name }} {{ grn.user.last_name }}</h6>
+        	<h6 class="small"><a href="{% url 'detail-grn' grn.id %}" class="link-dark">PZ{{ grn.id|stringformat:"03d"}} {{ grn.contractor }}</h6>
         {% endfor %}	
    </div>
  </div>
 </div>
 </div>
 {% endblock %}
-<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">materiał</p> {{ form.material }}</div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold">ilość(szt.)</p> {{ form.quantity }}</div>
-
-      			<div class="row">
-               	<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><p class="text-center fw-bold"></p></div>
-      			<div class="col-sm-4 d-grid gap-2 mt-3"><button type="submit" class="btn btn-danger">usuń</button></div>
-               </div>

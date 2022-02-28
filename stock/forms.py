@@ -1,7 +1,8 @@
 from django import forms
-from stock.models import Production, Stock, ProductionMaterial, ProductionComments, GoodsReceivedNote, GRNMaterial
+from stock.models import Stock, GoodsReceivedNote, GRNMaterial
 from order.models import Material
 
+#  Production, ProductionMaterial, ProductionComments,
 
 class StockCreateForm(forms.ModelForm):
     
@@ -10,27 +11,27 @@ class StockCreateForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ProductionMaterialForm(forms.ModelForm):
+# class ProductionMaterialForm(forms.ModelForm):
 
-    area = forms.DecimalField(required=True)
+#     area = forms.DecimalField(required=True)
 
-    class Meta:
-        model = ProductionMaterial
-        exclude = ['production']
+#     class Meta:
+#         model = ProductionMaterial
+#         exclude = ['production']
 
 
-class StockCreateInForm(forms.ModelForm):
+# class StockCreateInForm(forms.ModelForm):
     
-    class Meta:
-        model = Stock
-        exclude = ['material']
+#     class Meta:
+#         model = Stock
+#         exclude = ['material']
 
 
-class ProductionCommentsForm(forms.ModelForm):
+# class ProductionCommentsForm(forms.ModelForm):
 
-    class Meta:
-        model = ProductionComments
-        fields = ['comment',]
+#     class Meta:
+#         model = ProductionComments
+#         fields = ['comment',]
 
 
 class grnCreateForm(forms.ModelForm):

@@ -4,7 +4,7 @@
 <div class="col-sm-12">
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title">Przyjęcie z zewnątrz -  <a href="{% url 'edit-grn' grn.id %}" class="link-dark">Edycja</a></h5>
+     <h5 class="card-title">Przyjęcie z zewnątrz</h5>
      	<div class="col-sm-12">
         <table class="table table-dark">
                 <thead>
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">PZ{{ grn.id|stringformat:"05d" }}</th>
+                    <th scope="row">PZ{{ grn.id|stringformat:"03d" }}</th>
                     <td>{{ grn.documentID }}</td>
                     <td>{{ grn.contractor }}</td>
                     <td>{{ grn.user.first_name }} {{ grn.user.last_name }}</td>
@@ -51,7 +51,26 @@
                 {% endfor %}
               </tbody>
               <tfooter>
-            
+              <form method="POST">{% csrf_token %}
+                <tr>
+                  <td>{{ form.material }}</td>
+                  <td></td>
+                  <td>{{ form.area }}</td>
+                  <td class="text-start"><button class="btn btn-primary btn-sm" type="submit">Dodaj materiał</button></td>
+
+                </tr>
+                <tr>
+                  {% if form.errors %}
+       {% for field in form %}
+           {% for error in field.errors %} 
+              <div class="alert alert-danger">
+                   <strong>{{ error|escape }}</strong>
+              </div>
+           {% endfor %}
+       {% endfor %}
+    {% endif %}
+                </tr>
+              </form>
             </tfooter>
             </table>
  

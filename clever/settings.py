@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'order',
     'stock',
+    'production',
 
     'address',
     'phonenumber_field',
@@ -145,8 +146,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Custom user model
 AUTH_USER_MODEL = 'account.UserBase'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/account/login/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
