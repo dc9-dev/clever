@@ -55,7 +55,7 @@ class grnCreateForm(forms.ModelForm):
 #
 
 class GRNMaterailForm(forms.ModelForm):
-    area = forms.CharField(max_length=30)
+   # area = forms.CharField(max_length=30)
 
     class Meta:
         model = GRNMaterial

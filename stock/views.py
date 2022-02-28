@@ -285,6 +285,7 @@ def GRN(request):
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
+
             return redirect('edit-grn', id=obj.id)
         else:
             form = grnForm()
@@ -308,13 +309,25 @@ def EditGRN(request, id):
         form = GRNMaterailForm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
-            
-            if int(obj.material.material_area * 1000) % int(request.POST['area']) * 1000  == 0:
+
+            if int(float(request.POST['area']) * 1000) % int(float(obj.material.material_area ) * 1000 ) == 0:
+
+                material = Material.objects.get(id=request.POST['material'])
+                material.quantity += float(request.POST['area']) / float(material.material_area)
+                material.save()
+
                 obj.grn = grn
                 obj.save()
+
                 return redirect('edit-grn', id=grn.id)
+
             else:
-                print('error')
+                error = "Wprowadziłeś ilość materiału równą {}m2.<br>\
+                         Jedna płyta ma powierzchnie {}m2<br>\
+                         Nie wychodzą równe sztuki płyt, do PZtki i popraw metry  ".format(request.POST['area'], obj.material.material_area)
+                return HttpResponse(error)
+                
+                
         else:
             form = GRNMaterailForm()
 

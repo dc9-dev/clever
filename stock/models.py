@@ -160,15 +160,16 @@ class GoodsReceivedNote(models.Model):
     def __str__(self):
         return "{} - {}".format(self.documentID, self.contractor)
 
+
 class GRNMaterial(models.Model):
 
     grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    area =  models.FloatField(default=0.000, blank=False,)
+    area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.IntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
 
-        self.quantity = self.area / float(self.material.material_area)
+        self.quantity = self.area / self.material.material_area
         super(GRNMaterial, self).save(*args, **kwargs)
 

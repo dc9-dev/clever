@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-8">
     <div class="card recent-sales">
       <div class="card-body">
         <h5 class="card-title">Stan magazynu </h5>
@@ -73,36 +73,7 @@
 
   
 
-  <div class="col-sm-6">
 
-
-    <div class="card recent-sales">
-      <div class="card-body">
-        <h5 class="card-title">Frezy</h5>
-        <table class="table table-dark">
-                <thead>
-                  <tr>
-                    <th scope="col">Frez</th>
-                    <th scope="col">Na stanie</th>
-                    <th scope="col">Do ostrzenia</th>
-                    <th scope="col">Do kupienia</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for cutter in cutters %}
-                  <tr>
-                    <th scope="row">{{ cutter.name }}</th>
-                    <td>{{ cutter.quantity }}</td>
-                    <td>{{ cutter.forSharpening }} <a href="{% url 'cutter-sharp' cutter.id %}" class="link-light"><i class="bi bi-plus-square"></i></a></td>
-                    <td>{{ cutter.toBuy }} <a href="{% url 'cutter-buy' cutter.id }" class="link-light"><i class="bi bi-plus-square"></i></a></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-      </div>
-    </div>
-
-  </div>
 </div>
 
 {% endblock %}
