@@ -38,7 +38,7 @@
             {% endif %}
             {% if user.is_staff %}
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'stock' %}">
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-orders' %}">
                 <i class="bi bi-square"></i>
                 <span>Zamówienia </span>
               </a>
@@ -100,7 +100,7 @@
       {% endif %}
       {% if user.is_staff %}
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'stock' %}">
+        <a class="nav-link collapsed" href="{% url 'home-orders' %}">
           <i class="bi bi-square"></i>
           <span>Zamówienia</span>
         </a>

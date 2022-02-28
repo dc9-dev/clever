@@ -10,5 +10,5 @@ urlpatterns = [
     path('<int:id>/stockin', views.ProductionStockIn, name='stockin'),
     path('comments/<int:id>', views.ProductionComments, name='comments'),
     path('status/<int:id>', views.ProductionStatus, name='status'),
-    path('orders/' views.HomeOrders, name='home-orders'),
+    path('orders/', views.HomeOrders, name='home-orders'),
 ]

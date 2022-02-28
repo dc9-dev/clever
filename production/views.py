@@ -180,6 +180,6 @@ def DetailProduction(request, id):
     return render(request, 'stock/detail_production.html', ctx)
 
 
-def OrdersHome(request):
+def HomeOrders(request):
 
     return render(request, 'production/orders.html', {})
