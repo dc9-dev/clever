@@ -11,4 +11,6 @@ urlpatterns = [
     path('comments/<int:id>', views.ProductionComments, name='comments'),
     path('status/<int:id>', views.ProductionStatus, name='status'),
     path('orders/', views.HomeOrders, name='home-orders'),
+    path('orders/create', views.CreateOrder, name='create-order'),
+    path('orders/edit/<int:id>', views.EditOrder, name='edit-order'),
 ]

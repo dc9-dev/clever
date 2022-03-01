@@ -1,10 +1,16 @@
+from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import ProductionMaterialForm, ProductionCommentsForm
+
+from .forms import (ProductionMaterialForm,
+                    ProductionCommentsForm,
+                    CreateOrderForm)
 from .models import (Production,
                      ProductionStock,
                      ProductionMaterial,
-                     ProductionComments)
+                     ProductionComments,
+                     ProductionOrder)
 
 
 def ProductionHome(request):
@@ -182,4 +188,34 @@ def DetailProduction(request, id):
 
 def HomeOrders(request):
 
-    return render(request, 'production/orders.html', {})
+    orders = ProductionOrder.objects.all().order_by('-date')
+
+    return render(request, 'production/orders.html', {'orders': orders, })
+
+
+def CreateOrder(request):
+
+    form = CreateOrderForm()
+
+    if request.method == 'POST':
+        form = CreateOrderForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return redirect('edit-order', id=obj.id)
+
+    return render(request, 'production/create_order.html', {'form': form, })
+
+
+def EditOrder(request, id):
+
+    order = ProductionOrder.objects.get(id=id)
+    ms = order.materialservices_set.all()
+    #total = order.materialservices_set.annotate(total_price=Sum('total'))
+
+    ctx = {
+        'order': order,
+        'materialservices': ms,
+    }
+
+    return render(request, 'production/edit_order.html', ctx)

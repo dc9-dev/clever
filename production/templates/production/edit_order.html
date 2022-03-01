@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-body">
+     <h5 class="card-title">Zamówienie nr {{ order }}</h5>
+     	<div class="col-sm-12">
+        <h6>Zamawiający: {{ order.customer }}</h6>
+        <h6>Adres: {{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</h6>
+        <h6>Tel: {{ order.customer.phone_number }}</h6>
+     	  <table class="table table-success table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Materiał</th>
+              <th scope="col">Usługi</th>
+              <th scope="col">Ilość</th>
+              <th scope="col">Cena(m2)</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ms in materialservices %}
+            <tr>
+              <td scope="col">{{ ms.material }}</td>
+              <td scope="col">{{ ms.services }}</td>
+              <td scope="col">{{ ms.area }}m2</td>
+              <td scope="col">{{ ms.services.price_gross }}pln</td>
+              <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="dark">
+            <tr>
+              <td scope="col"></td>
+              <td scope="col"></td>
+              <td scope="col"></td>
+              <td scope="col"></td>
+              <td scope="col"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+   </div>
+ </div>
+</div>
+
+</div>
+{% endblock %}

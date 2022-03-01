@@ -2,20 +2,18 @@
 {% block content %}
 <div class="row">
 	<div class="col-sm-12 mb-3">
-		<button class="btn btn-primary btn-sm float-end">Nowe zamówienie</button>
+		<a href="{% url 'create-order' %}" class="btn btn-primary btn-sm float-end">Nowe zamówienie</a>
 	</div>
 </div>
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Do realizacji</h5>
+				<h5 class="card-title">Do realizacji ( {{ orders.count }} )</h5>
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item">An item</li>
-					<li class="list-group-item">A second item</li>
-					<li class="list-group-item">A third item</li>
-					<li class="list-group-item">A fourth item</li>
-					<li class="list-group-item">And a fifth one</li>
+					{% for order in orders %}
+					<li class="list-group-item">{{ order }}</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
@@ -23,13 +21,9 @@
 	<div class="col-sm-6">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Ukończone</h5>
+				<h5 class="card-title">Ukończone ( 0 ) </h5>
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item">An item</li>
-					<li class="list-group-item">A second item</li>
-					<li class="list-group-item">A third item</li>
-					<li class="list-group-item">A fourth item</li>
-					<li class="list-group-item">And a fifth one</li>
+					
 				</ul>
 			</div>
 		</div>

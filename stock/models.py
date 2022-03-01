@@ -53,7 +53,7 @@ class GRNMaterial(models.Model):
 
     grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    area =  models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
+    area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.IntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
