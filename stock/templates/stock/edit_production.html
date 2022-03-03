@@ -34,9 +34,11 @@
               <tr>
                 <td scope="col">{{ material.material }}</td>
                 <td scope="col">{{ material.area}}</td>
-                <td scope="col">{{ material.quantity }}
+                <td scope="col">
+                  <a href="{% url 'decrement' material.id %}">-</a>
+                  {{ material.quantity }}
                   <a href="{% url 'increment' material.id %}">+</a>
-           
+
                 
                
                 </td>

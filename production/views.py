@@ -126,6 +126,19 @@ def ProductionMaterialIncrement(request, id):
     return redirect('edit-production', id=productionMaterial.production.id)
 
 
+def ProductionMaterialDecrement(request, id):
+
+    productionMaterial = ProductionMaterial.objects.get(id=id)
+    material = Material.objects.get(id=productionMaterial.material.id)
+    productionMaterial.quantity -= 1
+    productionMaterial.save()
+    material.quantity += 1
+    material.save()
+    print(material)
+
+    return redirect('edit-production', id=productionMaterial.production.id)
+
+
 def ProductionComments(request, id):
 
     productionMaterial = ProductionMaterial.objects.get(id=id)

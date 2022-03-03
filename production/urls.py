@@ -6,6 +6,7 @@ urlpatterns = [
     path('new/<int:id>', views.CreateProduction, name='create-production'),
     path('<int:id>/edit', views.EditProduction, name='edit-production'),
     path('<int:id>/increment', views.ProductionMaterialIncrement, name='increment'),
+    path('<int:id>/decrement', views.ProductionMaterialDecrement, name='decrement'),
     path('<int:id>/detail', views.DetailProduction, name='detail-production'),
     path('<int:id>/filter', views.ProductionStockFilter, name='production-filter'),
     path('<int:id>/stockin', views.ProductionStockIn, name='stockin'),
