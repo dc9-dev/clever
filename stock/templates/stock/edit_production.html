@@ -35,9 +35,15 @@
                 <td scope="col">{{ material.material }}</td>
                 <td scope="col">{{ material.area}}</td>
                 <td scope="col">
-                  <a href="{% url 'decrement' material.id %}">-</a>
+                  {% if material.quantity != 0 %}
+                  <a href="{% url 'decrement' material.id %}" class="link-dark">
+                    <i class="bi bi-dash-square-dotted"></i>
+                  </a>
+                  {% endif %}
                   {{ material.quantity }}
-                  <a href="{% url 'increment' material.id %}">+</a>
+                  <a href="{% url 'increment' material.id %}" class="link-dark">
+                    <i class="bi bi-plus-square-dotted"></i>
+                  </a>
 
                 
                
@@ -61,15 +67,6 @@
               {% endfor %}
             </tbody>
             <tfooter>
-              <form method="POST">{% csrf_token %}
-                <tr>
-                  <td scope="col">{{ materialForm.material }}</td>
-                  <td scope="col">{{ materialForm.area }}</td>
-                  <td scope="col">{{ materialForm.quantity }}</td>
-                  <td colspan="3" class="text-start"><button class="btn btn-primary btn-sm" type="submit">Dodaj materiał</button></td>
-                </tr>
-              </form>
-
             </tfooter>
           </table>
 

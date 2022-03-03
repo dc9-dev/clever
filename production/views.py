@@ -73,41 +73,11 @@ def EditProduction(request, id):
         return redirect('stock')
 
     materials = production.productionmaterial_set.all()
-    materialForm = ProductionMaterialForm()
-
-    # if 'increment' in request.POST:
-    #     print(value)
-
-    # if 'Like' in request.POST:
-    #     print("TEST MORDO !")
-    #     print(request.POST)
-        # material = Material.objects.get(id=material.id)
-        # material.quantity -= int(request.POST['quantity'])
-        # material.save()
-        # post.Likes += 1
-        # post.save()
-
-    if request.method == 'POST':
-        materialForm = ProductionMaterialForm(request.POST)
-        if materialForm.is_valid():
-            obj = materialForm.save(commit=False)
-            obj.production = production
-            obj.save()
-
-            material = Material.objects.get(id=request.POST['material'])
-            material.quantity -= int(request.POST['quantity'])
-            material.save()
-
-            return redirect('edit-production', id=production.id)
-        else:
-            materialForm = ProductionMaterialForm()
 
     ctx = {
 
         'production': production,
         'materials': materials,
-        'materialForm': materialForm,
-
     }
 
     return render(request, 'stock/edit_production.html', ctx)
@@ -121,7 +91,6 @@ def ProductionMaterialIncrement(request, id):
     productionMaterial.save()
     material.quantity -= 1
     material.save()
-    print(material)
 
     return redirect('edit-production', id=productionMaterial.production.id)
 
@@ -134,7 +103,6 @@ def ProductionMaterialDecrement(request, id):
     productionMaterial.save()
     material.quantity += 1
     material.save()
-    print(material)
 
     return redirect('edit-production', id=productionMaterial.production.id)
 

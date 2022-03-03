@@ -145,7 +145,7 @@ class Customer(models.Model):
 class Services(models.Model):
 
     title = models.CharField(max_length=255)
-    price_gross = models.IntegerField()
+    #price_gross = models.IntegerField()
 
     def __str__(self):
         return self.title
@@ -184,7 +184,8 @@ class MaterialServices(models.Model):
                                  null=True,
                                  on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
-    total_price = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
+    price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    #total_price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
 
     def total(self):
-        return self.area * self.services.price_gross
+        return self.area * self.price
