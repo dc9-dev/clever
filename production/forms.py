@@ -2,7 +2,8 @@ from django import forms
 from .models import (Production,
                      ProductionMaterial,
                      ProductionComments,
-                     ProductionOrder)
+                     ProductionOrder,
+                     MaterialServices)
 from order.models import Material
 
 
@@ -37,5 +38,5 @@ class CreateOrderForm(forms.ModelForm):
 class EditOrderForm(forms.ModelForm):
 
     class Meta:
-        model = ProductionOrder
-        exclude = ['customer', 'date', 'order']
+        model = MaterialServices
+        exclude = ['productionorder', 'total_price']

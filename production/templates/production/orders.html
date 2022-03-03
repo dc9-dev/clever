@@ -6,19 +6,31 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-sm-4">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Do realizacji ( {{ orders.count }} )</h5>
+				<h5 class="card-title">Do realizacji ( 0 )</h5>
 				<ul class="list-group list-group-flush">
 					{% for order in orders %}
-					<li class="list-group-item">{{ order }}</li>
+					<li class="list-group-item"><a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order }}</a></li>
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-4">
+		<div class="card recent-sales">
+			<div class="card-body">
+				<h5 class="card-title">Produkcja ( {{ orders.count }} )</h5>
+				<ul class="list-group list-group-flush">
+					
+					<li class="list-group-item"><a href="" class="link-dark"></a></li>
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
 		<div class="card recent-sales">
 			<div class="card-body">
 				<h5 class="card-title">Ukończone ( 0 ) </h5>

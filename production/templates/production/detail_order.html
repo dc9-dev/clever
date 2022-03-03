@@ -4,7 +4,7 @@
 <div class="col-sm-12">
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title">Zamówienie nr {{ order }}</h5>
+     <h5 class="card-title">Zamówienie nr {{ order }} <a href="{% url 'create-production' order.id %}">Podejmij</a></h5>
      	<div class="col-sm-12">
         <h6>Zamawiający: {{ order.customer }}</h6>
         <h6>Adres: {{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</h6>
@@ -31,15 +31,7 @@
             {% endfor %}
           </tbody>
           <tfoot class="dark">
-            <form method="POST">{% csrf_token %}
-            <tr>
-              <td scope="col">{{ form.material }}</td>
-              <td scope="col">{{ form.services }}</td>
-              <td scope="col">{{ form.area }}</td>
-              <td scope="col"><button type="submit" class="btn btn-secondary btn-sm">Dodaj </button></td>
-              <td scope="col"></td>
-            </tr>
-            </form>
+            
           </tfoot>
         </table>
       </div>

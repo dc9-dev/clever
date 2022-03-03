@@ -184,6 +184,7 @@ class MaterialServices(models.Model):
                                  null=True,
                                  on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
+    total_price = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
 
     def total(self):
         return self.area * self.services.price_gross

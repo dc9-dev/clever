@@ -5,12 +5,16 @@ from django.shortcuts import render, redirect
 
 from .forms import (ProductionMaterialForm,
                     ProductionCommentsForm,
-                    CreateOrderForm)
+                    CreateOrderForm,
+                    EditOrderForm)
 from .models import (Production,
                      ProductionStock,
                      ProductionMaterial,
                      ProductionComments,
-                     ProductionOrder)
+                     ProductionOrder,
+                     )
+
+from order.models import Material
 
 
 def ProductionHome(request):
@@ -33,18 +37,32 @@ def ProductionStatus(request, id):
         return redirect('detail-production', id=production.id)
 
 
-def CreateProduction(request):
+def CreateProduction(request, id):
 
+    productionOrder = ProductionOrder.objects.get(id=id)
     user = request.user
     user_id = request.user.id
+    production, created = Production.objects.get_or_create(
+                                             id=productionOrder.id,
+                                             user_id=user_id,
+                                             order=productionOrder.order,
+                                             date=productionOrder.date,)
 
-    if request.method == 'POST':
-        production = Production.objects.create(user_id=user_id,
-                                               order=request.POST['title'])
+    materials = production.productionmaterial_set.all()
 
-        return redirect('edit-production', id=production.id)
+    for material in productionOrder.materialservices_set.all():
+        materials.create(production_id=production.id, material_id=material.material.id, area=material.area)
 
-    return render(request, 'stock/create_production.html', {})
+    #for material in productionOrder.materialservices_set.all():
+
+
+    # if request.method == 'POST':
+    #     production = Production.objects.create(user_id=user_id,
+    #                                            order=request.POST['title'])
+
+    return redirect('edit-production', id=production.id)
+
+    #return render(request, 'stock/create_production.html', {})
 
 
 def EditProduction(request, id):
@@ -56,6 +74,18 @@ def EditProduction(request, id):
 
     materials = production.productionmaterial_set.all()
     materialForm = ProductionMaterialForm()
+
+    # if 'increment' in request.POST:
+    #     print(value)
+
+    # if 'Like' in request.POST:
+    #     print("TEST MORDO !")
+    #     print(request.POST)
+        # material = Material.objects.get(id=material.id)
+        # material.quantity -= int(request.POST['quantity'])
+        # material.save()
+        # post.Likes += 1
+        # post.save()
 
     if request.method == 'POST':
         materialForm = ProductionMaterialForm(request.POST)
@@ -81,6 +111,19 @@ def EditProduction(request, id):
     }
 
     return render(request, 'stock/edit_production.html', ctx)
+
+
+def ProductionMaterialIncrement(request, id):
+
+    productionMaterial = ProductionMaterial.objects.get(id=id)
+    material = Material.objects.get(id=productionMaterial.material.id)
+    productionMaterial.quantity += 1
+    productionMaterial.save()
+    material.quantity -= 1
+    material.save()
+    print(material)
+
+    return redirect('edit-production', id=productionMaterial.production.id)
 
 
 def ProductionComments(request, id):
@@ -211,11 +254,38 @@ def EditOrder(request, id):
 
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
+
+    form = EditOrderForm()
+
+    if request.method == 'POST':
+        form = EditOrderForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.productionorder_id = order.id
+            obj.save()
+
+            return redirect('edit-order', id=order.id)
+        else:
+            form = EditOrderForm()
     #total = order.materialservices_set.annotate(total_price=Sum('total'))
+
+    ctx = {
+        'order': order,
+        'materialservices': ms,
+        'form': form,
+    }
+
+    return render(request, 'production/edit_order.html', ctx)
+
+
+def DetailOrder(request, id):
+
+    order = ProductionOrder.objects.get(id=id)
+    ms = order.materialservices_set.all()
 
     ctx = {
         'order': order,
         'materialservices': ms,
     }
 
-    return render(request, 'production/edit_order.html', ctx)
+    return render(request, 'production/detail_order.html', ctx)

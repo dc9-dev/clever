@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     path('', views.ProductionHome, name='home-production'),
-    path('new/', views.CreateProduction, name='create-production'),
+    path('new/<int:id>', views.CreateProduction, name='create-production'),
     path('<int:id>/edit', views.EditProduction, name='edit-production'),
+    path('<int:id>/increment', views.ProductionMaterialIncrement, name='increment'),
     path('<int:id>/detail', views.DetailProduction, name='detail-production'),
     path('<int:id>/filter', views.ProductionStockFilter, name='production-filter'),
     path('<int:id>/stockin', views.ProductionStockIn, name='stockin'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('orders/', views.HomeOrders, name='home-orders'),
     path('orders/create', views.CreateOrder, name='create-order'),
     path('orders/edit/<int:id>', views.EditOrder, name='edit-order'),
+    path('orders/detail/<int:id>', views.DetailOrder, name='detail-order'),
 ]

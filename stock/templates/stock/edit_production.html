@@ -34,7 +34,12 @@
               <tr>
                 <td scope="col">{{ material.material }}</td>
                 <td scope="col">{{ material.area}}</td>
-                <td scope="col">{{ material.quantity }}</td>
+                <td scope="col">{{ material.quantity }}
+                  <a href="{% url 'increment' material.id %}">+</a>
+           
+                
+               
+                </td>
                 <td scope="col" class="">
                   {% for stock in material.stocks.all %}
                   <p>#{{ stock.number }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
