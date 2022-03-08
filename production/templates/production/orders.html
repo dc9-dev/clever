@@ -6,36 +6,50 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Do realizacji ( 0 )</h5>
+				<h5 class="card-title">Przygotowywanie ( {{ preparation.count }} )</h5>
 				<ul class="list-group list-group-flush">
-					{% for order in orders %}
+					{% for order in preparation %}
 					<li class="list-group-item"><a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order }} - {{ order.customer.company }}</a></li>
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Produkcja ( {{ orders.count }} )</h5>
+				<h5 class="card-title">Do realizacji ( {{ pending.count }} )</h5>
 				<ul class="list-group list-group-flush">
-					
-					<li class="list-group-item"><a href="" class="link-dark"></a></li>
-					
+					{% for order in pending %}
+					<li class="list-group-item"><a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order }} - {{ order.customer.company }}</a></li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		<div class="card recent-sales">
 			<div class="card-body">
-				<h5 class="card-title">Ukończone ( 0 ) </h5>
+				<h5 class="card-title">Produkcja ( {{ during.count }} )</h5>
 				<ul class="list-group list-group-flush">
-					
+					{% for order in during %}
+					<li class="list-group-item"><a href="{% url 'detail-production' order.id %}" class="link-dark">{{ order }} - {{ order.customer.company }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="card recent-sales">
+			<div class="card-body">
+				<h5 class="card-title">Ukończone ( {{ done.count }} ) </h5>
+				<ul class="list-group list-group-flush">
+				{% for order in done %}
+					<li class="list-group-item"><a href="{% url 'detail-production' order.id %}" class="link-dark">{{ order }} - {{ order.customer.company }}</a></li>
+			    {% endfor %}	
 				</ul>
 			</div>
 		</div>

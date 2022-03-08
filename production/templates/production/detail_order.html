@@ -4,12 +4,37 @@
 <div class="col-sm-12">
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title">Zamówienie nr {{ order }} <a href="{% url 'create-production' order.id %}">Podejmij</a></h5>
-     	<div class="col-sm-12">
-        <h6>Zamawiający: {{ order.customer }}</h6>
-        <h6>Adres: {{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</h6>
-        <h6>Tel: {{ order.customer.phone_number }}</h6>
-     	  <table class="table table-success table-striped">
+      <div class="col-sm-12">
+        <div class="col-sm-4 mt-3">
+          {% if order.status == 1 %}
+          <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Podejmij</a> 
+          {% endif %}
+        <table class="table table-borderless table-sm text-start">
+            <tbody>
+              <tr>
+                <td>Zamówienie nr:</td>
+                <td>{{ order }}</td>
+              </tr>
+              <tr>
+                <td>Status:</td>
+                <td>{{ order.get_status_display }}</td>
+              </tr>
+              <tr>
+                <td>Zamawiający:</td>
+                <td>{{ order.customer }}</td>
+              </tr>
+              <tr>
+                <td>Adres:</td>
+                <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</td>
+              </tr>
+              <tr>
+                <td>Tel:</td>
+                <td>{{ order.customer.phone_number }}</td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
+        <table class="table table-success table-striped">
           <thead>
             <tr>
               <th scope="col">Materiał</th>
@@ -25,13 +50,20 @@
               <td scope="col">{{ ms.material }}</td>
               <td scope="col">{{ ms.services }}</td>
               <td scope="col">{{ ms.area }}m2</td>
-              <td scope="col">{{ ms.price}}pln</td>
+              <td scope="col">{{ ms.price }}pln</td>
               <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
             </tr>
             {% endfor %}
           </tbody>
           <tfoot class="dark">
-            
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Razem: </td>
+              <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
+            </tr>
+
           </tfoot>
         </table>
       </div>
@@ -41,3 +73,5 @@
 
 </div>
 {% endblock %}
+
+

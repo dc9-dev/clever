@@ -32,10 +32,14 @@ def ProductionHome(request):
 def ProductionStatus(request, id):
 
     production = Production.objects.get(id=id)
+    productionOrder = ProductionOrder.objects.get(id=production.id)
+
 
     if request.method == 'POST':
-        production.status = 1
+        production.status = 3
         production.save()
+        # productionOrder.status = 3
+        # productionOrder.save()
 
         return redirect('detail-production', id=production.id)
 
@@ -43,6 +47,8 @@ def ProductionStatus(request, id):
 def CreateProduction(request, id):
 
     productionOrder = ProductionOrder.objects.get(id=id)
+    productionOrder.status = 2
+    productionOrder.save()
     user = request.user
     user_id = request.user.id
     production, created = Production.objects.get_or_create(
@@ -54,18 +60,13 @@ def CreateProduction(request, id):
     materials = production.productionmaterial_set.all()
 
     for material in productionOrder.materialservices_set.all():
-        materials.create(production_id=production.id, material_id=material.material.id, area=material.area)
 
-    #for material in productionOrder.materialservices_set.all():
-
-
-    # if request.method == 'POST':
-    #     production = Production.objects.create(user_id=user_id,
-    #                                            order=request.POST['title'])
+        materials.create(production_id=production.id, 
+                         material_id=material.material.id, 
+                         area=material.area)
 
     return redirect('edit-production', id=production.id)
 
-    #return render(request, 'stock/create_production.html', {})
 
 
 def EditProduction(request, id):
@@ -215,9 +216,19 @@ def DetailProduction(request, id):
 
 def HomeOrders(request):
 
-    orders = ProductionOrder.objects.all().order_by('-date')
+    orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')
+    orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')
+    orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')
+    orders_done = ProductionOrder.objects.filter(status=3).order_by('-date')
 
-    return render(request, 'production/orders.html', {'orders': orders, })
+    ctx = {
+        'preparation': orders_preparation,
+        'pending': orders_pending,
+        'during': orders_during,
+        'done': orders_done,
+    }
+
+    return render(request, 'production/orders.html', ctx )
 
 
 def CreateOrder(request):
@@ -241,7 +252,8 @@ def EditOrder(request, id):
 
     form = EditOrderForm()
 
-    if request.method == 'POST':
+
+    if request.method == 'POST' and 'add' in request.POST:
         form = EditOrderForm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
@@ -251,7 +263,12 @@ def EditOrder(request, id):
             return redirect('edit-order', id=order.id)
         else:
             form = EditOrderForm()
-    #total = order.materialservices_set.annotate(total_price=Sum('total'))
+
+    if request.method == 'POST' and 'done' in request.POST:
+        order.status = 1
+        order.save()
+        return redirect('detail-order', id=order.id)
+    
 
     ctx = {
         'order': order,
@@ -264,8 +281,12 @@ def EditOrder(request, id):
 
 def DetailOrder(request, id):
 
+
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
+
+    if order.status == 0:
+        return redirect('edit-order', id=order.id)
 
     ctx = {
         'order': order,

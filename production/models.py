@@ -6,13 +6,20 @@ from order.models import Material, IntegerRangeField
 from decimal import Decimal
 from datetime import datetime
 
+from django.db.models import F, Sum
+
 
 class Production(models.Model):
     PREPARATION = 0
-    DONE = 1
+    PENDING = 1
+    DURING = 2
+    DONE = 3
     STATUS = (
-        (PREPARATION, 'w trakcie'),
-        (DONE, 'zakończone'),
+        ('zmień status', 'zmień status'),
+        (PREPARATION, 'Przygotowywanie'),
+        (PENDING, 'Oczekuję'),
+        (DURING, 'W trakcie'),
+        (DONE, 'Zakończone'),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -132,7 +139,6 @@ class Customer(models.Model):
     address_line_1 = models.CharField(max_length=150, blank=True)
     address_line_2 = models.CharField(max_length=150, blank=True)
     town_city = models.CharField(max_length=150, blank=True)
-    # User Status
 
     class Meta:
         verbose_name = "Klient"
@@ -156,10 +162,22 @@ class Services(models.Model):
 
 
 class ProductionOrder(models.Model):
+    PREPARATION = 0
+    PENDING = 1
+    DURING = 2
+    DONE = 3
+    STATUS = (
+        ('zmień status', 'zmień status'),
+        (PREPARATION, 'Przygotowywanie'),
+        (PENDING, 'Oczekuję'),
+        (DURING, 'W trakcie'),
+        (DONE, 'Zakończone'),
+    )
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+    status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def save(self, *args, **kwargs):
         counter = ProductionOrder.objects.count() + 1
@@ -170,6 +188,14 @@ class ProductionOrder(models.Model):
     def __str__(self):
         return self.order
 
+    def get_total(self):
+
+        total = 0 
+        for i in self.materialservices_set.all():
+            result = i.price * i.area
+            total += result
+        return total
+ 
 
 class MaterialServices(models.Model):
 
@@ -185,7 +211,7 @@ class MaterialServices(models.Model):
                                  on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
     price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
-    #total_price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    #transport = models.BooleanField(default=0)
 
     def total(self):
         return self.area * self.price

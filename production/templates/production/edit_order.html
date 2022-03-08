@@ -4,11 +4,33 @@
 <div class="col-sm-12">
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title">Zamówienie nr {{ order }}</h5>
      	<div class="col-sm-12">
-        <h6>Zamawiający: {{ order.customer }}</h6>
-        <h6>Adres: {{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</h6>
-        <h6>Tel: {{ order.customer.phone_number }}</h6>
+        <div class="col-sm-4 mt-3">
+        <table class="table table-borderless table-sm text-start">
+            <tbody>
+              <tr>
+                <td>Zamówienie nr:</td>
+                <td>{{ order }}</td>
+              </tr>
+              <tr>
+                <td>Status:</td>
+                <td>{{ order.get_status_display }}</td>
+              </tr>
+              <tr>
+                <td>Zamawiający:</td>
+                <td>{{ order.customer }}</td>
+              </tr>
+              <tr>
+                <td>Adres:</td>
+                <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</td>
+              </tr>
+              <tr>
+                <td>Tel:</td>
+                <td>{{ order.customer.phone_number }}</td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
         <table class="table table-success table-striped">
           <thead>
             <tr>
@@ -26,7 +48,7 @@
               <td scope="col">{{ form.services }}</td>
               <td scope="col">{{ form.area }}</td>
               <td scope="col">{{ form.price }}</td>
-              <td scope="col"><button type="submit" class="btn btn-success btn-sm">Dodaj </button></td>
+              <td scope="col"><button type="submit" name="add" class="btn btn-success btn-sm">Dodaj </button></td>
             </tr>
             </form>
             {% for ms in materialservices %}
@@ -45,11 +67,14 @@
               <td></td>
               <td></td>
               <td>Razem: </td>
-              <td> test </td>
+              <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
             </tr>
-            
+
           </tfoot>
         </table>
+        <form method="POST">{% csrf_token %}
+          <button type="submit" name="done" class="btn btn-primary btn-sm float-end">Do realizacji!</button>
+        </form>
       </div>
    </div>
  </div>
