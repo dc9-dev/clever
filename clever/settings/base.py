@@ -16,6 +16,17 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'p1472_nesting',
+        'USER': 'p1472_nesting',
+        'PASSWORD': 'Cleverspace2022',
+        'HOST': 'pgsql52.mydevil.net',
+        'PORT': '5432',
+    }
+}
+
 
 
 # Application definition
