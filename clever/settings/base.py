@@ -25,6 +25,22 @@ DATABASES = {
         'HOST': 'pgsql52.mydevil.net',
         'PORT': '5432',
     }
+
+    'copy': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'copy.db'),
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'p1472_nesting',
+        'USER': 'p1472_nesting',
+        'PASSWORD': 'Cleverspace2022',
+        'HOST': 'pgsql52.mydevil.net',
+        'PORT': '5432',
+    }
 }
 
 # Application definition
