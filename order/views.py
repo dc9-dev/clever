@@ -37,7 +37,7 @@ def home(request):
     #     'orders_done': orders_done, }
 
     # return render(request, "order/home.html", context)
-    return redirect('stock')
+    return redirect('home-orders')
 
 
 @login_required(login_url='login')
