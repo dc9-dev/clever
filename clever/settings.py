@@ -96,7 +96,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'p1472_nesting',
-        'USER': 'Nestinpolska',
+        'USER': 'Nestingpolska',
         'PASSWORD': 'Cleverspace2022',
         'HOST': 'pgsql52.mydevil.net',
         'PORT': '5432',
