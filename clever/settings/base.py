@@ -27,10 +27,7 @@ DATABASES = {
     }
 }
 
-
-
 # Application definition
-
 
 INSTALLED_APPS = [
     'django.contrib.messages',

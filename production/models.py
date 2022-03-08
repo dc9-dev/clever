@@ -25,7 +25,7 @@ class Production(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
-    status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
+    status = models.SmallIntegerField(choices=STATUS, default=DURING)
 
     def __str__(self):
         return self.order
