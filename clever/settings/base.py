@@ -24,7 +24,7 @@ DATABASES = {
         'PASSWORD': 'Cleverspace2022',
         'HOST': 'pgsql52.mydevil.net',
         'PORT': '5432',
-    }
+    },
 
     'copy': {
         'ENGINE': 'django.db.backends.sqlite3',
