@@ -38,8 +38,8 @@ def ProductionStatus(request, id):
     if request.method == 'POST':
         production.status = 3
         production.save()
-        # productionOrder.status = 3
-        # productionOrder.save()
+        productionOrder.status = 3
+        productionOrder.save()
 
         return redirect('detail-production', id=production.id)
 

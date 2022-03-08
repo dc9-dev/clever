@@ -11,7 +11,6 @@
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <small><a href="{% url 'detail-production' production.id %} " class="link-dark">{{ production.order }}</a></small>
             <span class="badge {% if production.status == 3 %} bg-success  {% elif production.status == 0 %} bg-dark  {% endif %} ">
-
              {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span>
           </li>
           {% endfor %}   
