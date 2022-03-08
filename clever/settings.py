@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)5)2#yve38n8xr5zt@pu!i2(rf1l&mz-$vlx9yguh$7(__m@5i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['clever-space.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['clever-space.herokuapp.com', '127.0.0.1', 'nestingpolska.usermd.net']
 
 
 # Application definition
