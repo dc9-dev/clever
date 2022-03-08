@@ -16,7 +16,10 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
+SECRET_KEY = '$1zynwgl$r$61-gqv1)!j=&jy^&dt4fx&sn5++eo%82rktlton'
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.messages',
