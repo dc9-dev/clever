@@ -94,8 +94,12 @@ WSGI_APPLICATION = 'clever.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgrescl',
+        'NAME': 'p1472_nesting',
+        'USER': 'Nestinpolska',
+        'PASSWORD': 'Cleverspace2022',
+        'HOST': 'pgsql52.mydevil.net',
+        'PORT': '5432',
     }
 }
 
