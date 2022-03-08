@@ -20,11 +20,11 @@ class StockCreateForm(forms.ModelForm):
 #         exclude = ['production']
 
 
-# class StockCreateInForm(forms.ModelForm):
+class StockCreateInForm(forms.ModelForm):
     
-#     class Meta:
-#         model = Stock
-#         exclude = ['material']
+    class Meta:
+        model = Stock
+        exclude = ['material']
 
 
 # class ProductionCommentsForm(forms.ModelForm):

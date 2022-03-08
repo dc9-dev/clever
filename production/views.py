@@ -14,6 +14,9 @@ from .models import (Production,
                      ProductionOrder,
                      )
 
+from stock.models import Stock
+from stock.forms import StockCreateForm, StockCreateInForm
+from stock.filters import StockFilter
 from order.models import Material
 
 

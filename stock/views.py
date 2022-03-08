@@ -7,6 +7,7 @@ from datetime import datetime
 
 from .filters import StockFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm
+from production.models import ProductionMaterial
 from .models import Stock, Material, Cutter, GoodsReceivedNote
 
 
