@@ -1,6 +1,7 @@
 from .base import *
-
-if os.environ['clever'] == 'prod':
+# you need to set "myproject = 'prod'" as an environment variable
+# in your OS (on which your website is hosted)
+if os.environ['DJANGO_SETTINGS_MODULE'] == 'clever.settings.prod':
    from .prod import *
 else:
    from .dev import *

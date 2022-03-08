@@ -1,3 +1,11 @@
+from .base import *
+import os
+
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+DEBUG = False
+ALLOWED_HOSTS = ['nestingpolska.usermd.net']
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -9,6 +17,3 @@ DATABASES = {
     }
 }
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['nestingpolska.usermd.net']
