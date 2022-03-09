@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'stock',
     'production',
 
+    'pdf',
+
     'address',
     'phonenumber_field',
     'localflavor',

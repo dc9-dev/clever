@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from xhtml2pdf import pisa
 from .models import Order, Item
 from .forms import ItemForm, AttachmentForm, StatusForm
 

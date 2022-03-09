@@ -79,18 +79,10 @@ def EditProduction(request, id):
         return redirect('stock')
 
     materials = production.productionmaterial_set.all()
-    materials_sum = production.productionmaterial_set.all().values("material").annotate(Sum("area"))
-
-    dups = (
-    materials.values("material").annotate(area_sum=Sum("area")).filter(area_sum__gt=1)
-    )
 
     ctx = {
-
         'production': production,
         'materials': materials,
-        'materials_sum': materials_sum,
-        'dups': dups,
     }
 
     return render(request, 'stock/edit_production.html', ctx)
