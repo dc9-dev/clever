@@ -14,7 +14,7 @@ class Stock(models.Model):
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
 
     def __str__(self):
-    	return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
+        return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
 
 
 class Cutter(models.Model):
@@ -34,6 +34,10 @@ class Contractor(models.Model):
     phone = PhoneNumberField(blank=True)
     fax = PhoneNumberField(blank=True)
     #address = AddressField(on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Kontrahent"
+        verbose_name_plural = "Kontrahenci"
 
     def __str__(self):
         return self.name

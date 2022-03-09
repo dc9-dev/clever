@@ -34,7 +34,6 @@ def ProductionStatus(request, id):
     production = Production.objects.get(id=id)
     productionOrder = ProductionOrder.objects.get(id=production.id)
 
-
     if request.method == 'POST':
         production.status = 3
         production.save()
@@ -57,16 +56,19 @@ def CreateProduction(request, id):
                                              order=productionOrder.order,
                                              date=productionOrder.date,)
 
-    materials = production.productionmaterial_set.all()
+    mats = production.productionmaterial_set.all()
 
-    for material in productionOrder.materialservices_set.all():
+    duplicates = productionOrder.materialservices_set.values("material").annotate(area_sum=Sum("area"))
 
-        materials.create(production_id=production.id, 
-                         material_id=material.material.id, 
-                         area=material.area)
+    for materials in duplicates:
+        data = []
+        for keys, values in materials.items():
+            data.append(values)
+        mats.create(production_id=production.id,
+                    material_id=data[0],
+                    area=data[1])
 
     return redirect('edit-production', id=production.id)
-
 
 
 def EditProduction(request, id):
@@ -81,9 +83,7 @@ def EditProduction(request, id):
 
     dups = (
     materials.values("material").annotate(area_sum=Sum("area")).filter(area_sum__gt=1)
-    )   
-    
-
+    )
 
     ctx = {
 
