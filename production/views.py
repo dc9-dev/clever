@@ -282,7 +282,6 @@ def EditOrder(request, id):
 
 def DetailOrder(request, id):
 
-
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
 

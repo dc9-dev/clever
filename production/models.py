@@ -151,8 +151,8 @@ class Customer(models.Model):
 class Services(models.Model):
 
     title = models.CharField(max_length=255)
-    #price_gross = models.IntegerField()
-
+    # price_gross = models.IntegerField()
+    
     def __str__(self):
         return self.title
 
