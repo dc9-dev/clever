@@ -16,29 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'p1472_nesting',
-        'USER': 'p1472_nesting',
-        'PASSWORD': 'Cleverspace2022',
-        'HOST': 'pgsql52.mydevil.net',
-        'PORT': '5432',
-    },
-
-    
-}
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'p1472_nesting',
-        'USER': 'p1472_nesting',
-        'PASSWORD': 'Cleverspace2022',
-        'HOST': 'pgsql52.mydevil.net',
-        'PORT': '5432',
-    }
-}
 
 # Application definition
 
@@ -153,3 +130,14 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail52.mydevil.net'
+#EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+#EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'biuro@nestingpolska.usermd.net'
+EMAIL_HOST_PASSWORD = 'Cleverspace2022'
+#EMAIL_HOST_USER = 'grykajm@gmail.com'
+#EMAIL_HOST_PASSOWRD = 'szklanki11'

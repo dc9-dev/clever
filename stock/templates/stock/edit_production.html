@@ -5,7 +5,7 @@
     <div class="card ">
       <div class="card-body">
        <div class="wrapper">
-       <h5 class="card-title">{{ production.order }} {{ production }}
+       <h5 class="card-title">{{ production.order }} - {{ order.customer }}
         <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
           <button type="submit" class="btn btn-danger btn-sm float-end">Zakończ zlecenie </button>
         </form>

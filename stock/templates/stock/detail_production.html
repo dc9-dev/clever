@@ -4,7 +4,7 @@
   <div class="col-sm-12">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">{{ production.order }} {% if production.status != 3 %} {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>{% endif %}{% endif %}</h5>
+       <h5 class="card-title">{{ production.order }} - {{ order.customer }}{% if production.status != 3 %} {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>{% endif %}{% endif %}</h5>
        <div class="row">
          <div class="col-sm-12">
            <div class="table-responsive"> 

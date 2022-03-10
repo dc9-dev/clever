@@ -1,8 +1,9 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
-
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 from .forms import (ProductionMaterialForm,
                     ProductionCommentsForm,
                     CreateOrderForm,
@@ -47,6 +48,8 @@ def CreateProduction(request, id):
 
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 2
+    productionOrder.email()
+    print(productionOrder.email())
     productionOrder.save()
     user = request.user
     user_id = request.user.id
@@ -77,15 +80,31 @@ def EditProduction(request, id):
         production = Production.objects.get(id=id)
     except Production.DoesNotExist:
         return redirect('stock')
-
+    productionOrder = ProductionOrder.objects.get(id=id)
     materials = production.productionmaterial_set.all()
 
     ctx = {
+        'order': productionOrder,
         'production': production,
         'materials': materials,
     }
 
     return render(request, 'stock/edit_production.html', ctx)
+
+
+def DetailProduction(request, id):
+
+    production = Production.objects.get(id=id)
+    productionOrder = ProductionOrder.objects.get(id=id)
+    materials = production.productionmaterial_set.all()
+
+    ctx = {
+        'order': productionOrder,
+        'production': production,
+        'materials': materials,
+    }
+
+    return render(request, 'stock/detail_production.html', ctx)
 
 
 def ProductionMaterialIncrement(request, id):
@@ -200,19 +219,6 @@ def ProductionStockIn(request, id):
     }
 
     return render(request, 'stock/create_stock.html', ctx)
-
-
-def DetailProduction(request, id):
-
-    production = Production.objects.get(id=id)
-    materials = production.productionmaterial_set.all()
-
-    ctx = {
-        'production': production,
-        'materials': materials,
-    }
-
-    return render(request, 'stock/detail_production.html', ctx)
 
 
 def HomeOrders(request):

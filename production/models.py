@@ -1,12 +1,14 @@
 from django.conf import settings
+from django.core.mail import EmailMessage
 from django.db import models
+from django.db.models import F, Sum
+from django.template.loader import render_to_string
 
 from order.models import Material, IntegerRangeField
 
 from decimal import Decimal
 from datetime import datetime
 
-from django.db.models import F, Sum
 
 
 class Production(models.Model):
@@ -195,6 +197,23 @@ class ProductionOrder(models.Model):
             result = i.price * i.area
             total += result
         return total
+
+    def mail(self, *args, **kwargs):
+        ctx = {
+            'name': self.customer.id,
+
+        }
+        template = render_to_string('production/email_template.html', ctx)
+
+        email = EmailMessage(
+            'Test',
+            template,
+            settings.EMAIL_HOST_USER,
+            ['grykajm@gmail.com']
+            )
+        
+        email.fail_silently=False
+        email.send()
  
 
 class MaterialServices(models.Model):

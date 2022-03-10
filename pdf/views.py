@@ -15,7 +15,7 @@ from datetime import datetime
 
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
-from reportlab.platypus import Frame
+from reportlab.platypus import Paragraph, Frame
 
 
 def generate_pdf(request, id):
@@ -38,9 +38,6 @@ def generate_pdf(request, id):
     p.drawString(195, 805, "Zamówienie nr {} ".format(production))
     p.line(0, 780, 1000, 780)
     p.line(0, 778, 1000, 778)
-    x1 = 20
-    y1 = 750
-
     p.drawString(20, 750, "Zamawiający: {}".format(production.customer))
     p.drawString(65, 730, "Adres: {}".format(production.customer.address_line_1))
     p.drawString(109, 710, "{}, {}".format(production.customer.postcode,
@@ -49,7 +46,7 @@ def generate_pdf(request, id):
     p.line(0, 672, 1000, 672)
     p.line(0, 670, 1000, 670)
 
-    data = [['Material', 'Usluga', 'Ilosc', 'Cena(m2)', 'Total'],]
+    data = [['Material', 'Usluga', 'Ilosc', 'Cena(m2)', 'Suma'],]
 
     for i in production.materialservices_set.all():
         print(i.material)
@@ -75,6 +72,20 @@ def generate_pdf(request, id):
     story.append(t)
     f = Frame(0, -2.8*inch, 8.3*inch, 11.7*inch)
     f.addFromList(story, p)
+
+    footer_style = styles['Normal']
+    footer_style.alignment = 1 
+    footer = Paragraph("Dokument wygenerowany automatycznie przez system Nesting Polska sp. z.o.o ", footer_style)
+
+
+    story.append(Paragraph("Dokument wygenerowany automatycznie przez system Nesting Polska sp. z.o.o ", footer_style))
+    story.append(Paragraph("Dane kontaktowe: tel. 532 - 424 - 424 , email: biuro@nestingpolska.pl ", footer_style))
+    story.append(Paragraph("Adres: ul. Odlewnicza 5, 04-343 Warszawa", footer_style))
+    story.append(Paragraph("Data wystawienia: {}".format(d.strftime('%d-%M-%Y')), footer_style))
+    story.append(Paragraph("*podpis oznaczna zapozanie sie ze stanem towaru. Reklamacje nie beda rozpatrywane.".format(d.strftime('%d-%M-%Y')), footer_style))
+
+    f2 = Frame(0, 0, 8.3*inch, 1*inch, showBoundary=1)
+    f2.addFromList(story, p)
 
     p.setTitle(f"Zam_{production}")
     p.showPage()

@@ -9,8 +9,10 @@
         <table class="table table-borderless table-sm text-start">
             <tbody>
               <tr>
+                {% if order.status != 0 %}
                 <td>Zamówienie nr:</td>
                 <td>{{ order }}</td>
+                {% endif %}
               </tr>
               <tr>
                 <td>Status:</td>
