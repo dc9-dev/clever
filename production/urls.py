@@ -16,5 +16,4 @@ urlpatterns = [
     path('orders/create', views.CreateOrder, name='create-order'),
     path('orders/edit/<int:id>', views.EditOrder, name='edit-order'),
     path('orders/detail/<int:id>', views.DetailOrder, name='detail-order'),
-    path('asasdsadsadsadasda', views.mail, name='mail'),
 ]
