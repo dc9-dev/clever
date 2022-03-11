@@ -205,7 +205,8 @@ class ProductionOrder(models.Model):
     def mail(self, *args, **kwargs):
 
         ctx = {
-            'name': self.customer.id,
+            'name': self.customer,
+            'status': self.get_status_display,
         }
         template = render_to_string('production/email_template.html', ctx)
 
