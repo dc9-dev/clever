@@ -18,9 +18,3 @@ DATABASES = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail52.mydevil.net'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'biuro@nestingpolska.usermd.net'
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
