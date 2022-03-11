@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.db.models import F, Sum
 from django.template.loader import render_to_string
@@ -210,14 +211,21 @@ class ProductionOrder(models.Model):
         }
         template = render_to_string('production/email_template.html', ctx)
 
-        email = EmailMessage(
-            'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()),
-            template,
-            settings.EMAIL_HOST_USER,
-            [self.customer.email]
-            )
-        email.fail_silently = False
-        email.send()
+        # email = EmailMessage(
+        #     'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()),
+        #     template,
+        #     settings.EMAIL_HOST_USER,
+        #     [self.customer.email]
+        #     )
+        # email.fail_silently = False
+        # email.send()
+
+        subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()), settings.EMAIL_HOST_USER, self.customer.email
+        text_content = 'Test test test.'
+        html_content = render_to_string('production/email_template.html', ctx)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
 class MaterialServices(models.Model):

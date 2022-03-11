@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage, send_mail
 from .forms import (ProductionMaterialForm,
                     ProductionCommentsForm,
                     CreateOrderForm,
