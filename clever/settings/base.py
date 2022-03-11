@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 ]
 
-GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
+GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -133,11 +133,7 @@ INTERNAL_IPS = [
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail52.mydevil.net'
-#EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
-#EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'biuro@nestingpolska.usermd.net'
-EMAIL_HOST_PASSWORD = 'Cleverspace2022'
-#EMAIL_HOST_USER = 'grykajm@gmail.com'
-#EMAIL_HOST_PASSOWRD = 'szklanki11'
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']

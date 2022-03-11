@@ -11,7 +11,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'p1472_nesting',
         'USER': 'p1472_nesting',
-        'PASSWORD': 'Cleverspace2022',
+        'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': 'pgsql52.mydevil.net',
         'PORT': '5432',
     },
