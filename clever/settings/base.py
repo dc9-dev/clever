@@ -46,8 +46,6 @@ INSTALLED_APPS = [
 
 ]
 
-GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
