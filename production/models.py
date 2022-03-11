@@ -182,6 +182,10 @@ class ProductionOrder(models.Model):
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def save(self, *args, **kwargs):
+        if self.pk is not None:
+            orig = ProductionOrder.objects.get(id=self.id)
+            if orig.status != self.status:
+                self.mail()
         counter = ProductionOrder.objects.count() + 1
         dt = datetime.today()
         self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
@@ -199,22 +203,21 @@ class ProductionOrder(models.Model):
         return total
 
     def mail(self, *args, **kwargs):
+
         ctx = {
             'name': self.customer.id,
-
         }
         template = render_to_string('production/email_template.html', ctx)
 
         email = EmailMessage(
-            'Test',
+            'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()),
             template,
             settings.EMAIL_HOST_USER,
-            ['grykajm@gmail.com']
+            [self.customer.email]
             )
-        
-        email.fail_silently=False
+        email.fail_silently = False
         email.send()
- 
+
 
 class MaterialServices(models.Model):
 
