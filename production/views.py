@@ -13,6 +13,7 @@ from .models import (Production,
                      ProductionComments,
                      ProductionOrder,
                      )
+from .filters import ProductionOrderFilter
 
 from stock.models import Stock
 from stock.forms import StockCreateForm, StockCreateInForm
@@ -220,16 +221,22 @@ def ProductionStockIn(request, id):
 
 def HomeOrders(request):
 
+    filter = ProductionOrderFilter(request.GET, queryset=ProductionOrder.objects.all())
+    
+    
     orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')
     orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')
     orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')
     orders_done = ProductionOrder.objects.filter(status=3).order_by('-date')
 
     ctx = {
+        
         'preparation': orders_preparation,
         'pending': orders_pending,
         'during': orders_during,
         'done': orders_done,
+      
+        'filter': filter,
     }
 
     return render(request, 'production/orders.html', ctx )

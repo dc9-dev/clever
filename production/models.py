@@ -4,6 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.db.models import F, Sum
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from order.models import Material, IntegerRangeField
 
@@ -170,7 +171,6 @@ class ProductionOrder(models.Model):
     DURING = 2
     DONE = 3
     STATUS = (
-        ('zmień status', 'zmień status'),
         (PREPARATION, 'Przygotowywanie'),
         (PENDING, 'Oczekuję'),
         (DURING, 'W trakcie'),
@@ -187,8 +187,8 @@ class ProductionOrder(models.Model):
             orig = ProductionOrder.objects.get(id=self.id)
             if orig.status != self.status:
                 self.mail()
-        counter = ProductionOrder.objects.count() + 1
-        dt = datetime.today()
+        dt = timezone.now()
+        counter = ProductionOrder.objects.filter(date__month=dt.month).count()
         self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
         super(ProductionOrder, self).save(*args, **kwargs)
 
@@ -196,7 +196,6 @@ class ProductionOrder(models.Model):
         return self.order
 
     def get_total(self):
-
         total = 0 
         for i in self.materialservices_set.all():
             result = i.price * i.area
@@ -209,17 +208,8 @@ class ProductionOrder(models.Model):
             'name': self.customer,
             'status': self.get_status_display,
         }
+
         template = render_to_string('production/email_template.html', ctx)
-
-        # email = EmailMessage(
-        #     'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()),
-        #     template,
-        #     settings.EMAIL_HOST_USER,
-        #     [self.customer.email]
-        #     )
-        # email.fail_silently = False
-        # email.send()
-
         subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()), settings.EMAIL_HOST_USER, self.customer.email
         text_content = 'Test test test.'
         html_content = render_to_string('production/email_template.html', ctx)
