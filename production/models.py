@@ -183,14 +183,15 @@ class ProductionOrder(models.Model):
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def save(self, *args, **kwargs):
+        dt = timezone.now()
         if self.pk is not None:
             orig = ProductionOrder.objects.get(id=self.id)
             if orig.status != self.status:
                 self.mail()
-        dt = timezone.now()
-        counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-        self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
-        super(ProductionOrder, self).save(*args, **kwargs)
+        else:
+            counter = ProductionOrder.objects.filter(date__month=dt.month).count()
+            self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
+        super(ProductionOrder, self).save(*args, **kwargs)ls
 
     def __str__(self):
         return self.order
