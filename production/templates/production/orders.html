@@ -1,22 +1,9 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-	<div class="col">
-		<div class="card card-body">
-
-			<form method="get">
-				{{ filter.form }}
-
-		    <button class="btn btn-primary" type="submit">Search</button>
-		  </form>
-		{% for order in filter.qs %}
-		  {{ order }}
-		{% endfor %}
-		</div>
-	</div>
 	<div class="col-sm-12 mb-3">
-		
-		<a href="{% url 'create-order' %}" class="btn btn-primary btn-sm float-end">Nowe zamówienie</a>
+		<a href="{% url 'create-order' %}" class="btn btn-primary btn-sm float-start">Nowe zamówienie</a>
+		<a href="{% url 'search-order' %}" class="btn btn-success btn-sm float-end">Szukaj zamówienia</a>
 	</div>
 </div>
 <div class="row">

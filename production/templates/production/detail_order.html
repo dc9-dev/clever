@@ -7,13 +7,17 @@
       <div class="col-sm-12">
         <div class="col-sm-4 mt-3">
           {% if order.status == 1 %}
-          <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Podejmij</a> 
+          
           {% endif %}
         <table class="table table-borderless table-sm text-start">
             <tbody>
               <tr>
                 <td>Zamówienie nr:</td>
                 <td>{{ order }}</td>
+              </tr>
+              <tr>
+                <td>Data:</td>
+                <td>{{ order.date }}</td>
               </tr>
               <tr>
                 <td>Status:</td>
@@ -58,7 +62,13 @@
           <tfoot class="dark">
             <tr>
               <td><a href="{% url 'getpdf' order.id %}" class="btn btn-danger btn-sm">Generuj PDF</a></td>
-              <td></td>
+              <td>
+                {% if order.status != 1 %}
+                <a href="{% url 'detail-production' order.id %}" class="btn btn-warning btn-sm">Zobacz produkcję</a>
+                {% elif order.status == 1 %}
+                <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Rozpocznij produkcję</a> 
+                {% endif %}
+              </td>
               <td></td>
               <td>Razem: </td>
               <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>

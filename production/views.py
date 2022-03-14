@@ -1,8 +1,10 @@
+from multiprocessing import context
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.views.generic import ListView
 from .forms import (ProductionMaterialForm,
                     ProductionCommentsForm,
                     CreateOrderForm,
@@ -221,22 +223,16 @@ def ProductionStockIn(request, id):
 
 def HomeOrders(request):
 
-    filter = ProductionOrderFilter(request.GET, queryset=ProductionOrder.objects.all())
-    
-    
-    orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')
-    orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')
-    orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')
-    orders_done = ProductionOrder.objects.filter(status=3).order_by('-date')
+    orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')[:25]
+    orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')[:25]
+    orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')[:25]
+    orders_done = ProductionOrder.objects.filter(status=3).order_by('-date')[:25]
 
     ctx = {
-        
         'preparation': orders_preparation,
         'pending': orders_pending,
         'during': orders_during,
         'done': orders_done,
-      
-        'filter': filter,
     }
 
     return render(request, 'production/orders.html', ctx )
@@ -305,3 +301,15 @@ def DetailOrder(request, id):
 
     return render(request, 'production/detail_order.html', ctx)
 
+
+class SearchOrder(ListView):
+
+    model = ProductionOrder
+    paginate_by = 100
+    template_name = 'production/search_order.html'
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['filter'] = ProductionOrderFilter(self.request.GET, queryset=self.get_queryset())
+        print(ProductionOrderFilter(self.request.GET, queryset=self.get_queryset()))
+        return context

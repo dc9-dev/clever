@@ -34,6 +34,13 @@ class Production(models.Model):
     def __str__(self):
         return self.order
 
+    def save(self, *args, **kwargs):
+        rename = list(self.order)
+        rename[0] = 'P'
+        rename[1] = 'R'
+        self.order = ''.join(rename)
+        super(Production, self).save(*args, **kwargs)
+
 
 class ProductionMaterial(models.Model):
 
@@ -99,6 +106,11 @@ class ProductionMaterial(models.Model):
             return 0
         else:
             return abs(float(self.area) - total_area + self.stockIn_area)
+
+    def waste_precent(self):
+        if self.waste != 0 and self.total_area != 0:
+            return  (self.waste() / self.total_area()) * 100
+        return "Brak"
 
 
 class ProductionStock(models.Model):
@@ -191,7 +203,7 @@ class ProductionOrder(models.Model):
         else:
             counter = ProductionOrder.objects.filter(date__month=dt.month).count()
             self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
-        super(ProductionOrder, self).save(*args, **kwargs)ls
+        super(ProductionOrder, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.order

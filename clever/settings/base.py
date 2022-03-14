@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_fastdev',
     'django_extensions',
+    'bootstrapform',
 
 ]
 
@@ -94,6 +95,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'pl'
 
 TIME_ZONE = 'Europe/Warsaw'
+
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 
 USE_I18N = True
 
