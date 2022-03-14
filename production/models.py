@@ -12,6 +12,26 @@ from decimal import Decimal
 from datetime import datetime
 
 
+class Customer(models.Model):
+
+    email = models.EmailField(unique=True, blank=True)
+    company = models.CharField(max_length=150, blank=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    # Delivery details
+    phone_number = models.CharField(max_length=15, blank=True)
+    postcode = models.CharField(max_length=12, blank=True)
+    address_line_1 = models.CharField(max_length=150, blank=True)
+    address_line_2 = models.CharField(max_length=150, blank=True)
+    town_city = models.CharField(max_length=150, blank=True)
+
+    class Meta:
+        verbose_name = "Klient"
+        verbose_name_plural = "Klienci"
+
+    def __str__(self):
+        return self.company
+
 
 class Production(models.Model):
     PREPARATION = 0
@@ -27,6 +47,7 @@ class Production(models.Model):
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=DURING)
@@ -146,27 +167,6 @@ class ProductionComments(models.Model):
 
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(blank=True, null=True)
-
-
-class Customer(models.Model):
-
-    email = models.EmailField(unique=True, blank=True)
-    company = models.CharField(max_length=150, blank=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    # Delivery details
-    phone_number = models.CharField(max_length=15, blank=True)
-    postcode = models.CharField(max_length=12, blank=True)
-    address_line_1 = models.CharField(max_length=150, blank=True)
-    address_line_2 = models.CharField(max_length=150, blank=True)
-    town_city = models.CharField(max_length=150, blank=True)
-
-    class Meta:
-        verbose_name = "Klient"
-        verbose_name_plural = "Klienci"
-
-    def __str__(self):
-        return self.company
 
 
 class Services(models.Model):

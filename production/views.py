@@ -55,6 +55,7 @@ def CreateProduction(request, id):
     user_id = request.user.id
     production, created = Production.objects.get_or_create(
                                              id=productionOrder.id,
+                                             customer=productionOrder.customer,
                                              user_id=user_id,
                                              order=productionOrder.order,
                                              date=productionOrder.date,)
@@ -89,7 +90,7 @@ def EditProduction(request, id):
         'materials': materials,
     }
 
-    return render(request, 'stock/edit_production.html', ctx)
+    return render(request, 'production/edit_production.html', ctx)
 
 
 def DetailProduction(request, id):
@@ -104,7 +105,7 @@ def DetailProduction(request, id):
         'materials': materials,
     }
 
-    return render(request, 'stock/detail_production.html', ctx)
+    return render(request, 'production/detail_production.html', ctx)
 
 
 def ProductionMaterialIncrement(request, id):

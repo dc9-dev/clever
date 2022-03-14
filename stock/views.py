@@ -1,3 +1,4 @@
+import re
 from django.http import HttpResponse, FileResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
@@ -5,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from datetime import datetime
 
-from .filters import StockFilter
+from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm
 from production.models import ProductionMaterial
 from .models import Stock, Material, Cutter, GoodsReceivedNote
@@ -102,6 +103,7 @@ def CutterBuy(request, id):
 def GRN(request):
 
     grns = GoodsReceivedNote.objects.all().order_by('-date')
+    filter = GrnFilter(request.GET, queryset=grns)
     form = grnCreateForm()
 
     if request.method == 'POST':
@@ -113,14 +115,15 @@ def GRN(request):
 
             return redirect('edit-grn', id=obj.id)
         else:
-            form = grnForm()
+            form = grnCreateForm()
 
     ctx = {
         'grns': grns,
+        'filter': filter,
         'form': form,
-           }
+        }
 
-    return render(request, 'production/grn.html', ctx)
+    return render(request, 'stock/grn.html', ctx)
 
 
 def EditGRN(request, id):
@@ -131,28 +134,34 @@ def EditGRN(request, id):
     form = GRNMaterailForm()
 
     if request.method == 'POST':
-        form = GRNMaterailForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
+        if 'addMaterial' in request.POST:
+            form = GRNMaterailForm(request.POST)
+            if form.is_valid():
+                obj = form.save(commit=False)
 
-            if int(float(request.POST['area']) * 1000) % int(float(obj.material.material_area ) * 1000 ) == 0:
+                if int(float(request.POST['area']) * 1000) % int(float(obj.material.material_area ) * 1000 ) == 0:
 
-                material = Material.objects.get(id=request.POST['material'])
-                material.quantity += float(request.POST['area']) / float(material.material_area)
-                material.save()
+                    material = Material.objects.get(id=request.POST['material'])
+                    material.quantity += float(request.POST['area']) / float(material.material_area)
+                    material.save()
 
-                obj.grn = grn
-                obj.save()
+                    obj.grn = grn
+                    obj.save()
 
-                return redirect('edit-grn', id=grn.id)
+                    return redirect('edit-grn', id=grn.id)
 
-            else:
-                error = "Wprowadziłeś ilość materiału równą {}m2.<br>\
-                         Jedna płyta ma powierzchnie {}m2<br>\
-                         Nie wychodzą równe sztuki płyt, wróć do PZtki i popraw metry  ".format(request.POST['area'], obj.material.material_area)
-                return HttpResponse(error)
+                else:
+                    error = "Wprowadziłeś ilość materiału równą {}m2.<br>\
+                            Jedna płyta ma powierzchnie {}m2<br>\
+                            Nie wychodzą równe sztuki płyt, wróć do PZtki i popraw metry  ".format(request.POST['area'], obj.material.material_area)
+                    return HttpResponse(error)
         else:
             form = GRNMaterailForm()
+        
+        if 'checked' in request.POST:
+            grn.status = 1
+            grn.save()
+            return redirect('detail-grn', id=grn.id)
 
     ctx = {
         'grns': grns,
@@ -161,7 +170,7 @@ def EditGRN(request, id):
         'materials': materials,
         }
 
-    return render(request, 'production/edit_grn.html', ctx)
+    return render(request, 'stock/edit_grn.html', ctx)
 
 
 def DetailGRN(request, id):
@@ -170,10 +179,28 @@ def DetailGRN(request, id):
     grn = GoodsReceivedNote.objects.get(id=id)
     materials = grn.grnmaterial_set.all()
 
+    if request.method == 'POST':
+        grn.status = 1
+        grn.save()
+        return redirect('detail-grn', grn.id)
+
     ctx = {
         'grns': grns,
         'grn': grn,
         'materials': materials,
         }
 
-    return render(request, 'production/detail_grn.html', ctx)
+    return render(request, 'stock/detail_grn.html', ctx)
+
+
+def check_grn(request, id):
+
+    grn = GoodsReceivedNote.objects.get(id=id)
+
+    if request.method == 'POST':
+        grn.status = 1
+        grn.save()
+        return redirect('detail-grn', id=grn.id)
+    
+   
+

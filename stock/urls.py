@@ -12,4 +12,5 @@ urlpatterns = [
     path('grn/', views.GRN, name='grn'),
     path('grn/edit/<int:id>', views.EditGRN, name='edit-grn'),
     path('grn/detail/<int:id>', views.DetailGRN, name='detail-grn'),
+    
 ]

@@ -22,7 +22,7 @@
                     <ul class="list-group list-group-flush">
                         {% for order in filter.qs %}
                             <li class="list-group-item">
-                            {{ order }} - {{ order.customer }}
+                            <a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order }} - {{ order.customer }}</a>
                             </li>
                         {% endfor %}
                     </ul>

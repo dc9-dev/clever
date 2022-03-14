@@ -4,8 +4,14 @@ from django_filters import ModelChoiceFilter, CharFilter, DateFilter
 from .models import *
 
 class ProductionOrderFilter(django_filters.FilterSet):
+
     customer = ModelChoiceFilter(label='Klient', queryset=Customer.objects.all())
     order = CharFilter(field_name='order', label='Zamówienie nr', lookup_expr='icontains')
+    date = DateFilter(
+        field_name='date', 
+        label='Data', 
+        lookup_expr='icontains', 
+        input_formats=settings.DATE_INPUT_FORMATS,)
     date_start = DateFilter(
         field_name='date', 
         label='Data od:',
@@ -21,4 +27,4 @@ class ProductionOrderFilter(django_filters.FilterSet):
 
     class Meta:
         model = ProductionOrder
-        exclude = ['date']
+        fields = '__all__'

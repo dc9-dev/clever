@@ -44,24 +44,63 @@ class Contractor(models.Model):
 
 
 class GoodsReceivedNote(models.Model):
+    TOCHECK = 0
+    CHECKED = 1
+    STATUS = (
+        (TOCHECK, 'Niezatwierdzone'),
+        (CHECKED, 'Zatwierdzone')
+    )
+   
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE, blank=False)
     documentID = models.CharField(max_length=255, blank=False, null=False)
     date = models.DateTimeField(auto_now_add=True)
-
+    status = models.SmallIntegerField(choices=STATUS, default=TOCHECK)
+    
     def __str__(self):
         return "{} - {}".format(self.documentID, self.contractor)
-
+    
 
 class GRNMaterial(models.Model):
+
+    VAT_8 = 0
+    VAT_23 = 1
+    VAT = (
+        (VAT_8, '8%'),
+        (VAT_23, '23%')
+    )
 
     grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.IntegerField(blank=True, null=True)
+    price_net = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    vat = models.SmallIntegerField(choices=VAT, default=VAT_23)
 
     def save(self, *args, **kwargs):
 
         self.quantity = self.area / self.material.material_area
         super(GRNMaterial, self).save(*args, **kwargs)
+    
+    def price_gross(self):
+        vat = 0
+        if self.vat == self.VAT_8:
+            vat = 0.08
+        if self.vat == self.VAT_23:
+            vat = 0.23
+        return float(self.price_net) + (float(self.price_net) * float(vat))
 
+    def total_price(self):
+        
+        return float(self.area) * self.price_gross()
+
+    def sum_total_price(self):
+
+        grn = GoodsReceivedNote.objects.get(id=self.id)
+
+        total_price = 0
+
+        for material in grn.grnmaterial_set.all():
+            result = float(material.area) * material.price_gross
+            total_price += result
+        return total_price
