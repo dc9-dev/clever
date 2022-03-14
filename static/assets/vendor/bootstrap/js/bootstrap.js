@@ -28,7 +28,9 @@
   }
 
   const Popper__namespace = /*#__PURE__*/_interopNamespace(Popper);
-
+  window.onload = function() {
+    console.log("Hello world!");
+  };
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.1.3): util/index.js

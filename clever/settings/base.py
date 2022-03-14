@@ -106,9 +106,6 @@ USE_TZ = False
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = '/home/Nestingpolska/domains/nestingpolska.usermd.net/public_python/public/static/'
-MEDIA_ROOT = '/home/Nestingpolska/domains/nestingpolska.usermd.net/public_python/public/media/'
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]

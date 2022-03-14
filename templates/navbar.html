@@ -11,7 +11,6 @@
       <ul class="d-flex align-items-center">
         <li class="nav-item dropdown pe-3">
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-           <!--  <img src="{% static 'assets/img/profile-img.jpg' %}" alt="Profile" class="rounded-circle"> -->
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.first_name }} {{ user.last_name.0 }}.</span>
           </a><!-- End Profile Iamge Icon -->
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -27,8 +26,20 @@
                 <span>Panel Admina</span>
               </a>
             </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'cash' %}">
+                <i class="bi bi-gear"></i>
+                <span>Rozliczenia</span>
+              </a>
+            </li>
             {% endif %}
             {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'grn' %}">
+                <i class="bi bi-bag-plus"></i>
+                <span>Przyjęcie Materiału</span>
+              </a>
+            </li>
             <li>
               <a class="dropdown-item d-flex align-items-center" href="{% url 'home-orders' %}">
                 <i class="bi bi-square"></i>
@@ -73,6 +84,12 @@
         <a class="nav-link collapsed" href="{% url 'admin:index' %}">
           <i class="bi bi-gear"></i>
           <span>Panel Admina</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'cash' %}">
+          <i class="bi bi-gear"></i>
+          <span>Rozliczenia</span>
         </a>
       </li>
       {% endif %}

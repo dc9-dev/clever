@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">PZ{{ grn.id|stringformat:"03d" }}</th>
+                    <th scope="row">PZ{{ grn.title }}</th>
                     <td>{{ grn.documentID }}</td>
                     <td>{{ grn.contractor }}</td>
                     <td>{{ grn.user.first_name }} {{ grn.user.last_name }}</td>
@@ -66,14 +66,10 @@
                   <td>{{ material.get_vat_display }}</td>
                   <td>{{ material.price_gross|floatformat:2 }}zł/m2</td>
                   <td>{{ material.total_price|floatformat:2 }}zł</td>
-                  
                 </tr>
-               
                 {% endfor %}
               </tbody>
-              
             </table>
- 
          </div>
    </div>
  </div>

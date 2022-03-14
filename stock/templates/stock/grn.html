@@ -20,7 +20,22 @@
          </div>
    </div>
  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="col-sm-12">
+        <div class="list-group mt-3">
+          {% for grn in filter.qs %}
+          <a href="{% url 'detail-grn' grn.id %}" 
+             class="list-group-item list-group-item-action {% if grn.status == 0 %} list-group-item-danger {% else %} list-group-item-info {% endif %}">
+             <small>{{ grn.title }} - {{ grn.documentID}} - {{ grn.contractor }}</small>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 <div class="col-sm-6">
   <div class="card">
     <div class="card-body">
@@ -28,9 +43,6 @@
         {{ filter.form|bootstrap }}
         <button class="btn btn-primary btn-sm mt-2 mb-2" type="submit">Szukaj</button> 
       </form>
-        {% for grn in filter.qs %}
-        	<h6><small><a href="{% url 'detail-grn' grn.id %}" class="link-dark">PZ{{ grn.id|stringformat:"03d"}} - {{ grn.documentID}} {{ grn.contractor }}</a></small></h6>
-        {% endfor %}	
    </div>
  </div>
 </div>

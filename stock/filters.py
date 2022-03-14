@@ -14,7 +14,7 @@ class StockFilter(django_filters.FilterSet):
 
 
 class GrnFilter(django_filters.FilterSet):
-    
+    title = CharFilter(field_name='title', label='Nr PZtki', lookup_expr='icontains')
     contractor = ModelChoiceFilter(label="Kontrahent",
                                   queryset=Contractor.objects.all(),
                                   )

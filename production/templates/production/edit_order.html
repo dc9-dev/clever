@@ -19,6 +19,14 @@
                 <td>{{ order.get_status_display }}</td>
               </tr>
               <tr>
+                <tr>
+                  <td>Płatność:</td>
+                  {% if order.settlement == False %}
+                  <td>Nierozliczone</td>
+                  {% else %}
+                  <td>Rozliczone</td>
+                  {% endif %}
+                </tr>
                 <td>Zamawiający:</td>
                 <td>{{ order.customer }}</td>
               </tr>

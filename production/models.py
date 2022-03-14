@@ -1,15 +1,13 @@
 from django.conf import settings
-from django.core.mail import EmailMessage
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
-from django.db.models import F, Sum
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.timezone import make_aware
 from order.models import Material, IntegerRangeField
 
 from decimal import Decimal
-from datetime import datetime
+
 
 
 class Customer(models.Model):
@@ -51,7 +49,7 @@ class Production(models.Model):
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=DURING)
-
+    
     def __str__(self):
         return self.order
 
@@ -198,6 +196,7 @@ class ProductionOrder(models.Model):
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
+    settlement = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         dt = timezone.now()

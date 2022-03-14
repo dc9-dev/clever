@@ -20,10 +20,19 @@
                 <td>{{ order.date }}</td>
               </tr>
               <tr>
+                <td>Płatność:</td>
+                {% if order.settlement == False %}
+                <td>Nierozliczone</td>
+                {% else %}
+                <td>Rozliczone</td>
+                {% endif %}
+              </tr>
+              <tr>
+              <tr>
                 <td>Status:</td>
                 <td>{{ order.get_status_display }}</td>
               </tr>
-              <tr>
+              
                 <td>Zamawiający:</td>
                 <td>{{ order.customer }}</td>
               </tr>
@@ -69,7 +78,11 @@
                 <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Rozpocznij produkcję</a> 
                 {% endif %}
               </td>
-              <td></td>
+              <td>
+                {% if order.status == 3 %}
+                <a href="{% url 'detail-production' order.id %}" class="btn btn-success btn-sm">Rozlicz</a>
+                {% endif %}
+              </td>
               <td>Razem: </td>
               <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
             </tr>

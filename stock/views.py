@@ -9,7 +9,7 @@ from datetime import datetime
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm
 from production.models import ProductionMaterial
-from .models import Stock, Material, Cutter, GoodsReceivedNote
+from .models import Stock, Material, Cutter, GoodsReceivedNote, Cash
 
 
 class StockView(ListView):
@@ -204,3 +204,10 @@ def check_grn(request, id):
     
    
 
+def cash(request):
+    cashes = Cash.objects.all()
+    ctx = {
+        'cashes': cashes,
+    }
+
+    return render(request, 'stock/home_cash.html', ctx)
