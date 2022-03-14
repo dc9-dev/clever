@@ -100,7 +100,7 @@ DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 STATIC_URL = '/static/'

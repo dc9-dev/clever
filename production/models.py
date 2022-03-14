@@ -195,7 +195,7 @@ class ProductionOrder(models.Model):
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def save(self, *args, **kwargs):
-        dt = timezone.now(timezone.utc)
+        dt = timezone.now()
         if self.pk is not None:
             orig = ProductionOrder.objects.get(id=self.id)
             if orig.status != self.status:

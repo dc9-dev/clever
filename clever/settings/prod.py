@@ -2,7 +2,7 @@ from .base import *
 import os
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['nestingpolska.usermd.net']
 
 
