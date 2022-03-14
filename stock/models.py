@@ -1,5 +1,7 @@
+from tabnanny import verbose
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from order.models import Material, IntegerRangeField
 from phonenumber_field.modelfields import PhoneNumberField
 from address.models import AddressField
@@ -50,13 +52,19 @@ class GoodsReceivedNote(models.Model):
         (TOCHECK, 'Niezatwierdzone'),
         (CHECKED, 'Zatwierdzone')
     )
-   
+    title = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE, blank=False)
     documentID = models.CharField(max_length=255, blank=False, null=False)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=TOCHECK)
     
+    def save(self, *args, **kwargs):
+        dt = timezone.now()
+        counter = GoodsReceivedNote.objects.filter(date__month=dt.month).count()
+        self.title = "PZ/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
+        super(GoodsReceivedNote, self).save(*args, **kwargs)
+
     def __str__(self):
         return "{} - {}".format(self.documentID, self.contractor)
     
@@ -69,7 +77,7 @@ class GRNMaterial(models.Model):
         (VAT_8, '8%'),
         (VAT_23, '23%')
     )
-
+    
     grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
@@ -104,3 +112,16 @@ class GRNMaterial(models.Model):
             result = float(material.area) * material.price_gross
             total_price += result
         return total_price
+
+
+class Cash(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    
+    class Meta:
+        verbose_name = "Kasa"
+        verbose_name_plural = "Kasy"
+
+    def __str__(self):
+        return "{} - {} {}".format(self.title, self.user.first_name, self.user.last_name)
