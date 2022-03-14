@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import F, Sum
 from django.template.loader import render_to_string
 from django.utils import timezone
-
+from django.utils.timezone import make_aware
 from order.models import Material, IntegerRangeField
 
 from decimal import Decimal
@@ -195,7 +195,7 @@ class ProductionOrder(models.Model):
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
 
     def save(self, *args, **kwargs):
-        dt = timezone.now(tz=timezone.utc)
+        dt = make_aware(timezone.now())
         if self.pk is not None:
             orig = ProductionOrder.objects.get(id=self.id)
             if orig.status != self.status:
