@@ -108,9 +108,15 @@ class ProductionMaterial(models.Model):
             return abs(float(self.area) - total_area + self.stockIn_area)
 
     def waste_precent(self):
-        if self.waste != 0 and self.total_area != 0:
-            return  (self.waste() / self.total_area()) * 100
-        return "Brak"
+        material = ProductionMaterial.objects.get(id=self.id)
+
+        if self.waste != 0 and self.total_area != 0 and self.quantity != 0:
+            return  (self.waste() / self.total_area() ) * 100
+            
+        else:
+            return 0
+            
+        
 
 
 class ProductionStock(models.Model):
