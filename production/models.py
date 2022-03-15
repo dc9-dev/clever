@@ -111,8 +111,6 @@ class ProductionMaterial(models.Model):
         else:
             return 0
             
-        
-
 
 class ProductionStock(models.Model):
 

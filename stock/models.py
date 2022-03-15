@@ -110,7 +110,6 @@ class GRNMaterial(models.Model):
     price_gross = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
     vat = models.SmallIntegerField(choices=VAT, default=VAT_23)
     vat_amount = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
-    
 
     def save(self, *args, **kwargs):
         self.price_net = float(self.price_net_unit) * float(self.area)
