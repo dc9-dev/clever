@@ -1,10 +1,10 @@
 import re
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 
-from datetime import datetime
 
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
@@ -228,5 +228,5 @@ class ServicesCreateView(CreateView):
 class ContractorCreateView(CreateView):
     model = Contractor
     template_name = "stock/create_object.html"
-    success_url = '/'
+    success_url = reverse_lazy('grn')
     form_class = CreateContractorForm
