@@ -1,5 +1,9 @@
 {% extends 'main.html' %}
+{% load attachments_tags %}
+{% get_attachments_for order as attachments %}
+
 {% block content %}
+
 <div class="row">
 <div class="col-sm-12">
   <div class="card">
@@ -88,7 +92,35 @@
             </tr>
 
           </tfoot>
+          
+        
         </table>
+        
+
+        <span>Object has {% attachments_count order %} attachments</span>
+        {% if attachments %}
+        <ul>
+        {% for attachment in my_entry_attachments %}
+            <li>
+                <a href="{{ attachment.attachment_file.url }}">{{ attachment.filename }}</a>
+                {% attachment_delete_link attachment %}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% attachment_form order %}
+        
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
       </div>
    </div>
  </div>

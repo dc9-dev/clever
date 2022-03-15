@@ -1,5 +1,8 @@
+from audioop import reverse
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
+from django.urls import reverse
 from django.db import models
+from decimal import Decimal
 
 
 class CustomAccountManager(BaseUserManager):
@@ -62,3 +65,33 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Customer(models.Model):
+
+    email = models.EmailField(unique=True, blank=True)
+    company = models.CharField(max_length=150, blank=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    # Delivery details
+    phone_number = models.CharField(max_length=15, blank=True)
+    postcode = models.CharField(max_length=12, blank=True)
+    address_line_1 = models.CharField(max_length=150, blank=True)
+    address_line_2 = models.CharField(max_length=150, blank=True)
+    town_city = models.CharField(max_length=150, blank=True)
+    balance =  models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+
+    class Meta:
+        verbose_name = "Klient"
+        verbose_name_plural = "Klienci"
+
+    def __str__(self):
+        return self.company
+
+    def get_absolute_url(self):
+        return reverse('accounts:detail-customer', args=[self.id])
+
+    def save(self, *args, **kwargs):
+        if self.company == '':
+            self.company = self.first_name + ' ' + self.last_name
+        super(Customer, self).save(self, *args, **kwargs)

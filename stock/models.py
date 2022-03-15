@@ -5,7 +5,6 @@ from django.utils import timezone
 from order.models import Material, IntegerRangeField
 from phonenumber_field.modelfields import PhoneNumberField
 from address.models import AddressField
-
 from decimal import Decimal
 
 

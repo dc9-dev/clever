@@ -3,32 +3,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.timezone import make_aware
 from order.models import Material, IntegerRangeField
-
+from account.models import Customer
 from decimal import Decimal
-
-
-
-class Customer(models.Model):
-
-    email = models.EmailField(unique=True, blank=True)
-    company = models.CharField(max_length=150, blank=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    # Delivery details
-    phone_number = models.CharField(max_length=15, blank=True)
-    postcode = models.CharField(max_length=12, blank=True)
-    address_line_1 = models.CharField(max_length=150, blank=True)
-    address_line_2 = models.CharField(max_length=150, blank=True)
-    town_city = models.CharField(max_length=150, blank=True)
-
-    class Meta:
-        verbose_name = "Klient"
-        verbose_name_plural = "Klienci"
-
-    def __str__(self):
-        return self.company
 
 
 class Production(models.Model):

@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserBase
+from .models import UserBase, Customer
 
 class LoginForm(forms.Form):
 
@@ -33,3 +33,22 @@ class UserRegistrationForm(forms.ModelForm):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
         for input, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+
+class CustomerCreateForm(forms.ModelForm):
+    
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        #fields = ['e-mail', 'firma', 'Imię', 'Naziwsko', 'Tel.', 'Kod Pocztowy', 'Adres', 'Miasto', 'Saldo'],  # sprawdz pozniej
+        super(CustomerCreateForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+            # for name in self.fields:
+            #     visible.field.widget.attrs['placeholder'] = list(fields) # to tez
+            
+            
+            
+        

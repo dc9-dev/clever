@@ -33,13 +33,14 @@ INSTALLED_APPS = [
     'production',
 
     'pdf',
-
+    'attachments',
     'address',
     'phonenumber_field',
     'localflavor',
 
     'randomslugfield',
     'imagekit',
+    
     'django_filters',
     'django_fastdev',
     'django_extensions',

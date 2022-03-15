@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm, UserRegistrationForm
-
+from django.views.generic import CreateView, DetailView
+from django.urls import reverse_lazy, reverse
+from .forms import LoginForm, UserRegistrationForm, CustomerCreateForm
+from .models import Customer
 
 def loginUser(request):
     if request.method == 'POST':
@@ -44,3 +46,32 @@ def register(request):
         else:
             user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'form': user_form})
+
+
+class CustomerCreateView(CreateView):
+    
+    model = Customer
+    template_name = 'account/create_customer.html'
+    form_class = CustomerCreateForm
+    success_url = "account/customer/create"
+
+    def get(self, request, *args, **kwargs):
+        context = {'form': CustomerCreateForm()}
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+       
+        form = CustomerCreateForm(request.POST)
+        if form.is_valid():
+            customer = form.save()
+            customer.save()
+            
+        return super().post(request, *args, **kwargs)
+
+
+class CustomerDetailView(DetailView):
+    model = Customer
+    template_name = 'account/detail_customer.html'
+
+    
+    
