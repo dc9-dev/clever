@@ -7,9 +7,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 
 from .filters import StockFilter, GrnFilter
-from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm
+from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Stock, Material, Cutter, GoodsReceivedNote, Cash
+from .models import Contractor, Stock, Material, Cutter, GoodsReceivedNote, Cash
 
 
 class StockView(ListView):
@@ -223,3 +223,10 @@ class ServicesCreateView(CreateView):
     template_name = "stock/create_object.html"
     success_url = '/'
     form_class = CreateServicesForm
+
+
+class ContractorCreateView(CreateView):
+    model = Contractor
+    template_name = "stock/create_object.html"
+    success_url = '/'
+    form_class = CreateContractorForm

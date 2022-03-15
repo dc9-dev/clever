@@ -1,5 +1,5 @@
 from django import forms
-from stock.models import Stock, GoodsReceivedNote, GRNMaterial
+from stock.models import Stock, GoodsReceivedNote, GRNMaterial, Contractor
 from order.models import Material
 from production.models import Services
 
@@ -55,4 +55,14 @@ class CreateServicesForm(forms.ModelForm):
 
     class Meta:
         model = Services
+        fields = '__all__'
+
+class CreateContractorForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CreateContractorForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Contractor
         fields = '__all__'
