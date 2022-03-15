@@ -1,24 +1,24 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-<div class="col-sm-12">
-  <div class="card">
-    <div class="card-body">
-     	<div class="col-sm-12">
-        <div class="col-sm-4 mt-3">
-        <table class="table table-borderless table-sm text-start">
-            <tbody>
-              <tr>
-                {% if order.status != 0 %}
-                <td>Zamówienie nr:</td>
-                <td>{{ order }}</td>
-                {% endif %}
-              </tr>
-              <tr>
-                <td>Status:</td>
-                <td>{{ order.get_status_display }}</td>
-              </tr>
-              <tr>
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4 mt-3">
+            <table class="table table-borderless table-sm text-start">
+              <tbody>
+                <tr>
+                  {% if order.status != 0 %}
+                  <td>Zamówienie nr:</td>
+                  <td>{{ order }}</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td>Status:</td>
+                  <td>{{ order.get_status_display }}</td>
+                </tr>
+                <tr>
                 <tr>
                   <td>Płatność:</td>
                   {% if order.settlement == False %}
@@ -29,66 +29,74 @@
                 </tr>
                 <td>Zamawiający:</td>
                 <td>{{ order.customer }}</td>
-              </tr>
+                </tr>
+                <tr>
+                  <td>Adres:</td>
+                  <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tel:</td>
+                  <td>{{ order.customer.phone_number }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <table class="table table-success table-striped">
+            <thead>
               <tr>
-                <td>Adres:</td>
-                <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</td>
+                <th scope="col">Materiał</th>
+                <th scope="col">Usługi</th>
+                <th scope="col">Ilość</th>
+                <th scope="col">Cena(m2)</th>
+                <th scope="col">Total</th>
               </tr>
+            </thead>
+            <tbody>
+              <form method="POST">{% csrf_token %}
+                <tr>
+                  <td scope="col">{{ form.material }}</td>
+                  <td scope="col">{{ form.services }}</td>
+                  <td scope="col">{{ form.area }}</td>
+                  <td scope="col">{{ form.price }}</td>
+                  <td scope="col"><button type="submit" name="add" class="btn btn-success btn-sm">Dodaj </button></td>
+                </tr>
+              </form>
+              {% for ms in materialservices %}
               <tr>
-                <td>Tel:</td>
-                <td>{{ order.customer.phone_number }}</td>
+                <td scope="col">{{ ms.material }}</td>
+                <td scope="col">{{ ms.services }}</td>
+                <td scope="col">{{ ms.area }}m2</td>
+                <td scope="col">{{ ms.price }}pln</td>
+                <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
               </tr>
+              {% endfor %}
             </tbody>
-        </table>
+            <tfoot class="dark">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Razem: </td>
+                <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
+              </tr>
+
+            </tfoot>
+          </table>
+          <form method="POST">{% csrf_token %}
+            <button type="submit" name="done" class="btn btn-primary btn-sm float-end">Do realizacji!</button>
+          </form>
         </div>
-        <table class="table table-success table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Materiał</th>
-              <th scope="col">Usługi</th>
-              <th scope="col">Ilość</th>
-              <th scope="col">Cena(m2)</th>
-              <th scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <form method="POST">{% csrf_token %}
-            <tr>
-              <td scope="col">{{ form.material }}</td>
-              <td scope="col">{{ form.services }}</td>
-              <td scope="col">{{ form.area }}</td>
-              <td scope="col">{{ form.price }}</td>
-              <td scope="col"><button type="submit" name="add" class="btn btn-success btn-sm">Dodaj </button></td>
-            </tr>
-            </form>
-            {% for ms in materialservices %}
-            <tr>
-              <td scope="col">{{ ms.material }}</td>
-              <td scope="col">{{ ms.services }}</td>
-              <td scope="col">{{ ms.area }}m2</td>
-              <td scope="col">{{ ms.price }}pln</td>
-              <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot class="dark">
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>Razem: </td>
-              <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
-            </tr>
-
-          </tfoot>
-        </table>
-        <form method="POST">{% csrf_token %}
-          <button type="submit" name="done" class="btn btn-primary btn-sm float-end">Do realizacji!</button>
-        </form>
       </div>
-   </div>
- </div>
-</div>
-
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="document">
+        <button type="submit">Upload file</button>
+      </form>
+      {% if url %}
+      <p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}

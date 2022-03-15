@@ -230,3 +230,15 @@ class MaterialServices(models.Model):
 
     def total(self):
         return self.area * self.price
+
+
+class Attachment(models.Model):
+    production_order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='production/order/attachments/')
+    
+    def __str__(self):
+        return self.title
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()
+        super().delete(*args, **kwargs)

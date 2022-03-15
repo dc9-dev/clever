@@ -1,10 +1,9 @@
 from django import forms
-from .models import (Production,
+from .models import (Attachment,
                      ProductionMaterial,
                      ProductionComments,
                      ProductionOrder,
                      MaterialServices)
-from order.models import Material
 
 
 class ProductionMaterialForm(forms.ModelForm):
@@ -40,3 +39,9 @@ class EditOrderForm(forms.ModelForm):
     class Meta:
         model = MaterialServices
         exclude = ['productionorder', 'total_price']
+
+class AttachmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Attachment
+        fields = '__all__'
