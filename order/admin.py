@@ -6,4 +6,3 @@ from .models import Material
 #admin.site.register(Pattern),
 #admin.site.register(Milling),
 admin.site.register(Material),
-#admin.site.register(Attachment),
