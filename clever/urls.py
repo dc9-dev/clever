@@ -8,5 +8,4 @@ urlpatterns = [
     path('stock/', include('stock.urls')),
     path('production/', include('production.urls')),
     path('pdf/', include('pdf.urls')),
-    path('^attachments/', include('attachments.urls', namespace='attachments')),
 ] 
