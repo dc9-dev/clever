@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'production',
 
     'pdf',
-    'attachments',
     'address',
     'phonenumber_field',
     'localflavor',
