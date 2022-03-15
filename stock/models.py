@@ -66,7 +66,31 @@ class GoodsReceivedNote(models.Model):
 
     def __str__(self):
         return "{} - {}".format(self.documentID, self.contractor)
+
+    def total_net(self):
+        materials = GoodsReceivedNote.objects.get(id=self.id).grnmaterial_set.all()
+        
+        total = 0
+        for material in materials:
+            total += material.price_net
+        return total
     
+    def total_vat(self):
+        materials = GoodsReceivedNote.objects.get(id=self.id).grnmaterial_set.all()
+        
+        total = 0
+        for material in materials:
+            total += material.vat_amount
+        return total
+    
+    def total_gross(self):
+        materials = GoodsReceivedNote.objects.get(id=self.id).grnmaterial_set.all()
+        
+        total = 0
+        for material in materials:
+            total += material.price_gross
+        return total
+
 
 class GRNMaterial(models.Model):
 
@@ -81,36 +105,31 @@ class GRNMaterial(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.IntegerField(blank=True, null=True)
+    price_net_unit = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
     price_net = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    price_gross = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
     vat = models.SmallIntegerField(choices=VAT, default=VAT_23)
+    vat_amount = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    
 
     def save(self, *args, **kwargs):
-
+        self.price_net = float(self.price_net_unit) * float(self.area)
         self.quantity = self.area / self.material.material_area
+        self.price_gross = self.price_gross_calc()
+        self.vat_amount = self.vat_amount_calc()
         super(GRNMaterial, self).save(*args, **kwargs)
     
-    def price_gross(self):
+    def vat_amount_calc(self):
+        
+        return float(self.price_gross) - self.price_net
+
+    def price_gross_calc(self):
         vat = 0
         if self.vat == self.VAT_8:
             vat = 0.08
         if self.vat == self.VAT_23:
             vat = 0.23
         return float(self.price_net) + (float(self.price_net) * float(vat))
-
-    def total_price(self):
-        
-        return float(self.area) * self.price_gross()
-
-    def sum_total_price(self):
-
-        grn = GoodsReceivedNote.objects.get(id=self.id)
-
-        total_price = 0
-
-        for material in grn.grnmaterial_set.all():
-            result = float(material.area) * material.price_gross
-            total_price += result
-        return total_price
 
 
 class Cash(models.Model):

@@ -7,8 +7,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 
 from .filters import StockFilter, GrnFilter
-from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm
-from production.models import ProductionMaterial
+from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm
+from production.models import ProductionMaterial, Services
 from .models import Stock, Material, Cutter, GoodsReceivedNote, Cash
 
 
@@ -128,7 +128,6 @@ def GRN(request):
 
 def EditGRN(request, id):
 
-    grns = GoodsReceivedNote.objects.all().order_by('date')
     grn = GoodsReceivedNote.objects.get(id=id)
     materials = grn.grnmaterial_set.all()
     form = GRNMaterailForm()
@@ -136,6 +135,7 @@ def EditGRN(request, id):
     if request.method == 'POST':
         if 'addMaterial' in request.POST:
             form = GRNMaterailForm(request.POST)
+            print(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
 
@@ -164,7 +164,6 @@ def EditGRN(request, id):
             return redirect('detail-grn', id=grn.id)
 
     ctx = {
-        'grns': grns,
         'grn': grn,
         'form': form,
         'materials': materials,
@@ -202,7 +201,6 @@ def check_grn(request, id):
         grn.save()
         return redirect('detail-grn', id=grn.id)
     
-   
 
 def cash(request):
     cashes = Cash.objects.all()
@@ -211,3 +209,17 @@ def cash(request):
     }
 
     return render(request, 'stock/home_cash.html', ctx)
+
+
+class MaterialCreateView(CreateView):
+    model = Material
+    template_name = "stock/create_object.html"
+    success_url = '/'
+    form_class = CreateMaterialForm
+
+
+class ServicesCreateView(CreateView):
+    model = Services
+    template_name = "stock/create_object.html"
+    success_url = '/'
+    form_class = CreateServicesForm

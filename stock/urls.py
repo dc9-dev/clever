@@ -13,5 +13,7 @@ urlpatterns = [
     path('grn/edit/<int:id>', views.EditGRN, name='edit-grn'),
     path('grn/detail/<int:id>', views.DetailGRN, name='detail-grn'),
     path('cash/', views.cash, name='cash'),
+    path('material/create', views.MaterialCreateView.as_view(), name='create-material'),
+    path('services/create', views.ServicesCreateView.as_view(), name='create-services'),
     
 ]

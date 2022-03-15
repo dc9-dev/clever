@@ -1,6 +1,7 @@
 from django import forms
 from stock.models import Stock, GoodsReceivedNote, GRNMaterial
 from order.models import Material
+from production.models import Services
 
 #  Production, ProductionMaterial, ProductionComments,
 
@@ -31,8 +32,27 @@ class grnCreateForm(forms.ModelForm):
 
 
 class GRNMaterailForm(forms.ModelForm):
-   # area = forms.CharField(max_length=30)
 
     class Meta:
         model = GRNMaterial
-        exclude = ['grn']
+        exclude = ['grn', 'price_net', 'price_gross', 'vat_amount']
+
+class CreateMaterialForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CreateMaterialForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Material
+        fields = '__all__'
+
+class CreateServicesForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CreateServicesForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Services
+        fields = '__all__'

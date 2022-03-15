@@ -142,12 +142,13 @@ class ProductionComments(models.Model):
 
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(blank=True, null=True)
-
+    
 
 class Services(models.Model):
 
     title = models.CharField(max_length=255)
-    # price_gross = models.IntegerField()
+    price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    units = models.CharField(max_length=255)
     
     def __str__(self):
         return self.title

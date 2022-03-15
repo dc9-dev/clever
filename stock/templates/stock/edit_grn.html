@@ -1,108 +1,119 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-<div class="col-sm-12">
-  <div class="card">
-    <div class="card-body">
-     <h5 class="card-title">Przyjęcie z zewnątrz</h5>
-     	<div class="col-sm-12">
-        <table class="table table-dark">
-                <thead>
-                  <tr>
-                    <th scope="col">ID </th>
-                    <th scope="col">Numer dokumentu </th>
-                    <th scope="col">Kontrahent</th>
-                    <th scope="col">Przyjęte przez</th>
-                    <th scope="col">Data</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">{{ grn.title }}</th>
-                    <td>{{ grn.documentID }}</td>
-                    <td>{{ grn.contractor }}</td>
-                    <td>{{ grn.user.first_name }} {{ grn.user.last_name }}</td>
-                    <td>{{ grn.date }}</td>
-                    <td>
-                      {{ grn.get_status_display }}
-                      {% if request.user.is_superuser %}
-                        {% if grn.status != 1 %}
-                        <br>
-                        <form action="" method="POST">{% csrf_token %}
-                          <button class="btn btn-success btn-sm" type="submit" name="checked">Zatwierdź</button>
-                        </form>
-                        {% endif %}
-                      {% endif %}
-                    </td>
-                  </tr>                  
-                </tbody>
-              </table>
-              <table class="table">
-              <thead class="thead-light">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Przyjęcie z zewnątrz</h5>
+        <div class="col-sm-12">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th scope="col">ID </th>
+                <th scope="col">Numer dokumentu </th>
+                <th scope="col">Kontrahent</th>
+                <th scope="col">Przyjęte przez</th>
+                <th scope="col">Data</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">{{ grn.title }}</th>
+                <td>{{ grn.documentID }}</td>
+                <td>{{ grn.contractor }}</td>
+                <td>{{ grn.user.first_name }} {{ grn.user.last_name }}</td>
+                <td>{{ grn.date }}</td>
+                <td>
+                  {{ grn.get_status_display }}
+                  {% if request.user.is_superuser %}
+                  {% if grn.status != 1 %}
+                  <br>
+                  <form action="" method="POST">{% csrf_token %}
+                    <button class="btn btn-success btn-sm" type="submit" name="checked">Zatwierdź</button>
+                  </form>
+                  {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col" colspan="10">Materiał</th>
+              </tr>
+              <tr>
+                <td>Nazwa skrócona</td>
+                <td>Pełna nazwa</td>
+                <td>Ilość(m2)</td>
+                <td>Szt.</td>
+                <td>Cena(netto)</td>
+                <td>VAT</td>
+                <td>Wartość(netto)</td>
+                <td>Kwota podatku</td>
+                <td>Wartość(brutto)</td>
+                <td>Akcja</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for material in materials %}
+              <tr>
+                <th scope="row">{{ material.material.short_name }}</th>
+                <td>{{ material.material.name }}</td>
+                <td>{{ material.area }}</td>
+                <td>{{ material.quantity }}</td>
+                <td>{{ material.price_net_unit }}zł/m2</td>
+                <td>{{ material.get_vat_display }}</td>
+                <td>{{ material.price_net|floatformat:2 }}zł</td>
+                <td>{{ material.vat_amount|floatformat:2 }}zł</td>
+                <td>{{ material.price_gross|floatformat:2 }}zł</td>
+                <td></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfooter>
+              <form method="POST">{% csrf_token %}
                 <tr>
-                  <th scope="col" colspan="8">Materiał</th>
-                </tr>
-                <tr>
-                  <td>Nazwa skrócona</td>
-                  <td>Pełna nazwa</td>
-                  <td>Ilość(m2)</td>
-                  <td>Szt.</td>
-                  <td>Cena(netto)</td>
-                  <td>VAT</td>
-                  <td>Cena(brutto)</td>
-                  <td>Cena całkowita</td>
-                  <td>Akcja</td>
-                </tr>
-              </thead>
-              <tbody>
-                {% for material in materials %}
-                <tr>
-                  <th scope="row">{{ material.material.short_name }}</th>
-                  <td>{{ material.material.name }}</td>
-                  <td>{{ material.area }}</td>
-                  <td>{{ material.quantity }}</td>
-                  <td>{{ material.price_net }}zł/m2</td>
-                  <td>{{ material.get_vat_display }}</td>
-                  <td>{{ material.price_gross|floatformat:2 }}zł/m2</td>
-                  <td>{{ material.total_price|floatformat:2 }}zł</td>
+                  <td colspan="5"></td>
+                  <td>Razem: </td>
+                  <td>{{ grn.total_net }}zł</td>
+                  <td>{{ grn.total_vat }}zł</td>
+                  <td>{{ grn.total_gross }}zł</td>
                   <td></td>
                 </tr>
-               
-                {% endfor %}
-              </tbody>
-              <tfooter>
-              <form method="POST">{% csrf_token %}
                 <tr>
                   <td>{{ form.material }}</td>
                   <td></td>
                   <td>{{ form.area }}</td>
                   <td></td>
-                  <td>{{ form.price_net}}</td>
+                  <td>{{ form.price_net_unit}}</td>
                   <td>{{ form.vat }}</td>
                   <td></td>
                   <td></td>
-                  <td class="text-start"><button class="btn btn-primary btn-sm" type="submit" name="addMaterial">Dodaj materiał</button></td>
+                  <td></td>
+                  <td class="text-start"><button class="btn btn-primary btn-sm" type="submit" name="addMaterial">Dodaj
+                    materiał</button></td>                  
                 </tr>
                 <tr>
                   {% if form.errors %}
-            {% for field in form %}
-           {% for error in field.errors %} 
-              <div class="alert alert-danger">
-                   <strong>{{ error|escape }}</strong>
-              </div>
-           {% endfor %}
-       {% endfor %}
-    {% endif %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
                 </tr>
               </form>
             </tfooter>
-            </table>
-            <a href="{% url 'detail-grn' grn.id%}" class="btn btn-success btn-sm">Zakończ</a>
-         </div>
-   </div>
- </div>
-</div>
+          </table>
+          <a href="{% url 'detail-grn' grn.id%}" class="btn btn-success btn-sm">Zakończ</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 {% endblock %}
