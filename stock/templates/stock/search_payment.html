@@ -1,0 +1,60 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load bootstrap %}
+<div class="row">
+    
+    <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <form method="GET">{% csrf_token %}
+              {{ filter.form|bootstrap }}
+              <button class="btn btn-primary btn-sm mt-2 mb-2" type="submit">Szukaj</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-sm text-center">
+                <thead>
+                  <tr>
+                    <td>ID</td>
+                    <td>Data <br> Użytkownik</td>
+                    <td>Kasa</td>
+                    <td>Tytułem</td>
+                    <td>Nr wew.</td>
+                    <td>IW/IY</td>
+                    <td>Kwota</td>
+                    <td>Saldo</td>
+                    <td>Status</td>
+                    <td>Szczegoły</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for obj in filter.qs %}
+                  <tr class="{% if obj.status != 0 %} table-success {% else %} table-danger {% endif %}">
+                    <td>{{ obj.id }}</td>
+                    <td>{{ obj.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.</td>
+                    <td>{{ obj.cash.title }}</td>
+                    <td>{{ obj.title }}</td>
+                    <td>{{ obj.number }}</td>
+                    <td>{{ obj.IW_IY }}</td>
+                    <td class="{% if obj.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ obj.amount }}zł</td>
+                    <td>{{ obj.cash_amount }}zł</td>
+                    <td>{{ obj.get_status_display }}</td>
+                    <td><a href="" class="btn btn-primary btn-sm">Zobacz</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div> 
+      </div>
+
+
+</div>
+
+
+</div>
+{% endblock %}

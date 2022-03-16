@@ -3,25 +3,56 @@
 {% block content %}
 {% if request.user.is_superuser %}
 <div class="row">
-{% for cash in cashes %}
-<div class="col-sm-6">
+  <div class="col">
+    <a href="{% url 'create-payment' %}" class="btn btn-danger btn-sm float-center mt-3 mb-3">Dodaj rekord</a> 
+    <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center mt-3 mb-3">Szukaj rekordu</a><br> 
+  </div>
+</div>
+{% for cash in cash_list %}
+<div class="row">
+<div class="col-sm-12">
     <div class="card">
       <div class="card-body">
         <div class="card-title">
             <small>
                 <p class="float-start">{{ cash.title }} - {{ cash.user.first_name }} {{ cash.user.last_name }}</p>
-                <h6 class="float-end">Stan: {{ cash.amount }}pln</h6>
+                <h6 class="float-end {% if cash.amount > 0 %} text-success {% else %} text-danger {% endif %}">Saldo: {{ cash.amount }}zł</h6>
             </small>
+            
+            <table class="table table-sm text-center">
+              <thead>
+                <tr>
+                  <td>ID</td>
+                  <td>Data <br> Użytkownik</td>
+                  <td>Tytułem</td>
+                  <td>Nr wew.</td>
+                  <td>IW/IY</td>
+                  <td>Kwota</td>
+                  <td>Saldo</td>
+                  <td>Status</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obj in cash.payment_set.all %}
+                <tr class="{% if obj.status != 0 %} table-success {% else %} table-danger {% endif %}">
+                  <td>{{ obj.id }}</td>
+                  <td>{{ obj.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.</td>
+                  <td>{{ obj.title }}</td>
+                  <td>{{ obj.number }}</td>
+                  <td>{{ obj.IW_IY }}</td>
+                  <td class="{% if obj.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ obj.amount }}zł</td>
+                  <td>{{ obj.cash_amount }}zł</td>
+                  <td>{{ obj.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            
         </div>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button class="btn btn-primary me-md-2" type="button">Button</button>
-            <button class="btn btn-primary" type="button">Button</button>
-          </div>
       </div>
     </div>
-   
+</div>
 </div>
 {% endfor %}
-</div>
 {% endif %}
 {% endblock %}

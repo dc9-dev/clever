@@ -2,51 +2,57 @@
 {% block content %}
 {% load bootstrap %}
 <div class="row">
-    
-<div class="col-sm-6">
-  
-  <div class="card">
-    <div class="card-body">
-     <h5 class="card-title">Przyjęcie z zewnątrz<a href="{% url 'create-contractor' %}" class="btn btn-success btn-sm float-end">Nowy kontrahent</a></h5>
-    
-     	<div class="col-sm-12">
-     		<form method="POST" action="">{% csrf_token %} 
-               <div class="row">
-               	<div class="col-sm-6"><p class="text-center fw-bold">numer dokumentu</p> {{ form.documentID }} </div>
-      			<div class="col-sm-6"><p class="text-center fw-bold">kontrahent</p> {{ form.contractor }}</div>
-               </div>
-               <div class="row">
-      			<div class="col-sm-12 d-grid gap-2 mt-3"><button type="submit" class="btn btn-primary float-end ">dalej</button></div>
-               </div>
-         </form>
-         </div>
-   </div>
- </div>
-  <div class="card">
-    <div class="card-body">
-      <div class="col-sm-12">
-        <div class="list-group mt-3">
-          {% for grn in filter.qs %}
-          <a href="{% url 'detail-grn' grn.id %}" 
-             class="list-group-item list-group-item-action {% if grn.status == 0 %} list-group-item-danger {% else %} list-group-item-info {% endif %}">
-             <small>{{ grn.title }} - {{ grn.documentID}} - {{ grn.contractor }}</small>
-          </a>
-          {% endfor %}
+
+  <div class="col-sm-6">
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Przyjęcie z zewnątrz<a href="{% url 'create-contractor' %}"
+            class="btn btn-success btn-sm float-end">Nowy kontrahent</a></h5>
+
+        <div class="col-sm-12">
+          <form method="POST" action="">{% csrf_token %}
+            <div class="row">
+              <div class="col-sm-6">
+                <p class="text-center fw-bold">numer dokumentu</p> {{ form.documentID }}
+              </div>
+              <div class="col-sm-6">
+                <p class="text-center fw-bold">kontrahent</p> {{ form.contractor }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 d-grid gap-2 mt-3"><button type="submit"
+                  class="btn btn-primary float-end ">dalej</button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="col-sm-12">
+          <div class="list-group mt-3">
+            {% for grn in filter.qs %}
+            <a href="{% url 'detail-grn' grn.id %}"
+              class="list-group-item list-group-item-action {% if grn.status == 0 %} list-group-item-danger {% else %} list-group-item-info {% endif %}">
+              <small>{{ grn.title }} - {{ grn.documentID}} - {{ grn.contractor }}</small>
+            </a>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="col-sm-6">
-  <div class="card">
-    <div class="card-body">
-      <form method="GET">{% csrf_token %}
-        {{ filter.form|bootstrap }}
-        <button class="btn btn-primary btn-sm mt-2 mb-2" type="submit">Szukaj</button> 
-      </form>
-   </div>
- </div>
-</div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <form method="GET">{% csrf_token %}
+          {{ filter.form|bootstrap }}
+          <button class="btn btn-primary btn-sm mt-2 mb-2" type="submit">Szukaj</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

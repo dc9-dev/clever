@@ -6,10 +6,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 
-from .filters import StockFilter, GrnFilter
-from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
+from .filters import StockFilter, GrnFilter, PaymentFilter
+from .forms import CreatePaymentForm, StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Contractor, Stock, Material, Cutter, GoodsReceivedNote, Cash
+from .models import Contractor, Payment, Stock, Material, Cutter, GoodsReceivedNote, Cash
 
 
 class StockView(ListView):
@@ -201,15 +201,29 @@ def check_grn(request, id):
         grn.save()
         return redirect('detail-grn', id=grn.id)
     
+    
+class CashListView(ListView):
+    model = Cash
+    template_name = "stock/home_cash.html"
 
-def cash(request):
-    cashes = Cash.objects.all()
-    ctx = {
-        'cashes': cashes,
-    }
 
-    return render(request, 'stock/home_cash.html', ctx)
+class PaymentCreateView(CreateView):
+    model = Payment
+    template_name = "stock/create_object.html"
+    form_class = CreatePaymentForm
+    success_url = reverse_lazy('cash')
 
+
+class SearchPaymentView(ListView):
+    model = Payment
+    template_name = 'stock/search_payment.html' 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = PaymentFilter(self.request.GET,
+                                          queryset=self.get_queryset())
+        return context
+    
 
 class MaterialCreateView(CreateView):
     model = Material
