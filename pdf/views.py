@@ -77,13 +77,8 @@ def generate_pdf(request, id):
     footer_style.alignment = 1 
     footer = Paragraph("Dokument wygenerowany automatycznie przez system Nesting Polska sp. z.o.o ", footer_style)
 
-
-    story.append(Paragraph("Dokument wygenerowany automatycznie przez system Nesting Polska sp. z.o.o ", footer_style))
-    story.append(Paragraph("Dane kontaktowe: tel. 532 - 424 - 424 , email: biuro@nestingpolska.pl ", footer_style))
-    story.append(Paragraph("Adres: ul. Odlewnicza 5, 04-343 Warszawa", footer_style))
-    story.append(Paragraph("Data wystawienia: {}".format(d.strftime('%d-%M-%Y')), footer_style))
-    story.append(Paragraph("*podpis oznaczna zapozanie sie ze stanem towaru. Reklamacje nie beda rozpatrywane.".format(d.strftime('%d-%M-%Y')), footer_style))
-
+    story.append(Paragraph("Data wystawienia: {}".format(d.strftime('%d-%m-%Y')), footer_style))
+    
     f2 = Frame(0, 0, 8.3*inch, 1*inch, showBoundary=1)
     f2.addFromList(story, p)
 

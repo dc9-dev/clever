@@ -22,8 +22,9 @@
             
         {% endfor %}
      {% endif %}   
-      <hr>
+      <hr>{% if request.user.is_superuser %}
       <h1>{{ material.waste_precent|floatformat:2 }}%</h1>
+          {% endif %}
       {% endfor %}
       
    </div>

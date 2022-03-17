@@ -53,25 +53,17 @@ class CustomerCreateView(CreateView):
     model = Customer
     template_name = 'account/create_customer.html'
     form_class = CustomerCreateForm
-    success_url = "account/customer/create"
+    success_url = reverse_lazy('create-order')
 
     def get(self, request, *args, **kwargs):
         context = {'form': CustomerCreateForm()}
         return super().get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-       
-        form = CustomerCreateForm(request.POST)
-        if form.is_valid():
-            customer = form.save()
-            customer.save()
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
             
-        return super().post(request, *args, **kwargs)
-
 
 class CustomerDetailView(DetailView):
     model = Customer
     template_name = 'account/detail_customer.html'
-
-    
-    

@@ -88,15 +88,42 @@
           </form>
         </div>
       </div>
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="document">
-        <button type="submit">Upload file</button>
-      </form>
-      {% if url %}
-      <p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
-      {% endif %}
+      <div class="row">
+        <div class="col-sm-6">
+
+          <div class="mb-3 d-flex">
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              {{ attachment }}
+              <input type="file" multiple class="form-control form-control-sm mt-3 ms-3" name="document">
+              <button type="submit" class="btn btn-success btn-sm  mt-3 ms-3" name="file">Prześlij plik</button>
+            </form>
+           
+          </div>
+
+         
+
+        </div>
+        <div class="col-sm-6">
+          <h6>Komentarze:</h6>
+          {% for comment in order.comment_set.all %}
+            {{ comment.user.first_name }} {{ comment.user.last_name|first }}.
+            <p>{{ comment.content }}</p>
+          {% endfor %}
+          <form method="POST">{% csrf_token %}
+            {{ comment }}
+            <button type="submit" name="comment" class="btn btn-primary btn-sm ">Skomentuj</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+
+
+
 {% endblock %}
+
+{% if url %}
+<p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
+{% endif %}

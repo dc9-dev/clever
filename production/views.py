@@ -1,14 +1,14 @@
 from multiprocessing import context
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.views.generic import ListView
-from .forms import (ProductionMaterialForm,
+from .forms import (AttachmentForm,
                     ProductionCommentsForm,
                     CreateOrderForm,
-                    EditOrderForm)
+                    EditOrderForm,
+                    CommentForm)
 from .models import (Production,
                      ProductionStock,
                      ProductionMaterial,
@@ -259,6 +259,8 @@ def EditOrder(request, id):
     ms = order.materialservices_set.all()
 
     form = EditOrderForm()
+    comment = CommentForm()
+    attachment = AttachmentForm()
 
 
     if request.method == 'POST' and 'add' in request.POST:
@@ -276,12 +278,27 @@ def EditOrder(request, id):
         order.status = 1
         order.save()
         return redirect('detail-order', id=order.id)
+
+    if request.method == 'POST' and 'comment' in request.POST:
+        comment = CommentForm(request.POST)
+        if comment.is_valid():
+            comment.instance.user = request.user
+            comment.instance.order = order
+            comment.save()
+                    
+        return redirect('detail-order', id=order.id)
+
+    if request.method == 'POST' and 'file' in request.POST:
+        attachment = AttachmentForm(request.POST, request.FILES)
     
 
     ctx = {
         'order': order,
         'materialservices': ms,
         'form': form,
+        'comment': comment,
+        'attachment': attachment,
+        
     }
 
     return render(request, 'production/edit_order.html', ctx)

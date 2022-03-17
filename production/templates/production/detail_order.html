@@ -94,6 +94,22 @@
         </table>
       </div>
    </div>
+   <div class="row">
+    <div class="col-sm-6">
+
+
+     
+
+    </div>
+    <div class="col-sm-6">
+      <h6>Komentarze:</h6>
+      {% for comment in order.comment_set.all %}
+        {{ comment.user.first_name }} {{ comment.user.last_name|first }}.
+        <p>{{ comment.content }}</p>
+      {% endfor %}
+     
+    </div>
+  </div>
  </div>
 </div>
 

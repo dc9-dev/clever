@@ -28,4 +28,4 @@ class ProductionOrderFilter(django_filters.FilterSet):
 
     class Meta:
         model = ProductionOrder
-        fields = '__all__'
+        exclude = ['attachments']

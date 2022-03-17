@@ -9,4 +9,5 @@ urlpatterns = [
     path('production/', include('production.urls')),
     path('pdf/', include('pdf.urls')),
     path('cash/', include('cash.urls')),
+    path('comments/', include('django_comments.urls')),
 ] 

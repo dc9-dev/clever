@@ -1,9 +1,11 @@
+
 from django import forms
 from .models import (Attachment,
                      ProductionMaterial,
                      ProductionComments,
                      ProductionOrder,
-                     MaterialServices)
+                     MaterialServices,
+                     Comment,)
 
 
 class ProductionMaterialForm(forms.ModelForm):
@@ -45,3 +47,14 @@ class AttachmentForm(forms.ModelForm):
     class Meta:
         model = Attachment
         fields = '__all__'
+
+
+class CommentForm(forms.ModelForm):
+    
+    content = forms.CharField(
+                    label='Treść', 
+                    widget=forms.Textarea(attrs={'rows': '2',}))
+
+    class Meta:
+        model = Comment
+        fields = ['content']

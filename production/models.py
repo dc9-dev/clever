@@ -173,6 +173,7 @@ class ProductionOrder(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
     settlement = models.BooleanField(default=False)
+    attachments = models.FileField(upload_to='order/attachment/')
 
     def save(self, *args, **kwargs):
         dt = timezone.now()
@@ -194,6 +195,8 @@ class ProductionOrder(models.Model):
             result = i.price * i.area
             total += result
         return total
+    
+    
 
     # def mail(self, *args, **kwargs):
 
@@ -210,6 +213,11 @@ class ProductionOrder(models.Model):
     #     msg.attach_alternative(html_content, "text/html")
     #     msg.send()
 
+class Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
+    content = models.TextField()
 
 class MaterialServices(models.Model):
 
