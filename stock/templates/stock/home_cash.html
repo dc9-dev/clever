@@ -33,16 +33,16 @@
                 </tr>
               </thead>
               <tbody>
-                {% for obj in cash.payment_set.all %}
-                <tr class="{% if obj.status != 0 %} table-success {% else %} table-danger {% endif %}">
-                  <td>{{ obj.id }}</td>
-                  <td>{{ obj.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.</td>
-                  <td>{{ obj.title }}</td>
-                  <td>{{ obj.number }}</td>
-                  <td>{{ obj.IW_IY }}</td>
-                  <td class="{% if obj.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ obj.amount }}zł</td>
-                  <td>{{ obj.cash_amount }}zł</td>
-                  <td>{{ obj.get_status_display }}</td>
+                {% for payment in cash.payment_set.all %}
+                <tr class="{% if payment.status != 0 %} table-success {% else %} table-danger {% endif %}">
+                  <td>{{ payment.id }}</td>
+                  <td>{{ payment.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.</td>
+                  <td>{{ payment.title }}</td>
+                  <td>{{ payment.number }}</td>
+                  <td>{{ payment.IW_IY }}</td>
+                  <td class="{% if payment.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ payment.amount }}zł</td>
+                  <td>{{ payment.cash_amount }}zł</td>
+                  <td>{{ payment.get_status_display }}</td>
                 </tr>
                 {% endfor %}
               </tbody>

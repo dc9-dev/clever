@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">{% csrf_token %}
+                    <p>Czy jesteś pewny, że chcesz usunąć "{{ object.title }}"?</p>
+                    {{ form }}
+                    <button type="submit" class="btn btn-danger btn-sm">Tak, usuń</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

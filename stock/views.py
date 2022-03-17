@@ -2,14 +2,15 @@ import re
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
+from django.views.generic.list import MultipleObjectMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 
-from .filters import StockFilter, GrnFilter, PaymentFilter
-from .forms import CreatePaymentForm, StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
+from .filters import StockFilter, GrnFilter
+from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Contractor, Payment, Stock, Material, Cutter, GoodsReceivedNote, Cash
+from .models import Contractor, Stock, Material, Cutter, GoodsReceivedNote
 
 
 class StockView(ListView):
@@ -86,18 +87,6 @@ def AddStock(request, id):
             return redirect('stock')
 
     return render(request, 'stock/create_stock.html', {'form': form})
-
-
-def CutterSharp(request, id):
-
-    cutter = Cutter.objects.get(id=id)
-
-    return redirect('stock')
-
-
-def CutterBuy(request, id):
-
-    cutter = Cutter.objects.get(id=id)
 
 
 def GRN(request):
@@ -200,30 +189,7 @@ def check_grn(request, id):
         grn.status = 1
         grn.save()
         return redirect('detail-grn', id=grn.id)
-    
-    
-class CashListView(ListView):
-    model = Cash
-    template_name = "stock/home_cash.html"
 
-
-class PaymentCreateView(CreateView):
-    model = Payment
-    template_name = "stock/create_object.html"
-    form_class = CreatePaymentForm
-    success_url = reverse_lazy('cash')
-
-
-class SearchPaymentView(ListView):
-    model = Payment
-    template_name = 'stock/search_payment.html' 
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = PaymentFilter(self.request.GET,
-                                          queryset=self.get_queryset())
-        return context
-    
 
 class MaterialCreateView(CreateView):
     model = Material

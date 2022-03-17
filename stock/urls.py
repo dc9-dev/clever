@@ -8,16 +8,10 @@ urlpatterns = [
     path('new/', staff_member_required(views.CreateStock.as_view()), name='create-stock'),
     path('add/<int:id>', views.AddStock, name='add-stock'),
     path('take/<int:id1>/<int:id2>', views.TakeStock, name='take-stock'),
-    path('cutter/sharp/<int:id>', views.CutterSharp, name='cutter-sharp'),
     path('grn/', views.GRN, name='grn'),
     path('grn/edit/<int:id>', views.EditGRN, name='edit-grn'),
     path('grn/detail/<int:id>', views.DetailGRN, name='detail-grn'),
-    path('cash/', views.CashListView.as_view(), name='cash'),
-    path('payment/', views.PaymentCreateView.as_view(), name='create-payment'),
-    path('payment/search', views.SearchPaymentView.as_view(), name='search-payment'),
-    path('payment/detail', views.SearchPaymentView.as_view(), name='search-payment'),
     path('material/create', views.MaterialCreateView.as_view(), name='create-material'),
     path('services/create', views.ServicesCreateView.as_view(), name='create-services'),
     path('contractor', views.ContractorCreateView.as_view(), name='create-contractor'),
-    
 ]
