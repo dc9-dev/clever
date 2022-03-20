@@ -85,14 +85,10 @@ class ProductionMaterial(models.Model):
         material = ProductionMaterial.objects.get(id=self.id)
         total_area = 0 + self.quantity * float(self.material.material_area)
 
-        for stock in material.stocks.all():
-            result = stock.length * stock.width / 1000000
-            total_area += result
-
-        if float(self.area) - total_area + self.stockIn_area > 0:
+        if float(self.area) - total_area > 0:
             return 0
         else:
-            return abs(float(self.area) - total_area + self.stockIn_area)
+            return abs(float(self.area) - total_area)
 
     # def waste_precent(self):
     #     if self.waste != 0 and self.total_area != 0 and self.quantity != 0:
