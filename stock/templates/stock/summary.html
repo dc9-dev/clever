@@ -23,7 +23,7 @@
         {% endfor %}
      {% endif %}   
       <hr>{% if request.user.is_superuser %}
-      <h1>{{ material.waste_precent|floatformat:2 }}%</h1>
+      <h1>Procent odpadu: {{ material.waste_precent|floatformat:2 }}%</h1>
           {% endif %}
       {% endfor %}
       

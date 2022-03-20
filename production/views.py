@@ -25,8 +25,9 @@ from order.models import Material
 
 def ProductionHome(request):
     productions = Production.objects.all().order_by('-date')
-
-    ctx = {'productions': productions, }
+    production_material = Production.objects.get(id=1).productionmaterial_set.all()
+    ctx = {'productions': productions, 
+            'test': production_material,}
 
     return render(request, 'production/home.html', ctx)
 
@@ -73,13 +74,14 @@ def CreateProduction(request, id):
 
 
 def EditProduction(request, id):
-    productionOrder = ProductionOrder.objects.get(id=id)
-    materials = production.productionmaterial_set.all()
-
+    
     try:
         production = Production.objects.get(id=id)
     except Production.DoesNotExist:
         return redirect('stock')
+    
+    productionOrder = ProductionOrder.objects.get(id=id)
+    materials = production.productionmaterial_set.all()
     
     ctx = {
         'order': productionOrder,

@@ -74,7 +74,7 @@
             </tbody>
             <tfooter>
               <form method="POST">{% csrf_token %}
-                <tr>
+                <tr class="fw-bold">
                   <td colspan="5"></td>
                   <td>Razem: </td>
                   <td>{{ grn.total_net }}zł</td>
@@ -92,8 +92,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="text-start"><button class="btn btn-primary btn-sm" type="submit" name="addMaterial">Dodaj
-                    materiał</button></td>                  
+                  <td class="text-start"><button class="btn btn-primary btn-sm" type="submit" name="addMaterial">Dodaj</button></td>                  
                 </tr>
                 <tr>
                   {% if form.errors %}

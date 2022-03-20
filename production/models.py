@@ -94,13 +94,18 @@ class ProductionMaterial(models.Model):
         else:
             return abs(float(self.area) - total_area + self.stockIn_area)
 
-    def waste_precent(self):
+    # def waste_precent(self):
+    #     if self.waste != 0 and self.total_area != 0 and self.quantity != 0:
+    #         return (self.waste() / self.total_area() ) * 100
+    #     else:
+    #         return 0
 
-        if self.waste != 0 and self.total_area != 0 and self.quantity != 0:
-            return  (self.waste() / self.total_area() ) * 100
-            
-        else:
-            return 0
+    def waste_precent(self):
+        area = self.area 
+        quantity = self.quantity
+        material_area = self.material.material_area
+        waste = abs(self.area - quantity * material_area)
+        return  waste * 100 / area
             
 
 class ProductionStock(models.Model):
