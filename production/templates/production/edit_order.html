@@ -80,7 +80,6 @@
                 <td>Razem: </td>
                 <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
               </tr>
-
             </tfoot>
           </table>
           <form method="POST">{% csrf_token %}
@@ -88,42 +87,41 @@
           </form>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-
-          <div class="mb-3 d-flex">
-            <form method="post" enctype="multipart/form-data">{% csrf_token %}
-              {{ attachment }}
-              <input type="file" multiple class="form-control form-control-sm mt-3 ms-3" name="document">
-              <button type="submit" class="btn btn-success btn-sm  mt-3 ms-3" name="file">Prześlij plik</button>
-            </form>
-           
-          </div>
-
-         
-
-        </div>
-        <div class="col-sm-6">
-          <h6>Komentarzee:</h6>
-          {% for comment in order.comment_set.all %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Komentarze:</h6>
+            {% for comment in order.comment_set.all %}
             {{ comment.user.first_name }} {{ comment.user.last_name|first }}.
             <p>{{ comment.content }}</p>
-          {% endfor %}
-          <form method="POST">{% csrf_token %}
-            {{ comment }}
-            <button type="submit" name="comment" class="btn btn-primary btn-sm ">Skomentuj</button>
-          </form>
+            {% endfor %}
+            <form method="POST">{% csrf_token %}
+              {{ comment }}
+              <button type="submit" name="comment" class="btn btn-primary btn-sm mt-3 float-start">Skomentuj</button>
+            </form>
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Załaczniki:</h6>
+            {% for attachment in order.attachment_set.all %}
+            <p><a  class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
+            {% endfor %}
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              {{ attachment }}
+              <button type="submit" class="btn btn-success btn-sm  mt-3 ms-3" name="file">Prześlij plik</button>
+            </form>
+          </small>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-
-
-
 {% endblock %}
-
-{% if url %}
-<p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
-{% endif %}

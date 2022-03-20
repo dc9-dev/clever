@@ -18,7 +18,7 @@
             <p class="float-start">{{ cash.title }} - {{ cash.user.first_name }} {{ cash.user.last_name }}</p>
             <h6 class="float-end {% if cash.amount > 0 %} text-success {% else %} text-danger {% endif %}">Saldo: {{cash.amount }} zł</h6>
           </small>
-          <table class="table table-sm text-center">
+          <table class="table table-sm text-center  me-2 ">
             <thead>
               <tr>
                 <td>ID</td>
@@ -43,13 +43,13 @@
                 <td class="{% if payment.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ payment.amount }}zł</td>
                 <td>{{ payment.cash_amount }}zł</td>
                 <td>{{ payment.get_status_display }}</td>
-                <td>{% if status != 1 %}
-                      {% if payment.user.id == request.user.id or request.user.is_superuser %}
+                <td>
+                  {% if payment.status == 0 %}
                   <a href="{% url 'delete-payment' payment.id %}" class="btn btn-danger btn-sm">Usuń</a>
-                      {% endif %}
-                    {% endif %}
+                  {% endif %}
+                   
                 </td>
-                <td><a href="{% url 'update-payment' payment.id %}" class="btn btn-success btn-sm">Szczegóły</a></td>
+                <td><a href="{% if payment.status == 0 %} {% url 'update-payment' payment.id %} {% else %}  {% endif %}" class="btn btn-success btn-sm">Szczegóły</a></td>
               </tr>
               {% endfor %}
             </tbody>

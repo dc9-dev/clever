@@ -24,7 +24,6 @@ from order.models import Material
 
 
 def ProductionHome(request):
-
     productions = Production.objects.all().order_by('-date')
 
     ctx = {'productions': productions, }
@@ -33,7 +32,6 @@ def ProductionHome(request):
 
 
 def ProductionStatus(request, id):
-
     production = Production.objects.get(id=id)
     productionOrder = ProductionOrder.objects.get(id=production.id)
 
@@ -47,7 +45,6 @@ def ProductionStatus(request, id):
 
 
 def CreateProduction(request, id):
-
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 2
     productionOrder.save()
@@ -76,14 +73,14 @@ def CreateProduction(request, id):
 
 
 def EditProduction(request, id):
+    productionOrder = ProductionOrder.objects.get(id=id)
+    materials = production.productionmaterial_set.all()
 
     try:
         production = Production.objects.get(id=id)
     except Production.DoesNotExist:
         return redirect('stock')
-    productionOrder = ProductionOrder.objects.get(id=id)
-    materials = production.productionmaterial_set.all()
-
+    
     ctx = {
         'order': productionOrder,
         'production': production,
@@ -94,7 +91,6 @@ def EditProduction(request, id):
 
 
 def DetailProduction(request, id):
-
     production = Production.objects.get(id=id)
     productionOrder = ProductionOrder.objects.get(id=id)
     materials = production.productionmaterial_set.all()
@@ -109,7 +105,6 @@ def DetailProduction(request, id):
 
 
 def ProductionMaterialIncrement(request, id):
-
     productionMaterial = ProductionMaterial.objects.get(id=id)
     material = Material.objects.get(id=productionMaterial.material.id)
     productionMaterial.quantity += 1
@@ -121,7 +116,6 @@ def ProductionMaterialIncrement(request, id):
 
 
 def ProductionMaterialDecrement(request, id):
-
     productionMaterial = ProductionMaterial.objects.get(id=id)
     material = Material.objects.get(id=productionMaterial.material.id)
     productionMaterial.quantity -= 1
@@ -133,7 +127,6 @@ def ProductionMaterialDecrement(request, id):
 
 
 def ProductionComments(request, id):
-
     productionMaterial = ProductionMaterial.objects.get(id=id)
     comments = productionMaterial.comments.all()
     form = ProductionCommentsForm()
@@ -158,7 +151,6 @@ def ProductionComments(request, id):
 
 
 def ProductionStockFilter(request, id):
-
     productionMaterial = ProductionMaterial.objects.get(id=id)
     productionStocks = productionMaterial.stocks.all()
 
@@ -177,10 +169,8 @@ def ProductionStockFilter(request, id):
 
 
 def ProductionStockIn(request, id):
-
     productionMaterial = ProductionMaterial.objects.get(id=id)
     stock = Stock.objects.filter(length=0, width=0).first()
-
     form = StockCreateInForm()
 
     if request.method == 'POST':
@@ -223,7 +213,6 @@ def ProductionStockIn(request, id):
 
 
 def HomeOrders(request):
-
     orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')[:25]
     orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')[:25]
     orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')[:25]
@@ -240,7 +229,6 @@ def HomeOrders(request):
 
 
 def CreateOrder(request):
-
     form = CreateOrderForm()
 
     if request.method == 'POST':
@@ -254,14 +242,11 @@ def CreateOrder(request):
 
 
 def EditOrder(request, id):
-
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
-
     form = EditOrderForm()
     comment = CommentForm()
     attachment = AttachmentForm()
-
 
     if request.method == 'POST' and 'add' in request.POST:
         form = EditOrderForm(request.POST)
@@ -286,26 +271,28 @@ def EditOrder(request, id):
             comment.instance.order = order
             comment.save()
                     
-        return redirect('detail-order', id=order.id)
+        return redirect('edit-order', id=order.id)
 
     if request.method == 'POST' and 'file' in request.POST:
         attachment = AttachmentForm(request.POST, request.FILES)
-    
+        if attachment.is_valid():
+            attachment.instance.production_order_id = order.id
+            attachment.save()
 
+        return redirect('edit-order', id=order.id)
+    
     ctx = {
         'order': order,
         'materialservices': ms,
         'form': form,
         'comment': comment,
         'attachment': attachment,
-        
     }
 
     return render(request, 'production/edit_order.html', ctx)
 
 
 def DetailOrder(request, id):
-
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
 
@@ -321,7 +308,6 @@ def DetailOrder(request, id):
 
 
 class SearchOrder(ListView):
-
     model = ProductionOrder
     paginate_by = 100
     template_name = 'production/search_order.html'

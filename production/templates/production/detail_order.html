@@ -2,118 +2,128 @@
 {% block content %}
 
 <div class="row">
-<div class="col-sm-12">
-  <div class="card">
-    <div class="card-body">
-      <div class="col-sm-12">
-        <div class="col-sm-4 mt-3">
-          {% if order.status == 1 %}
-          
-          {% endif %}
-        <table class="table table-borderless table-sm text-start">
-            <tbody>
-              <tr>
-                <td>Zamówienie nr:</td>
-                <td>{{ order }}</td>
-              </tr>
-              <tr>
-                <td>Data:</td>
-                <td>{{ order.date }}</td>
-              </tr>
-              <tr>
-                <td>Płatność:</td>
-                {% if order.settlement == False %}
-                <td>Nierozliczone</td>
-                {% else %}
-                <td>Rozliczone</td>
-                {% endif %}
-              </tr>
-              <tr>
-              <tr>
-                <td>Status:</td>
-                <td>{{ order.get_status_display }}</td>
-              </tr>
-              
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="col-sm-12">
+          <div class="col-sm-4 mt-3">
+            {% if order.status == 1 %}
+
+            {% endif %}
+            <table class="table table-borderless table-sm text-start">
+              <tbody>
+                <tr>
+                  <td>Zamówienie nr:</td>
+                  <td>{{ order }}</td>
+                </tr>
+                <tr>
+                  <td>Data:</td>
+                  <td>{{ order.date }}</td>
+                </tr>
+                <tr>
+                  <td>Płatność:</td>
+                  {% if order.settlement == False %}
+                  <td>Nierozliczone</td>
+                  {% else %}
+                  <td>Rozliczone</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                <tr>
+                  <td>Status:</td>
+                  <td>{{ order.get_status_display }}</td>
+                </tr>
+
                 <td>Zamawiający:</td>
                 <td>{{ order.customer }}</td>
-              </tr>
+                </tr>
+                <tr>
+                  <td>Adres:</td>
+                  <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tel:</td>
+                  <td>{{ order.customer.phone_number }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <table class="table table-success table-striped">
+            <thead>
               <tr>
-                <td>Adres:</td>
-                <td>{{ order.customer.address_line_1 }}, {{ order.customer.postcode }} {{ order.customer.town_city }}</td>
+                <th scope="col">Materiał</th>
+                <th scope="col">Usługi</th>
+                <th scope="col">Ilość</th>
+                <th scope="col">Cena(m2)</th>
+                <th scope="col">Total</th>
               </tr>
+            </thead>
+            <tbody>
+              {% for ms in materialservices %}
               <tr>
-                <td>Tel:</td>
-                <td>{{ order.customer.phone_number }}</td>
+                <td scope="col">{{ ms.material }}</td>
+                <td scope="col">{{ ms.services }}</td>
+                <td scope="col">{{ ms.area }}m2</td>
+                <td scope="col">{{ ms.price }}pln</td>
+                <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
               </tr>
+              {% endfor %}
             </tbody>
-        </table>
+            <tfoot class="dark">
+              <tr>
+                <td><a href="{% url 'getpdf' order.id %}" class="btn btn-danger btn-sm">Generuj PDF</a></td>
+                <td>
+                  {% if order.status != 1 %}
+                  <a href="{% url 'detail-production' order.id %}" class="btn btn-warning btn-sm">Zobacz produkcję</a>
+                  {% elif order.status == 1 %}
+                  <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Rozpocznij
+                    produkcję</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if order.status == 3 %}
+                  <a href="{% url 'detail-production' order.id %}" class="btn btn-success btn-sm">Rozlicz</a>
+                  {% endif %}
+                </td>
+                <td>Razem: </td>
+                <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
+              </tr>
+
+            </tfoot>
+
+
+          </table>
         </div>
-        <table class="table table-success table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Materiał</th>
-              <th scope="col">Usługi</th>
-              <th scope="col">Ilość</th>
-              <th scope="col">Cena(m2)</th>
-              <th scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for ms in materialservices %}
-            <tr>
-              <td scope="col">{{ ms.material }}</td>
-              <td scope="col">{{ ms.services }}</td>
-              <td scope="col">{{ ms.area }}m2</td>
-              <td scope="col">{{ ms.price }}pln</td>
-              <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot class="dark">
-            <tr>
-              <td><a href="{% url 'getpdf' order.id %}" class="btn btn-danger btn-sm">Generuj PDF</a></td>
-              <td>
-                {% if order.status != 1 %}
-                <a href="{% url 'detail-production' order.id %}" class="btn btn-warning btn-sm">Zobacz produkcję</a>
-                {% elif order.status == 1 %}
-                <a href="{% url 'create-production' order.id %}" class="btn btn-primary btn-sm float-en">Rozpocznij produkcję</a> 
-                {% endif %}
-              </td>
-              <td>
-                {% if order.status == 3 %}
-                <a href="{% url 'detail-production' order.id %}" class="btn btn-success btn-sm">Rozlicz</a>
-                {% endif %}
-              </td>
-              <td>Razem: </td>
-              <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
-            </tr>
-
-          </tfoot>
-          
-        
-        </table>
       </div>
-   </div>
-   <div class="row">
-    <div class="col-sm-6">
-
-
-     
-
-    </div>
-    <div class="col-sm-6">
-      <h6>Komentarze:</h6>
-      {% for comment in order.comment_set.all %}
-        {{ comment.user.first_name }} {{ comment.user.last_name|first }}.
-        <p>{{ comment.content }}</p>
-      {% endfor %}
-     
     </div>
   </div>
- </div>
 </div>
-
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body pt-3">
+        <small>
+          <h6>Komentarze:</h6>
+          {% for comment in order.comment_set.all %}
+          {{ comment.user.first_name }} {{ comment.user.last_name|first }}.
+          <p>{{ comment.content }}</p>
+          {% endfor %}
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body pt-3">
+        <small>
+          <h6>Załaczniki:</h6>
+          {% for attachment in order.attachment_set.all %}
+          <p><a class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
+          {% endfor %}
+        </small>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
-
-

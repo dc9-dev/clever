@@ -7,16 +7,19 @@ from .filters import PaymentFilter
 from .models import Payment, Cash
 
 
-
 class PaymentsListView(ListView):
     model = Payment
     template_name = 'cash/home_payments.html'
-    
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cashes'] = Cash.objects.all()
         return context
 
+# class PaymentDetailView(DetailView):
+#     model = Payment
+#     template_name = ""
 
 class PaymentCreateView(CreateView):
     model = Payment
@@ -36,8 +39,8 @@ class PaymentUpdateView(UpdateView):
         return get_object_or_404(Payment, id=id_)
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         return super().form_valid(form)
+
 
 class PaymentDeleteView(DeleteView):
     template_name = 'cash/delete_payment.html'
@@ -48,6 +51,7 @@ class PaymentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('cash')
+
 
 class SearchPaymentView(ListView):
     model = Payment

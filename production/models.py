@@ -6,7 +6,7 @@ from django.utils import timezone
 from order.models import Material, IntegerRangeField
 from account.models import Customer
 from decimal import Decimal
-
+import os
 
 class Production(models.Model):
     PREPARATION = 0
@@ -39,7 +39,6 @@ class Production(models.Model):
 
 
 class ProductionMaterial(models.Model):
-
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
@@ -54,9 +53,7 @@ class ProductionMaterial(models.Model):
         return self.quantity * float(self.material.material_area)
 
     def stock_area(self):
-
         material = ProductionMaterial.objects.get(id=self.id)
-
         stock_area = 0
 
         for stock in material.stocks.all():
@@ -66,9 +63,7 @@ class ProductionMaterial(models.Model):
         return stock_area
 
     def stockIn_area(self):
-
         material = ProductionMaterial.objects.get(id=self.id)
-
         self.stockIn_area = 0
 
         for stock in material.productionstockin_set.all():
@@ -78,9 +73,7 @@ class ProductionMaterial(models.Model):
         return self.stockIn_area
 
     def total_area(self):
-
         material = ProductionMaterial.objects.get(id=self.id)
-
         total_area = 0
 
         for stock in material.stocks.all():
@@ -89,9 +82,7 @@ class ProductionMaterial(models.Model):
         return total_area + self.quantity * float(self.material.material_area)
 
     def waste(self):
-
         material = ProductionMaterial.objects.get(id=self.id)
-
         total_area = 0 + self.quantity * float(self.material.material_area)
 
         for stock in material.stocks.all():
@@ -113,7 +104,6 @@ class ProductionMaterial(models.Model):
             
 
 class ProductionStock(models.Model):
-
     number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
     length = IntegerRangeField(min_value=50, max_value=2800)
@@ -125,7 +115,6 @@ class ProductionStock(models.Model):
 
 
 class ProductionStockIn(models.Model):
-
     number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE)
     length = IntegerRangeField(min_value=50, max_value=2800)
@@ -143,7 +132,6 @@ class ProductionComments(models.Model):
     
 
 class Services(models.Model):
-
     title = models.CharField(max_length=255)
     price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
     units = models.CharField(max_length=255)
@@ -195,8 +183,6 @@ class ProductionOrder(models.Model):
             result = i.price * i.area
             total += result
         return total
-    
-    
 
     # def mail(self, *args, **kwargs):
 
@@ -219,8 +205,8 @@ class Comment(models.Model):
     order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
     content = models.TextField()
 
-class MaterialServices(models.Model):
 
+class MaterialServices(models.Model):
     productionorder = models.ForeignKey(ProductionOrder,
                                         on_delete=models.CASCADE)
     material = models.ForeignKey(Material,
@@ -233,7 +219,6 @@ class MaterialServices(models.Model):
                                  on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
     price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
-    #transport = models.BooleanField(default=0)
 
     def total(self):
         return self.area * self.price
@@ -242,9 +227,9 @@ class MaterialServices(models.Model):
 class Attachment(models.Model):
     production_order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
     file = models.FileField(upload_to='production/order/attachments/')
-    
+
     def __str__(self):
-        return self.title
+        return os.path.basename(self.file.name)
 
     def delete(self, *args, **kwargs):
         self.file.delete()

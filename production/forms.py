@@ -1,4 +1,3 @@
-
 from django import forms
 from .models import (Attachment,
                      ProductionMaterial,
@@ -9,7 +8,6 @@ from .models import (Attachment,
 
 
 class ProductionMaterialForm(forms.ModelForm):
-
     area = forms.DecimalField(required=True)
 
     class Meta:
@@ -43,18 +41,29 @@ class EditOrderForm(forms.ModelForm):
         exclude = ['productionorder', 'total_price']
 
 class AttachmentForm(forms.ModelForm):
+    file = forms.FileField(label='',)
 
     class Meta:
         model = Attachment
-        fields = '__all__'
+        fields = ['file']
+    
+    def __init__(self, *args, **kwargs):
+        super(AttachmentForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control form-control-sm mt-3 ms-3'
 
 
 class CommentForm(forms.ModelForm):
-    
     content = forms.CharField(
-                    label='Treść', 
-                    widget=forms.Textarea(attrs={'rows': '2',}))
+                    label='Napisz komentarz', 
+                    widget=forms.Textarea(attrs={'rows': '2',})
+                    )
 
     class Meta:
         model = Comment
         fields = ['content']
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control form-control-sm mt-3 float-start'

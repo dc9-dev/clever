@@ -13,7 +13,9 @@
             <span class="badge {% if production.status == 3 %} bg-success  {% elif production.status == 2 %} bg-dark  {% endif %} ">
              {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}
              {% if request.user.is_superuser %}
-             | Test: 12%
+             | {% for material in production.productionmaterial_set.all %}
+                {{ material.material }} Odpad: {{ material }}  
+             {% endfor %}
              {% endif %}
             </span>
           </li>
