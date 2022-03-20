@@ -104,8 +104,11 @@ class ProductionMaterial(models.Model):
         area = self.area 
         quantity = self.quantity
         material_area = self.material.material_area
-        waste = abs(self.area - quantity * material_area)
-        return  waste * 100 / area
+        waste = self.area - quantity * material_area
+        if waste < 0:
+            return abs(waste) * 100 / area
+        else:
+            return 0
             
 
 class ProductionStock(models.Model):
