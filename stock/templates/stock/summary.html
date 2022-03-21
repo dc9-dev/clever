@@ -4,13 +4,13 @@
      <h5 class="card-title">Podusmowanie</h5>
      {% for material in materials %}
      <p class="fw-bold">{{ material.material }}</p>
-     <h6>Powierzchnia zlecona {{ material.area|floatformat:3 }}m2 </h6></br>
-     <h6>Całkowicie pobrano {{ material.total_area|floatformat:3 }}m2</h6>
-     <h6>Powierzchnia pełnej płyty z magazynu {{ material.sum_area|floatformat:3 }}m2</h6>
-     <h6>Powierzchnia formatek z magazynu: {{ material.stock_area|floatformat:3 }}m2</h6>
-     <h6>Powierzchnia formatek do magazynu: {{ material.stockIn_area|floatformat:3 }}m2</h6>
+     <h6>Zlecono: {{ material.area|floatformat:3 }}m2 </h6>
+     <h6>Pobrano: {{ material.total_area|floatformat:3 }}m2 ({{ material.sum_area|floatformat:3 }}m2 płyt + {{ material.stock_area|floatformat:3 }}m2 formatek)</h6>
+     <h6>Płyty z magazynu: {{ material.sum_area|floatformat:3 }}m2</h6>
+     <h6>Formatki z magazynu: {{ material.stock_area|floatformat:3 }}m2</h6>
+     <h6>Formatki do magazynu: {{ material.stockIn_area|floatformat:3 }}m2</h6>
      <br>
-     <h6 class="fw-bold">Powierzchnia odpadu {{ material.waste|floatformat:3 }}m2</h6>
+     <h6 class="fw-bold">Odpad: {{ material.waste|floatformat:3 }}m2</h6>
      <br>
      {% if not material.comments.all %}
          <h6>Uwagi:</h6>

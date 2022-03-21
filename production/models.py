@@ -45,7 +45,6 @@ class ProductionMaterial(models.Model):
     quantity = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     def _str__(self):
-
         return self.material
 
     def sum_area(self):
@@ -82,19 +81,12 @@ class ProductionMaterial(models.Model):
         return total_area + self.quantity * float(self.material.material_area)
 
     def waste(self):
-        material = ProductionMaterial.objects.get(id=self.id)
         total_area = 0 + self.quantity * float(self.material.material_area)
 
         if float(self.area) - total_area > 0:
             return 0
         else:
             return abs(float(self.area) - total_area)
-
-    # def waste_precent(self):
-    #     if self.waste != 0 and self.total_area != 0 and self.quantity != 0:
-    #         return (self.waste() / self.total_area() ) * 100
-    #     else:
-    #         return 0
 
     def waste_precent(self):
         area = self.area 
