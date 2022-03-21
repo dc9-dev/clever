@@ -31,7 +31,7 @@
                 <tr>
                 <tr>
                   <td>Status:</td>
-                  <td>{{ order.get_status_display }}</td>
+                  <td>{{ order.get_status_display }} <a href="{% url 'send-mail' order.id %}" class="btn btn-primary btn-sm">Wyślij email</a></td>
                 </tr>
 
                 <td>Zamawiający:</td>

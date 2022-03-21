@@ -23,7 +23,8 @@
               <td scope="col">{{ material.quantity }}</td>
               <td scope="col">{{ material.caluclate_material|floatformat:2 }}m2</td>
               <td scope="col">{{ material.stocks.count }}</td>
-              <td scope="col">{{ material.caluclate_area|floatformat:2 }}m2</td>
+              <td scope="col"></td>
+              <!-- Patrz na sam dol !!!-->
             </tr>
             {% endfor %}
           </tbody>
@@ -77,3 +78,5 @@
     </div>
   </div>
   {% endblock %}
+
+  {{ material.caluclate_area|floatformat:2 }}m2

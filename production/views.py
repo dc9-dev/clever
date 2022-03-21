@@ -1,6 +1,7 @@
 from multiprocessing import context
 from django.db.models import Sum
-from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.views.generic import ListView
@@ -307,6 +308,25 @@ def DetailOrder(request, id):
     }
 
     return render(request, 'production/detail_order.html', ctx)
+
+
+def mail(request, id):
+        order = ProductionOrder.objects.get(id=id)
+
+        ctx = {
+            'name': order.customer,
+            'status': order.get_status_display,
+        }
+
+        template = render_to_string('production/email_template.html', ctx)
+        subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(order.order, order.get_status_display()), settings.EMAIL_HOST_USER, order.customer.email
+        text_content = 'Test test test.'
+        html_content = render_to_string('production/email_template.html', ctx)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        
+        return redirect('detail-order', id=order.id)
 
 
 class SearchOrder(ListView):

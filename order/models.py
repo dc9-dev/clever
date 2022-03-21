@@ -87,16 +87,16 @@ class Material(models.Model):
 
         return self.quantity * self.material_area
 
-    def caluclate_area(self):
+    # def caluclate_area(self):
 
-        material = Material.objects.get(short_name=self.short_name)
-        total_area = 0
-        # for loop for calculating area off child - division by 1000000 to convert mm2 to m2
-        for stock in material.stocks.all():
-            result = stock.length * stock.width / 1000000 
-            total_area += result
+    #     material = Material.objects.get(id=self.short_name)
+    #     total_area = 0
+    #     # for loop for calculating area off child - division by 1000000 to convert mm2 to m2
+    #     for stock in material.stocks.all():
+    #         result = stock.length * stock.width / 1000000 
+    #         total_area += result
 
-        return total_area
+    #     return total_area
 
 
 class IntegerRangeField(models.IntegerField):
