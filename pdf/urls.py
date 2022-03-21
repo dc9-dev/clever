@@ -5,5 +5,5 @@ urlpatterns = [
 
     # path('', views.search_form),
     path('getpdf/<int:id>/', views.generate_pdf, name='getpdf'),
-
+    path('getpdf/cash', views.GeneratePdf.as_view(), name='cash-report'),
 ]

@@ -26,9 +26,10 @@ class Payment(models.Model):
     )
 
     cash = models.ForeignKey(Cash, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255)
-    number = models.CharField(max_length=255)
+    number = models.CharField(max_length=255, blank=True)
     IW_IY = models.CharField(max_length=255, blank=True)
     amount = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
     cash_amount = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10, editable=False)

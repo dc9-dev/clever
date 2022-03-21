@@ -1,7 +1,7 @@
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy 
-
+from django.http.response import JsonResponse
 from .forms import CreatePaymentForm
 from .filters import PaymentFilter
 from .models import Payment, Cash
@@ -10,7 +10,6 @@ from .models import Payment, Cash
 class PaymentsListView(ListView):
     model = Payment
     template_name = 'cash/home_payments.html'
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

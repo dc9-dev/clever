@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Python Guides</title>
+    <style>
+        h1 {
+          text-align: center;
+        }
+        td, th {
+          text-align: center;
+        }
+      </style>
+</head>
+<body>
+      <h1>Raport dobowy - {{ date }}</h1>
+      {% for cash in cashes %}
+      <h1>{{ cash.title }} - {{ cash.amount }}zl</h1>
+      <table>
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Data <br> uzytkownik </td>
+            <td>Tytulem</td>
+            <td>Nr wew.</td>
+            <td>IW/IY</td>
+            <td>Kwota</td>
+            <td>Saldo</td>
+            <td>Status</td>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in cash.payment_set.all %}
+          <tr>
+            <td>{{ payment.id }}</td>
+            <td>{{ payment.date|date:'d/m/y' }} <br> {{ payment.user.first_name }} {{ payment.user.last_name }}</td>
+            <td>{{ payment.title }}</td>
+            <td>{{ payment.number }}</td>
+            <td>{{ payment.IW_IY }}</td>
+            <td>{{ payment.amount }}zl</td>
+            <td>{{ payment.cash_amount }}zl</td>
+            <td>{{ payment.get_status_display }}</td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endfor %}
+</body>
+</html>
