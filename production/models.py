@@ -40,7 +40,7 @@ class Production(models.Model):
 
 class ProductionMaterial(models.Model):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, blank=True)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.PositiveIntegerField(default=0, blank=False, null=False)
 

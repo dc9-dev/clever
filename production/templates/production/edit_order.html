@@ -45,8 +45,8 @@
           <table class="table table-success table-striped">
             <thead>
               <tr>
-                <th scope="col">Materiał</th>
-                <th scope="col">Usługi</th>
+                <th scope="col">Materiał <a href="{% url 'create-material'  %}?next={{ request.path }}" class="text-dark bi bi-plus-square-dotted"></a></th>
+                <th scope="col">Usługi <a href="{% url 'create-services' %}?next={{ request.path }}" class="text-dark bi bi-plus-square-dotted"></a></th>
                 <th scope="col">Ilość</th>
                 <th scope="col">Cena(m2)</th>
                 <th scope="col">Total</th>

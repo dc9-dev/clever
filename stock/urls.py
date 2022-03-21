@@ -11,7 +11,7 @@ urlpatterns = [
     path('grn/', views.GRN, name='grn'),
     path('grn/edit/<int:id>', views.EditGRN, name='edit-grn'),
     path('grn/detail/<int:id>', views.DetailGRN, name='detail-grn'),
-    path('material/create', views.MaterialCreateView.as_view(), name='create-material'),
-    path('services/create', views.ServicesCreateView.as_view(), name='create-services'),
+    path('material/create/', views.MaterialCreateView.as_view(), name='create-material'),
+    path('services/create/', views.ServicesCreateView.as_view(), name='create-services'),
     path('contractor', views.ContractorCreateView.as_view(), name='create-contractor'),
 ]

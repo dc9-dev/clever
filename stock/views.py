@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from django.views.generic.list import MultipleObjectMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 
 
@@ -194,15 +194,19 @@ def check_grn(request, id):
 class MaterialCreateView(CreateView):
     model = Material
     template_name = "stock/create_object.html"
-    success_url = '/'
     form_class = CreateMaterialForm
+
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse_lazy('edit-order'))
 
 
 class ServicesCreateView(CreateView):
     model = Services
     template_name = "stock/create_object.html"
-    success_url = '/'
     form_class = CreateServicesForm
+
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse_lazy('edit-order'))
 
 
 class ContractorCreateView(CreateView):
