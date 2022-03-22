@@ -40,7 +40,6 @@ class Payment(models.Model):
         ordering = ['-date']
 
     def save(self, *args, **kwargs):
-        
         cash = Cash.objects.get(id=self.cash.id)
         cash.amount += self.amount
         self.cash_amount = cash.amount

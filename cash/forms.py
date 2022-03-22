@@ -10,4 +10,15 @@ class CreatePaymentForm(forms.ModelForm):
 
     class Meta:
         model = Payment
-        fields = '__all__'
+        exclude = ['user', 'IW_IY', 'status']
+
+
+class UpdatePaymentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UpdatePaymentForm, self).__init__(*args, **kwargs)
+        for input, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Payment
+        exclude = ['__all__']

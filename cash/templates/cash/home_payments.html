@@ -54,7 +54,11 @@
                   {% endif %}
                    
                 </td>
-                <td><a href="{% if payment.status == 0 %} {% url 'update-payment' payment.id %} {% else %}  {% endif %}" class="btn btn-success btn-sm">Szczegóły</a></td>
+                <td>
+                  {% if request.user.is_superuser %}
+                  <a href="{% if payment.status == 0 %} {% url 'update-payment' payment.id %} {% else %}  {% endif %}" class="btn btn-success btn-sm">Szczegóły</a>
+                  {% endif %}
+                </td>
               </tr>
               {% endfor %}
             </tbody>

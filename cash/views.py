@@ -1,8 +1,9 @@
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy 
 from django.http.response import JsonResponse
-from .forms import CreatePaymentForm
+from .forms import CreatePaymentForm, UpdatePaymentForm
 from .filters import PaymentFilter
 from .models import Payment, Cash
 
@@ -20,17 +21,21 @@ class PaymentsListView(ListView):
 #     model = Payment
 #     template_name = ""
 
-class PaymentCreateView(CreateView):
+class PaymentCreateView(LoginRequiredMixin, CreateView):
     model = Payment
     template_name = "stock/create_object.html"
     form_class = CreatePaymentForm
     success_url = reverse_lazy('cash')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class PaymentUpdateView(UpdateView):
     model = Payment
     template_name = "stock/create_object.html"
-    form_class = CreatePaymentForm
+    form_class = UpdatePaymentForm
     success_url = reverse_lazy('cash')
     
     def get_object(self):
