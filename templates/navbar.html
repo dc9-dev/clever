@@ -26,14 +26,15 @@
                 <span>Panel Admina</span>
               </a>
             </li>
+            
+            {% endif %}
+            {% if user.is_staff %}
             <li>
               <a class="dropdown-item d-flex align-items-center" href="{% url 'cash' %}">
                 <i class="bi bi-cash-coin"></i>
                 <span>Rozliczenia</span>
               </a>
             </li>
-            {% endif %}
-            {% if user.is_staff %}
             <li class="nav-item">
               <a class="dropdown-item d-flex align-items-center" href="{% url 'grn' %}">
                 <i class="bi bi-bag-plus"></i>
@@ -86,14 +87,15 @@
           <span>Panel Admina</span>
         </a>
       </li>
+     
+      {% endif %}
+      {% if user.is_staff %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'cash' %}">
           <i class="bi bi-cash-coin"></i>
           <span>Rozliczenia</span>
         </a>
       </li>
-      {% endif %}
-      {% if user.is_staff %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home-orders' %}">
           <i class="bi bi-square"></i>
