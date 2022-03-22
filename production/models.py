@@ -157,14 +157,12 @@ class ProductionOrder(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
     settlement = models.BooleanField(default=False)
-    attachments = models.FileField(upload_to='order/attachment/')
+    description = models.TextField()
 
     def save(self, *args, **kwargs):
         dt = timezone.now()
         if self.pk is not None:
             orig = ProductionOrder.objects.get(id=self.id)
-            # if orig.status != self.status:
-            #     self.mail()
         else:
             counter = ProductionOrder.objects.filter(date__month=dt.month).count()
             self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
@@ -180,20 +178,6 @@ class ProductionOrder(models.Model):
             total += result
         return total
 
-    # def mail(self, *args, **kwargs):
-
-    #     ctx = {
-    #         'name': self.customer,
-    #         'status': self.get_status_display,
-    #     }
-
-    #     template = render_to_string('production/email_template.html', ctx)
-    #     subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(self.order, self.get_status_display()), settings.EMAIL_HOST_USER, self.customer.email
-    #     text_content = 'Test test test.'
-    #     html_content = render_to_string('production/email_template.html', ctx)
-    #     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    #     msg.attach_alternative(html_content, "text/html")
-    #     msg.send()
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

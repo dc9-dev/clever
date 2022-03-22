@@ -15,6 +15,10 @@
                   {% endif %}
                 </tr>
                 <tr>
+                  <td>Opis:</td>
+                  <td>{{ order.description }}</td>
+                </tr>
+                <tr>
                   <td>Status:</td>
                   <td>{{ order.get_status_display }}</td>
                 </tr>
