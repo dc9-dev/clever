@@ -3,7 +3,7 @@ import os
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['nestingpolska.usermd.net', 'mesting.pl']
+ALLOWED_HOSTS = ['nesting.pl', 'system.nesting.pl']
 
 
 DATABASES = {
