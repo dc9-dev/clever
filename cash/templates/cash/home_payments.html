@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-{% if request.user.is_superuser %}
+{% if request.user.is_staff %}
 <div class="row">
   <div class="col">
     <a href="{% url 'create-payment' %}" class="btn btn-danger btn-sm float-center mt-3 mb-3">Dodaj rekord</a>
