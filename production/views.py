@@ -4,7 +4,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView
 from .forms import (AttachmentForm,
                     ProductionCommentsForm,
                     CreateOrderForm,
@@ -22,7 +23,7 @@ from clever.decorators import staff_or_404
 from stock.models import Stock
 from stock.forms import StockCreateForm, StockCreateInForm
 from stock.filters import StockFilter
-from order.models import Material
+from order.models import Material, Order
 
 @staff_or_404
 def ProductionHome(request):
@@ -314,6 +315,15 @@ def DetailOrder(request, id):
     }
 
     return render(request, 'production/detail_order.html', ctx)
+
+
+class OrderDescription(UpdateView):
+    model = ProductionOrder
+    template_name = "stock/create_object.html"
+    fields = ['description']
+
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse_lazy('edit-order'))
 
 
 def mail(request, id):

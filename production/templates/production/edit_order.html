@@ -16,7 +16,13 @@
                 </tr>
                 <tr>
                   <td>Opis:</td>
-                  <td>{{ order.description }}</td>
+                  <td>
+                    {% if order.description %}
+                    {{ order.description }}
+                    {% else %}
+                    <a href="{% url 'add-description' order.id %}?next={{ request.path }}" class="link-dark">dodaj</a>
+                    {% endif %}
+                  </td>
                 </tr>
                 <tr>
                   <td>Status:</td>
