@@ -4,7 +4,7 @@
 {% if request.user.is_staff %}
 <div class="row">
   <div class="col">
-    <a href="{% url 'create-payment' %}" class="btn btn-danger btn-sm float-center mt-3 mb-3">Dodaj rekord</a>
+    <a href="{% url 'create-payment' %}" class="btn btn-danger btn-sm mt-3 mb-3">Dodaj rekord</a>
     <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center mt-3 mb-3">Szukaj rekordu</a>
     <a href="{% url 'cash-report' %}" class="btn btn-danger btn-sm">Raport dobowy</a>
     <br>
@@ -17,6 +17,7 @@
     <div class="card">
       <div class="card-body">
         <div class="card-title">
+          
           <small>
             <p class="float-start">{{ cash.title }} </p>
             <!-- <a href="" class="btn btn-danger btn-sm">Raport tygodniowy</a>

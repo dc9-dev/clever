@@ -40,10 +40,11 @@ class Payment(models.Model):
         ordering = ['-date']
 
     def save(self, *args, **kwargs):
-        cash = Cash.objects.get(id=self.cash.id)
-        cash.amount += self.amount
-        self.cash_amount = cash.amount
-        cash.save()
+        if self.status == 0:
+            cash = Cash.objects.get(id=self.cash.id)
+            cash.amount += self.amount
+            self.cash_amount = cash.amount
+            cash.save()
         super(Payment, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
