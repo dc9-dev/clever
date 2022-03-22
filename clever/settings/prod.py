@@ -18,5 +18,5 @@ DATABASES = {
 }
 
 
-STATIC_ROOT = '/home/Nestingpolska/domains/nestingpolska.usermd.net/public_python/public/static/'
-MEDIA_ROOT = '/home/Nestingpolska/domains/nestingpolska.usermd.net/public_python/public/media/'
+STATIC_ROOT = '/home/Nestingpolska/domains/nesting.pl/public_python/public/static/'
+MEDIA_ROOT = '/home/Nestingpolska/domains/nesting.pl/public_python/public/media/'
