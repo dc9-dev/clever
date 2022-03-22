@@ -58,6 +58,7 @@
             </thead>
             <tbody>
               {% for material in materials %}
+              <form method="POST">{% csrf_token %}
               <tr>
                 <th scope="row">{{ material.material.short_name }}</th>
                 <td>{{ material.material.name }}</td>
@@ -68,8 +69,10 @@
                 <td>{{ material.price_net|floatformat:2 }}zł</td>
                 <td>{{ material.vat_amount|floatformat:2 }}zł</td>
                 <td>{{ material.price_gross|floatformat:2 }}zł</td>
-                <td></td>
+                <td><button type="submit" name="delete" class="btn btn-danger btn-sm">Usuń</button></td>
               </tr>
+              <input type="hidden" name="m_id" value="{{ material.id }}"/>
+              </form>
               {% endfor %}
             </tbody>
             <tfooter>

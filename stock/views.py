@@ -152,6 +152,11 @@ def EditGRN(request, id):
             grn.save()
             return redirect('detail-grn', id=grn.id)
 
+    if request.method == 'POST' and 'delete' in request.POST:
+        obj = grn.grnmaterial_set.get(id=request.POST['m_id'])
+        obj.delete()
+        return redirect('edit-grn', id=grn.id)
+
     ctx = {
         'grn': grn,
         'form': form,

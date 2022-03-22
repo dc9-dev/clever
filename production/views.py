@@ -10,7 +10,7 @@ from .forms import (AttachmentForm,
                     CreateOrderForm,
                     EditOrderForm,
                     CommentForm)
-from .models import (Production,
+from .models import (MaterialServices, Production,
                      ProductionStock,
                      ProductionMaterial,
                      ProductionComments,
@@ -282,6 +282,11 @@ def EditOrder(request, id):
             attachment.instance.production_order_id = order.id
             attachment.save()
 
+        return redirect('edit-order', id=order.id)
+
+    if request.method == 'POST' and 'delete' in request.POST:
+        obj = MaterialServices.objects.get(id=request.POST['ms_id'])
+        obj.delete()
         return redirect('edit-order', id=order.id)
     
     ctx = {

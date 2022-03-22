@@ -11,7 +11,7 @@
                 <tr>
                   {% if order.status != 0 %}
                   <td>Zamówienie nr:</td>
-                  <td>{{ order }}</td>
+                  <td>{{ order.customer }} - {{ order }} </td>
                   {% endif %}
                 </tr>
                 <tr>
@@ -45,11 +45,14 @@
           <table class="table table-success table-striped">
             <thead>
               <tr>
-                <th scope="col">Materiał <a href="{% url 'create-material'  %}?next={{ request.path }}" class="text-dark bi bi-plus-square-dotted"></a></th>
-                <th scope="col">Usługi <a href="{% url 'create-services' %}?next={{ request.path }}" class="text-dark bi bi-plus-square-dotted"></a></th>
+                <th scope="col">Materiał <a href="{% url 'create-material'  %}?next={{ request.path }}"
+                    class="text-dark bi bi-plus-square-dotted"></a></th>
+                <th scope="col">Usługi <a href="{% url 'create-services' %}?next={{ request.path }}"
+                    class="text-dark bi bi-plus-square-dotted"></a></th>
                 <th scope="col">Ilość</th>
                 <th scope="col">Cena(m2)</th>
                 <th scope="col">Total</th>
+                <th scope="col">Akcja</th>
               </tr>
             </thead>
             <tbody>
@@ -59,26 +62,32 @@
                   <td scope="col">{{ form.services }}</td>
                   <td scope="col">{{ form.area }}</td>
                   <td scope="col">{{ form.price }}</td>
-                  <td scope="col"><button type="submit" name="add" class="btn btn-success btn-sm">Dodaj </button></td>
+                  <td scope="col"></td>
+                  <td scope="col"><button type="submit" name="add" class="btn btn-success btn-sm">Dodaj</button></td>
                 </tr>
               </form>
               {% for ms in materialservices %}
-              <tr>
-                <td scope="col">{{ ms.material }}</td>
-                <td scope="col">{{ ms.services }}</td>
-                <td scope="col">{{ ms.area }}m2</td>
-                <td scope="col">{{ ms.price }}pln</td>
-                <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
-              </tr>
+              <form method="POST">{% csrf_token %}
+                <tr>
+                  <td scope="col">{{ ms.material }}</td>
+                  <td scope="col">{{ ms.services }}</td>
+                  <td scope="col">{{ ms.area }}m2</td>
+                  <td scope="col">{{ ms.price }}pln</td>
+                  <td scope="col">{{ ms.total|floatformat:2 }}pln</td>
+                  <td><button type="submit" name="delete" class="btn btn-danger btn-sm">Usuń</button></td>
+                </tr>
+                <input type="hidden" name="ms_id" value="{{ ms.id }}"/>
+              </form>
               {% endfor %}
             </tbody>
             <tfoot class="dark">
-              <tr>
+              <tr class="fw-bold">
                 <td></td>
                 <td></td>
                 <td></td>
                 <td>Razem: </td>
-                <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
+                <td> {{ order.get_total|floatformat:2 }}pln</td>
+                <td></td>
               </tr>
             </tfoot>
           </table>
@@ -113,7 +122,7 @@
           <small>
             <h6>Załaczniki:</h6>
             {% for attachment in order.attachment_set.all %}
-            <p><a  class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
+            <p><a class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
             {% endfor %}
             <form method="post" enctype="multipart/form-data">{% csrf_token %}
               {{ attachment }}
@@ -124,4 +133,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+  {% endblock %}

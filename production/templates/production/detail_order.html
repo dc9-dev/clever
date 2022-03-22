@@ -6,7 +6,7 @@
     <div class="card">
       <div class="card-body">
         <div class="col-sm-12">
-          <div class="col-sm-4 mt-3">
+          <div class="col-sm-6 mt-3">
             {% if order.status == 1 %}
 
             {% endif %}
@@ -14,7 +14,7 @@
               <tbody>
                 <tr>
                   <td>Zamówienie nr:</td>
-                  <td>{{ order }}</td>
+                  <td>{{ order.customer }} - {{ order }}</td>
                 </tr>
                 <tr>
                   <td>Data:</td>
