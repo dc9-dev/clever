@@ -6,6 +6,7 @@ __pycache__
 db.sqlite3
 sqlite3.db
 media
+.clever/settings/dev.py
 
 # Backup files # 
 *.bak 

@@ -1,4 +1,4 @@
-from multiprocessing import context
+
 from django.db.models import Sum
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -18,12 +18,13 @@ from .models import (MaterialServices, Production,
                      )
 from .filters import ProductionOrderFilter
 
+from clever.decorators import staff_or_404
 from stock.models import Stock
 from stock.forms import StockCreateForm, StockCreateInForm
 from stock.filters import StockFilter
 from order.models import Material
 
-
+@staff_or_404
 def ProductionHome(request):
     productions = Production.objects.all().order_by('-date')
     production_material = Production.objects.get(id=1).productionmaterial_set.all()
@@ -32,7 +33,7 @@ def ProductionHome(request):
 
     return render(request, 'production/home.html', ctx)
 
-
+@staff_or_404
 def ProductionStatus(request, id):
     production = Production.objects.get(id=id)
     productionOrder = ProductionOrder.objects.get(id=production.id)
@@ -45,7 +46,7 @@ def ProductionStatus(request, id):
 
         return redirect('detail-production', id=production.id)
 
-
+@staff_or_404
 def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 2
@@ -73,7 +74,7 @@ def CreateProduction(request, id):
 
     return redirect('edit-production', id=production.id)
 
-
+@staff_or_404
 def EditProduction(request, id):
     
     try:
@@ -92,7 +93,7 @@ def EditProduction(request, id):
 
     return render(request, 'production/edit_production.html', ctx)
 
-
+@staff_or_404
 def DetailProduction(request, id):
     production = Production.objects.get(id=id)
     productionOrder = ProductionOrder.objects.get(id=id)
@@ -106,7 +107,7 @@ def DetailProduction(request, id):
 
     return render(request, 'production/detail_production.html', ctx)
 
-
+@staff_or_404
 def ProductionMaterialIncrement(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     material = Material.objects.get(id=productionMaterial.material.id)
@@ -117,7 +118,7 @@ def ProductionMaterialIncrement(request, id):
 
     return redirect('edit-production', id=productionMaterial.production.id)
 
-
+@staff_or_404
 def ProductionMaterialDecrement(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     material = Material.objects.get(id=productionMaterial.material.id)
@@ -128,7 +129,7 @@ def ProductionMaterialDecrement(request, id):
 
     return redirect('edit-production', id=productionMaterial.production.id)
 
-
+@staff_or_404
 def ProductionComments(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     comments = productionMaterial.comments.all()
@@ -152,7 +153,7 @@ def ProductionComments(request, id):
 
     return render(request, 'production/comments.html', ctx)
 
-
+@staff_or_404
 def ProductionStockFilter(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     productionStocks = productionMaterial.stocks.all()
@@ -170,7 +171,7 @@ def ProductionStockFilter(request, id):
 
     return render(request, 'stock/produciton_stock_filter.html', ctx)
 
-
+@staff_or_404
 def ProductionStockIn(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     stock = Stock.objects.filter(length=0, width=0).first()
@@ -214,7 +215,7 @@ def ProductionStockIn(request, id):
 
     return render(request, 'stock/create_stock.html', ctx)
 
-
+@staff_or_404
 def HomeOrders(request):
     orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')[:25]
     orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')[:25]
@@ -230,7 +231,7 @@ def HomeOrders(request):
 
     return render(request, 'production/orders.html', ctx )
 
-
+@staff_or_404
 def CreateOrder(request):
     form = CreateOrderForm()
 
@@ -243,7 +244,7 @@ def CreateOrder(request):
 
     return render(request, 'production/create_order.html', {'form': form, })
 
-
+@staff_or_404
 def EditOrder(request, id):
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
@@ -299,7 +300,7 @@ def EditOrder(request, id):
 
     return render(request, 'production/edit_order.html', ctx)
 
-
+@staff_or_404
 def DetailOrder(request, id):
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
