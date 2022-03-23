@@ -4,11 +4,11 @@
 {% if request.user.is_staff %}
 <div class="row">
   <div class="col">
-    
+    {% if request.user.is_superuser %}
     <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center mt-3 mb-3">Szukaj rekordu</a>
     <a href="{% url 'cash-report' %}" class="btn btn-danger btn-sm">Raport dobowy</a>
     <br>
-    
+    {% endif %}
   </div>
 </div>
 {% for cash in cashes %}
