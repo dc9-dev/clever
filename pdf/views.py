@@ -25,9 +25,9 @@ from django.template.loader import render_to_string
 
 class GeneratePdf(View):
     def get(self, request, *args, **kwargs):
-        cashes = Cash.objects.all()
+        cash = Cash.objects.get(id=self.kwargs['id'])
         date = datetime.now()
-        open('templates/temp.html', "w").write(render_to_string('pdf/cash_report.html', {'cashes': cashes, 'date': date,}))
+        open('templates/temp.html', "w").write(render_to_string('pdf/cash_report.html', {'cash': cash, 'date': date,}))
         
         pdf = html_to_pdf('temp.html')
 

@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.PaymentsListView, name='cash'),
+    path('', views.CashListView.as_view(), name='cashes'),
+    path('cash/<int:id>', views.CashDetail, name='cash-detail'),
     path('payment/create/<int:id>', views.PaymentCreateView, name='create-payment'),
     path('payment/search', views.SearchPaymentView.as_view(), name='search-payment'),
     path('payment/detail', views.SearchPaymentView.as_view(), name='search-payment'),

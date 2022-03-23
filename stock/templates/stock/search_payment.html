@@ -43,7 +43,7 @@
                     <td class="{% if obj.amount > 0 %} text-success {% else %} text-danger {% endif %}">{{ obj.amount }}zł</td>
                     <td>{{ obj.cash_amount }}zł</td>
                     <td>{{ obj.get_status_display }}</td>
-                    <td><a href="" class="btn btn-primary btn-sm">Zobacz</a></td>
+                    <td><a href="{% url 'update-payment' obj.id %}" class="btn btn-primary btn-sm">Zobacz</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>

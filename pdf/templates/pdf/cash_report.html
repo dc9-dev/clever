@@ -16,7 +16,7 @@
 </head>
 <body>
       <h1>Raport dobowy - {{ date }}</h1>
-      {% for cash in cashes %}
+      
       <h1>{{ cash.title }} - {{ cash.amount }}zl</h1>
       <table>
         <thead>
@@ -35,7 +35,7 @@
         <tbody>
           {% for payment in cash.payment_set.all %}
           <tr>
-            <td>{{ payment.id }}</td>
+            <td>{{ payment.id_number }}</td>
             <td>{{ payment.date|date:'d/m/y' }} <br> {{ payment.user.first_name }} {{ payment.user.last_name }}</td>
             <td>{{ payment.title }}</td>
             <td>{{ payment.number }}</td>
@@ -48,6 +48,6 @@
           {% endfor %}
         </tbody>
       </table>
-      {% endfor %}
+      
 </body>
 </html>

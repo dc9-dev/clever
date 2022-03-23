@@ -9,33 +9,19 @@ from .filters import PaymentFilter
 from .models import Payment, Cash
 
 
-# class PaymentsListView(ListView):
-#     model = Payment
-#     template_name = 'cash/home_payments.html'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['cashes'] = Cash.objects.all()
-#         return context
+class CashListView(ListView):
+    model = Cash
+    template_name = 'cash/home_cash.html'
 
-def PaymentsListView(request):
-    cashes = Cash.objects.all()   
+
+def CashDetail(request, id):
+    cash = Cash.objects.get(id=id)   
            
     ctx = {
-        'cashes': cashes,
+        'cash': cash,
     }
-    return render(request, 'cash/home_payments.html', ctx)
-
-
-# class PaymentCreateView(LoginRequiredMixin, CreateView):
-#     model = Payment
-#     template_name = "stock/create_object.html"
-#     form_class = CreatePaymentForm
-#     success_url = reverse_lazy('cash')
-    
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
+    return render(request, 'cash/cash_detail.html', ctx)
 
 
 def PaymentCreateView(request, id):
@@ -50,10 +36,10 @@ def PaymentCreateView(request, id):
             obj.cash = cash
             obj.user = request.user
             obj.save()
-            return redirect('cash')
+            return redirect('cash-detail', cash.id)
         else:
             form = CreatePaymentForm()
-            return redirect('cash')
+            return redirect('cash-detail', cash.id)
 
     ctx = {
         'cash': cash,
@@ -66,12 +52,16 @@ class PaymentUpdateView(UpdateView):
     model = Payment
     template_name = "stock/create_object.html"
     form_class = UpdatePaymentForm
-    success_url = reverse_lazy('cash')
+    #success_url = reverse_lazy('cash-detail', kwargs.get('id'))
+
+    def get_success_url(self):
+        cash_id = Payment.objects.get(id=self.kwargs['id']).cash_id
+        return reverse_lazy('cash-detail', kwargs={'id': cash_id})
     
     def get_object(self):
         id_ = self.kwargs.get("id")
         return get_object_or_404(Payment, id=id_)
-
+    
     def form_valid(self, form):
         return super().form_valid(form)
 
