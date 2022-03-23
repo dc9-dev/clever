@@ -1,0 +1,82 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Stan magazynu </h5>
+        <table class="table table-hover table-sm text-left" style="text-align: left">
+          <thead>
+            <tr>
+              <th scope="col">Materiał</th>
+              <th scope="col">Płyty</th>
+              <th scope="col">Powierzchnia płyt</th>
+              <th scope="col">Formatki</th>
+              <th scope="col">Powierzchnia formatek</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for material in materials %}
+            <tr>
+              <th scope="col">{{ material.name }}</th>
+              <td scope="col">{{ material.quantity }}</td>
+              <td scope="col">{{ material.caluclate_material|floatformat:2 }}m2</td>
+              <td scope="col">{{ material.stocks.count }}</td>
+              <td scope="col"></td>
+              <!-- Patrz na sam dol !!!-->
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Formatki <a href="{% url 'create-stock' %}"><button class="btn btn-primary btn-sm">Nowa
+              Formatka</button></a></h5>
+        <div class="table-responsive">
+          <table class="table table-borderless table-hover table-sm">
+            {% include 'stock/search.html' %}
+            <thead>
+              <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Długość</th>
+                <th scope="col">Szerokość</th>
+                <th scope="col">Materiał</th>
+                <th scope="col">Akcja</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for stock in filter.qs %}
+              <tr>
+                <td scope="row">{{ stock.id }}</td>
+                <td>{{ stock.length }}mm</td>
+                <td>{{ stock.width }}mm</td>
+                {% if stock.length == 0 %}
+                <td>
+                  <p>------</p>
+                </td>
+                {% else %}
+                <td>{{ stock.material }}</td>
+                {% endif %}
+                <td>
+                  {% if stock.length == 0 %}
+                  <a href="{% url 'add-stock' stock.id %}"><button type="button" class="btn btn-primary btn-sm">dodaj</button></a>
+                  {% else %}
+
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {{ material.caluclate_area|floatformat:2 }}m2

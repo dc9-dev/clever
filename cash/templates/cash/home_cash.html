@@ -2,21 +2,23 @@
 {% load static %}
 
 {% block content %}
-
+  <div class="row">
     {% for cash in object_list %}
+    <div class="col">
     {% if request.user == cash.user or request.user.is_superuser %}
     <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">{{ cash.title }}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ cash.user.first_name}}</h6>
           <p class="card-text">Saldo: {{ cash.amount }}zł</p>
-          <a href="{% url 'cash-detail' cash.id %}" class="card-link">Szczegóły</a>
+          <a href="{% url 'cash-detail' cash.id %}" class="btn btn-success btn-sm">Szczegóły</a>
           {% if request.user.is_superuser %}
-          <a href="{% url 'cash-report' cash.id %}" class="card-link">Raport</a>
+          <a href="{% url 'cash-report' cash.id %}" class="btn btn-danger btn-sm float-end">Raport</a>
           {% endif %}
         </div>
       </div>
       {% endif %}
+    </div>
     {% endfor %}
-
+  </div>
 {% endblock %}
