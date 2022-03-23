@@ -9,7 +9,7 @@
         <div class="card-body">
           <h5 class="card-title">{{ cash.title }}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ cash.user.first_name}}</h6>
-          <p class="card-text">{{ cash.amount }}zł</p>
+          <p class="card-text">Saldo: {{ cash.amount }}zł</p>
           <a href="{% url 'cash-detail' cash.id %}" class="card-link">Szczegóły</a>
           {% if request.user.is_superuser %}
           <a href="{% url 'cash-report' cash.id %}" class="card-link">Raport</a>
