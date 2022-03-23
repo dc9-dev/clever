@@ -1,6 +1,7 @@
 from aiohttp import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy 
 from django.http.response import JsonResponse
@@ -16,10 +17,16 @@ class CashListView(ListView):
 
 
 def CashDetail(request, id):
-    cash = Cash.objects.get(id=id)   
-           
+    cash = Cash.objects.get(id=id)
+    payments = cash.payment_set.all()
+    
+    paginator = Paginator(payments, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+               
     ctx = {
         'cash': cash,
+        'page_obj': page_obj,
     }
     return render(request, 'cash/cash_detail.html', ctx)
 
