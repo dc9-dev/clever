@@ -52,7 +52,6 @@ def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 2
     productionOrder.save()
-    user = request.user
     user_id = request.user.id
     production, created = Production.objects.get_or_create(
                                              id=productionOrder.id,
@@ -68,7 +67,9 @@ def CreateProduction(request, id):
     for materials in duplicates:
         data = []
         for keys, values in materials.items():
-            data.append(values)
+            if values != None:
+                data.append(values)
+                
         mats.create(production_id=production.id,
                     material_id=data[0],
                     area=data[1])
