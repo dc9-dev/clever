@@ -4,7 +4,7 @@
 {% if request.user.is_staff %}
 <div class="row">
   <div class="col">
-    <a href="{% url 'create-payment' %}" class="btn btn-danger btn-sm mt-3 mb-3">Dodaj rekord</a>
+    
     <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center mt-3 mb-3">Szukaj rekordu</a>
     <a href="{% url 'cash-report' %}" class="btn btn-danger btn-sm">Raport dobowy</a>
     <br>
@@ -12,10 +12,12 @@
   </div>
 </div>
 {% for cash in cashes %}
+{% if request.user == cash.user or request.user.is_superuser %}
 <div class="row">
   <div class="col-sm-12">
     <div class="card">
       <div class="card-body">
+        <a href="{% url 'create-payment' cash.id %}" class="btn btn-danger btn-sm mt-3 mb-3">Dodaj rekord</a>
         <div class="card-title">
           
           <small>
@@ -41,7 +43,7 @@
             <tbody>
               {% for payment in cash.payment_set.all %}
               <tr class="{% if payment.status != 0 %} table-success {% else %} table-danger {% endif %}">
-                <td>{{ payment.id }}</td>
+                <td>{{ payment.id_number }}</td>
                 <td>{{ payment.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.</td>
                 <td>{{ payment.title }}</td>
                 <td>{{ payment.number }}</td>
@@ -57,11 +59,16 @@
                 </td>
                 <td>
                   {% if request.user.is_superuser %}
+                    
                   <a href="{% url 'update-payment' payment.id %}" class="btn btn-success btn-sm">Szczegóły</a>
+                    
                   {% endif %}
                 </td>
               </tr>
+              
               {% endfor %}
+              {% endif %}
+
             </tbody>
           </table>
         </div>

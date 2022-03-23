@@ -10,8 +10,8 @@ class CreatePaymentForm(forms.ModelForm):
 
     class Meta:
         model = Payment
-        exclude = ['user', 'IW_IY', 'status']
-
+        fields = ['title', 'number', 'amount', 'comment']
+        
 
 class UpdatePaymentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

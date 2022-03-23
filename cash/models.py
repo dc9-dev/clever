@@ -24,7 +24,7 @@ class Payment(models.Model):
         (UNCHECKED, 'Niesprawdzony'),
         (CHECKED, 'Sprawdzony')
     )
-
+    id_number = models.IntegerField()
     cash = models.ForeignKey(Cash, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -40,12 +40,19 @@ class Payment(models.Model):
         ordering = ['-date']
 
     def save(self, *args, **kwargs):
+        cash = Cash.objects.get(id=self.cash.id)
         if self.status == 0:
-            cash = Cash.objects.get(id=self.cash.id)
             cash.amount += self.amount
             self.cash_amount = cash.amount
             cash.save()
+            if self.id_number == cash.payment_set.count() + 1: 
+                self.id_number = cash.payment_set.count() + 2
+            else:
+                self.id_number = cash.payment_set.count() + 2
+
+        
         super(Payment, self).save(*args, **kwargs)
+        print(cash.payment_set.count())
 
     def delete(self, *args, **kwargs):
         cash = Cash.objects.get(id=self.cash.id)

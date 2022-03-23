@@ -1,4 +1,3 @@
-from http.client import HTTPMessage
 from io import BytesIO
 
 from django.http import HttpResponse
@@ -11,7 +10,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, TableStyle
 
 from cash.models import Cash
-from production.models import ProductionOrder, MaterialServices
+from production.models import ProductionOrder
 
 from datetime import datetime
 
@@ -29,7 +28,7 @@ class GeneratePdf(View):
         cashes = Cash.objects.all()
         date = datetime.now()
         open('templates/temp.html', "w").write(render_to_string('pdf/cash_report.html', {'cashes': cashes, 'date': date,}))
-
+        
         pdf = html_to_pdf('temp.html')
 
         return HttpResponse(pdf, content_type='application/pdf')
