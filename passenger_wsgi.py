@@ -3,10 +3,6 @@ import sys
 from urllib.parse import unquote
 
 from django.core.wsgi import get_wsgi_application
-from signal import signal, SIGPIPE, SIG_DFL 
-#Ignore SIG_PIPE and don't throw exceptions on it... (http://docs.python.org/library/signal.html)
-signal(SIGPIPE,SIG_DFL) 
-
 
 sys.path.append(os.getcwd())
 os.environ['DJANGO_SETTINGS_MODULE'] = "clever.settings.prod" 
