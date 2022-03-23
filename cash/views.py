@@ -81,7 +81,8 @@ class PaymentDeleteView(DeleteView):
         return get_object_or_404(Payment, id=id_)
 
     def get_success_url(self):
-        return reverse_lazy('cash')
+        cash_id = Payment.objects.get(id=self.kwargs['id']).cash_id
+        return reverse_lazy('cash-detail', kwargs={'id': cash_id})
 
 
 class SearchPaymentView(ListView):
