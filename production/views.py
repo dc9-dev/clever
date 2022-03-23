@@ -216,7 +216,7 @@ def ProductionStockIn(request, id):
 
     return render(request, 'stock/create_stock.html', ctx)
 
-@staff_or_404
+
 def HomeOrders(request):
     orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')[:25]
     orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')[:25]
