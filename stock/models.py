@@ -9,24 +9,18 @@ from address.models import AddressField
 from decimal import Decimal
 
 
-class Stock(models.Model):
+class Warehouse(models.Model):
+    title = models.CharField(max_length=255)
 
+
+class Stock(models.Model):
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
     length = IntegerRangeField(min_value=50, max_value=2800, null=True)
     width = IntegerRangeField(min_value=50, max_value=2070, null=True)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
 
     def __str__(self):
         return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
-
-
-class Cutter(models.Model):
-    name = models.CharField(max_length=200)
-    quantity = models.IntegerField(blank=False, null=True)
-    toBuy = models.IntegerField(blank=True, null=True, default=0)
-    forSharpening = models.IntegerField(blank=True, null=True, default=0)
-
-    def __str__(self):
-        return self.name
 
 
 class Contractor(models.Model):

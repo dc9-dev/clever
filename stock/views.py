@@ -10,7 +10,12 @@ from django.urls import reverse_lazy
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Contractor, Stock, Material, Cutter, GoodsReceivedNote
+from .models import Contractor, Stock, Material, GoodsReceivedNote, Warehouse
+
+
+class WarehouseListView(ListView):
+    model = Warehouse
+    template_name = 'stock/home.html'
 
 
 class StockView(ListView):
@@ -24,7 +29,6 @@ class StockView(ListView):
             'filter': StockFilter(self.request.GET,
                                   queryset=self.get_queryset()),
             'materials': Material.objects.all().order_by('name'),
-            'cutters': Cutter.objects.all().order_by('-name'),
             })
         return context
 
@@ -219,3 +223,5 @@ class ContractorCreateView(CreateView):
     template_name = "stock/create_object.html"
     success_url = reverse_lazy('grn')
     form_class = CreateContractorForm
+
+
