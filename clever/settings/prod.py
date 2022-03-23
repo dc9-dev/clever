@@ -5,7 +5,6 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
 ALLOWED_HOSTS = ['system.nesting.pl', 'nesting.pl']
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -16,7 +15,6 @@ DATABASES = {
         'PORT': '5432',
     },
 }
-
 
 STATIC_ROOT = '/home/Nestingpolska/domains/nesting.pl/public_python/public/static/'
 MEDIA_ROOT = '/home/Nestingpolska/domains/nesting.pl/public_python/public/media/'
