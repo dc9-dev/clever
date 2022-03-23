@@ -59,16 +59,12 @@
                 </td>
                 <td>
                   {% if request.user.is_superuser %}
-                    
                   <a href="{% url 'update-payment' payment.id %}" class="btn btn-success btn-sm">Szczegóły</a>
-                    
                   {% endif %}
                 </td>
               </tr>
-              
               {% endfor %}
               {% endif %}
-
             </tbody>
           </table>
         </div>
