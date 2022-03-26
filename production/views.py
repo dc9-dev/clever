@@ -1,4 +1,3 @@
-
 from django.db.models import Sum
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -25,14 +24,16 @@ from stock.forms import StockCreateForm, StockCreateInForm
 from stock.filters import StockFilter
 from order.models import Material, Order
 
+
 @staff_or_404
 def ProductionHome(request):
     productions = Production.objects.all().order_by('-date')
     production_material = Production.objects.get(id=1).productionmaterial_set.all()
-    ctx = {'productions': productions, 
-            'test': production_material,}
+    ctx = {'productions': productions,
+           'test': production_material, }
 
     return render(request, 'production/home.html', ctx)
+
 
 @staff_or_404
 def ProductionStatus(request, id):
@@ -47,6 +48,7 @@ def ProductionStatus(request, id):
 
         return redirect('detail-production', id=production.id)
 
+
 @staff_or_404
 def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
@@ -54,11 +56,11 @@ def CreateProduction(request, id):
     productionOrder.save()
     user_id = request.user.id
     production, created = Production.objects.get_or_create(
-                                             id=productionOrder.id,
-                                             customer=productionOrder.customer,
-                                             user_id=user_id,
-                                             order=productionOrder.order,
-                                             date=productionOrder.date,)
+        id=productionOrder.id,
+        customer=productionOrder.customer,
+        user_id=user_id,
+        order=productionOrder.order,
+        date=productionOrder.date, )
 
     mats = production.productionmaterial_set.all()
 
@@ -66,27 +68,30 @@ def CreateProduction(request, id):
 
     for materials in duplicates:
         data = []
+
         for keys, values in materials.items():
-            if values != None:
-                data.append(values)
-                
-        mats.create(production_id=production.id,
-                    material_id=data[0],
-                    area=data[1])
+            data.append(values)
+
+        if None in data:
+            pass
+        else:
+            mats.create(production_id=production.id,
+                        material_id=data[0],
+                        area=data[1])
 
     return redirect('edit-production', id=production.id)
 
+
 @staff_or_404
 def EditProduction(request, id):
-    
     try:
         production = Production.objects.get(id=id)
     except Production.DoesNotExist:
         return redirect('stock')
-    
+
     productionOrder = ProductionOrder.objects.get(id=id)
     materials = production.productionmaterial_set.all()
-    
+
     ctx = {
         'order': productionOrder,
         'production': production,
@@ -94,6 +99,7 @@ def EditProduction(request, id):
     }
 
     return render(request, 'production/edit_production.html', ctx)
+
 
 @staff_or_404
 def DetailProduction(request, id):
@@ -109,6 +115,7 @@ def DetailProduction(request, id):
 
     return render(request, 'production/detail_production.html', ctx)
 
+
 @staff_or_404
 def ProductionMaterialIncrement(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
@@ -120,6 +127,7 @@ def ProductionMaterialIncrement(request, id):
 
     return redirect('edit-production', id=productionMaterial.production.id)
 
+
 @staff_or_404
 def ProductionMaterialDecrement(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
@@ -130,6 +138,7 @@ def ProductionMaterialDecrement(request, id):
     material.save()
 
     return redirect('edit-production', id=productionMaterial.production.id)
+
 
 @staff_or_404
 def ProductionComments(request, id):
@@ -155,6 +164,7 @@ def ProductionComments(request, id):
 
     return render(request, 'production/comments.html', ctx)
 
+
 @staff_or_404
 def ProductionStockFilter(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
@@ -163,7 +173,7 @@ def ProductionStockFilter(request, id):
     f = StockFilter(
         request.GET,
         queryset=Stock.objects.filter(material=productionMaterial.material)
-        )
+    )
 
     ctx = {
         'material': productionMaterial,
@@ -172,6 +182,7 @@ def ProductionStockFilter(request, id):
     }
 
     return render(request, 'stock/produciton_stock_filter.html', ctx)
+
 
 @staff_or_404
 def ProductionStockIn(request, id):
@@ -186,10 +197,10 @@ def ProductionStockIn(request, id):
             form.save(commit=False)
             if stock is None:
                 newStock = Stock.objects.create(
-                                     length=request.POST['length'],
-                                     width=request.POST['width'],
-                                     material=productionMaterial.material,
-                                     )
+                    length=request.POST['length'],
+                    width=request.POST['width'],
+                    material=productionMaterial.material,
+                )
 
                 productionMaterial.productionstockin_set.create(
                     number=newStock.id,
@@ -231,7 +242,8 @@ def HomeOrders(request):
         'done': orders_done,
     }
 
-    return render(request, 'production/orders.html', ctx )
+    return render(request, 'production/orders.html', ctx)
+
 
 @staff_or_404
 def CreateOrder(request):
@@ -245,6 +257,7 @@ def CreateOrder(request):
             return redirect('edit-order', id=obj.id)
 
     return render(request, 'production/create_order.html', {'form': form, })
+
 
 @staff_or_404
 def EditOrder(request, id):
@@ -276,7 +289,7 @@ def EditOrder(request, id):
             comment.instance.user = request.user
             comment.instance.order = order
             comment.save()
-                    
+
         return redirect('edit-order', id=order.id)
 
     if request.method == 'POST' and 'file' in request.POST:
@@ -291,7 +304,7 @@ def EditOrder(request, id):
         obj = MaterialServices.objects.get(id=request.POST['ms_id'])
         obj.delete()
         return redirect('edit-order', id=order.id)
-    
+
     ctx = {
         'order': order,
         'materialservices': ms,
@@ -301,6 +314,7 @@ def EditOrder(request, id):
     }
 
     return render(request, 'production/edit_order.html', ctx)
+
 
 @staff_or_404
 def DetailOrder(request, id):
@@ -328,22 +342,23 @@ class OrderDescription(UpdateView):
 
 
 def mail(request, id):
-        order = ProductionOrder.objects.get(id=id)
+    order = ProductionOrder.objects.get(id=id)
 
-        ctx = {
-            'name': order.customer,
-            'status': order.get_status_display,
-        }
+    ctx = {
+        'name': order.customer,
+        'status': order.get_status_display,
+    }
 
-        template = render_to_string('production/email_template.html', ctx)
-        subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(order.order, order.get_status_display()), settings.EMAIL_HOST_USER, order.customer.email
-        text_content = 'Test test test.'
-        html_content = render_to_string('production/email_template.html', ctx)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-        
-        return redirect('detail-order', id=order.id)
+    template = render_to_string('production/email_template.html', ctx)
+    subject, from_email, to = 'Zamówienie nr {} - status: {}'.format(order.order,
+                                                                     order.get_status_display()), settings.EMAIL_HOST_USER, order.customer.email
+    text_content = 'Test test test.'
+    html_content = render_to_string('production/email_template.html', ctx)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+    return redirect('detail-order', id=order.id)
 
 
 class SearchOrder(ListView):
@@ -352,7 +367,7 @@ class SearchOrder(ListView):
     template_name = 'production/search_order.html'
 
     def get_context_data(self, **kwargs):
-        context =  super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['filter'] = ProductionOrderFilter(self.request.GET, queryset=self.get_queryset())
         print(ProductionOrderFilter(self.request.GET, queryset=self.get_queryset()))
         return context
