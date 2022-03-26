@@ -66,13 +66,13 @@ def CreateProduction(request, id):
 
     for materials in duplicates:
         data = []
+        new_data = [num for num in data if isinstance(num, (int, float))] # remove non numbers values from data[]
+        new_data 
         for keys, values in materials.items():
-            if values != None:
-                data.append(values)
-                
+            data.append(values)
         mats.create(production_id=production.id,
-                    material_id=data[0],
-                    area=data[1])
+                    material_id=new_data[0],
+                    area=new_data[1])
 
     return redirect('edit-production', id=production.id)
 

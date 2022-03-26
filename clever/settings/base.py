@@ -42,14 +42,17 @@ INSTALLED_APPS = [
     'randomslugfield',
     'imagekit',
     
+    'debug_toolbar',
     'django_filters',
     'django_fastdev',
     'django_extensions',
     'bootstrapform',
+    
 
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

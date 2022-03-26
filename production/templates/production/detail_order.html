@@ -7,19 +7,30 @@
       <div class="card-body">
         <div class="col-sm-12">
           <div class="col-sm-6 mt-3">
-            {% if order.status == 1 %}
-
-            {% endif %}
             <table class="table table-borderless table-sm text-start">
               <tbody>
                 <tr>
+                  {% if order.status != 0 %}
                   <td>Zamówienie nr:</td>
-                  <td>{{ order.customer }} - {{ order }}</td>
+                  <td>{{ order.customer }} - {{ order }} </td>
+                  {% endif %}
                 </tr>
                 <tr>
-                  <td>Data:</td>
-                  <td>{{ order.date }}</td>
+                  <td>Opis:</td>
+                  <td>
+                    {% if order.description %}
+                    {{ order.description }}
+                    {% else %}
+                    <a href="{% url 'add-description' order.id %}?next={{ request.path }}"
+                      class="btn btn-secondary btn-sm">dodaj</a>
+                    {% endif %}
+                  </td>
                 </tr>
+                <tr>
+                  <td>Status:</td>
+                  <td>{{ order.get_status_display }}</td>
+                </tr>
+                <tr>
                 <tr>
                   <td>Płatność:</td>
                   {% if order.settlement == False %}
@@ -28,12 +39,6 @@
                   <td>Rozliczone</td>
                   {% endif %}
                 </tr>
-                <tr>
-                <tr>
-                  <td>Status:</td>
-                  <td>{{ order.get_status_display }} <a href="{% url 'send-mail' order.id %}" class="btn btn-primary btn-sm">Wyślij email</a></td>
-                </tr>
-
                 <td>Zamawiający:</td>
                 <td>{{ order.customer }}</td>
                 </tr>
@@ -89,10 +94,7 @@
                 <td>Razem: </td>
                 <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>
               </tr>
-
             </tfoot>
-
-
           </table>
         </div>
       </div>

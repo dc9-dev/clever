@@ -64,7 +64,7 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Konta"
 
     def __str__(self):
-        return self.email
+        return ("{} {}".format(self.first_name, self.last_name))
     
     def get_full_name(self):
         full_name = '{} {}'.format(self.first_name, self.last_name)

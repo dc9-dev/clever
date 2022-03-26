@@ -6,3 +6,5 @@ if os.environ['CLEVER']  == 'prod':
 else:
    from .dev import *
    print("settings = dev")
+   
+   

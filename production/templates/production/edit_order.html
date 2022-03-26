@@ -20,7 +20,7 @@
                     {% if order.description %}
                     {{ order.description }}
                     {% else %}
-                    <a href="{% url 'add-description' order.id %}?next={{ request.path }}" class="link-dark">dodaj</a>
+                    <a href="{% url 'add-description' order.id %}?next={{ request.path }}" class="btn btn-secondary btn-sm">dodaj</a>
                     {% endif %}
                   </td>
                 </tr>
