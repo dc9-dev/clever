@@ -13,7 +13,7 @@
           <p class="card-text">Saldo: {{ cash.amount }}zł</p>
           <a href="{% url 'cash-detail' cash.id %}" class="btn btn-success btn-sm">Szczegóły</a>
           {% if request.user.is_superuser %}
-          <a href="{% url 'cash-report' cash.id %}" class="btn btn-danger btn-sm float-end">Raport</a>
+          <a href="{% url 'cash-report' cash.id 'today' %}" class="btn btn-danger btn-sm float-end">Raport</a>
           {% endif %}
         </div>
       </div>

@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="pl">
+﻿<!DOCTYPE html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-   
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Python Guides</title>
+    
+    <title>Clever Space - Raporty</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
     <style>
+        body {
+        font-family: 'Roboto', serif;
+        }
+     
         h1 {
           text-align: center;
         }
@@ -17,8 +22,16 @@
       </style>
 </head>
 <body>
-      <h1>Raport dobowy - {{ date }}</h1>
-      
+      <h1>
+        raport
+        {% if date == "month" %}
+          miesięczny
+        {% elif date == "week" %}
+          tygodniowy
+        {% elif date == "today" %}
+          dobowy
+        {% endif %}
+      </h1>
       <h1>{{ cash.title }} - {{ cash.amount }}zl</h1>
       <table>
         <thead>
@@ -31,11 +44,10 @@
             <td>Kwota</td>
             <td>Saldo</td>
             <td>Status</td>
-            
           </tr>
         </thead>
         <tbody>
-          {% for payment in cash.payment_set.all %}
+          {% for payment in cash_filtered %}
           <tr>
             <td>{{ payment.id_number }}</td>
             <td>{{ payment.date|date:'d/m/y' }} <br> {{ payment.user.first_name }} {{ payment.user.last_name }}</td>
@@ -45,11 +57,9 @@
             <td>{{ payment.amount }}zl</td>
             <td>{{ payment.cash_amount }}zl</td>
             <td>{{ payment.get_status_display }}</td>
-            
           </tr>
           {% endfor %}
         </tbody>
       </table>
-      
 </body>
 </html>

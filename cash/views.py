@@ -59,7 +59,6 @@ class PaymentUpdateView(UpdateView):
     model = Payment
     template_name = "stock/create_object.html"
     form_class = UpdatePaymentForm
-    #success_url = reverse_lazy('cash-detail', kwargs.get('id'))
 
     def get_success_url(self):
         cash_id = Payment.objects.get(id=self.kwargs['id']).cash_id

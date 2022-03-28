@@ -10,8 +10,10 @@
       <div class="card-body">
         <a href="{% url 'create-payment' cash.id %}" class="btn btn-danger btn-sm mt-3 mb-3">Dodaj rekord</a>
         {% if request.user.is_superuser %}
-        <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center mt-3 mb-3">Szukaj rekordu</a>
-        <a href="{% url 'cash-report' cash.id %}" class="btn btn-warning btn-sm mt-3 mb-3 float-end">Raport dobowy</a>
+        <a href="{% url 'search-payment' %}" class="btn btn-primary btn-sm float-center m-3">Szukaj rekordu</a>
+        <a href="{% url 'cash-report' cash.id 'today' %}" class="btn btn-warning btn-sm m-3 float-end">Raport dobowy</a>
+        <a href="{% url 'cash-report' cash.id 'week' %}" class="btn btn-light btn-sm m-3 float-end">Raport tygodniowy</a>
+        <a href="{% url 'cash-report' cash.id 'month' %}" class="btn btn-dark btn-sm m-3 float-end">Raport miesięczny</a>
         <br>
         {% endif %}
         <div class="card-title">
