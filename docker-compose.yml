@@ -1,0 +1,7 @@
+db:
+  image: postgres
+  enviroment:
+    -POSTGRES_PASSWORD=admin
+    -POSTGRES_USER=admin
+  ports:
+    "5432:5432"
