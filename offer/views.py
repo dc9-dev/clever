@@ -51,13 +51,14 @@ def edit_offer(request, id):
             note.instance.offer = offer
             note.save()
 
-        return redirect('edit-order', id=offer.id)
+        return redirect('edit-offer', id=offer.id)
             
     print(form.errors)
     ctx = {
         'offer': offer,
         'items': items,
         'form': form,
+        'note': note,
     }
     return render(request, 'offer/update_offer.html', ctx)
 

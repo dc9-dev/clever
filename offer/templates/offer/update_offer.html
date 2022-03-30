@@ -70,6 +70,26 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Notatki:</h6>
+            {% for note in offer.note_set.all %}
+            {{ note.user.first_name }} {{ note.user.last_name|first }}.
+            <p>{{ note.content }}</p>
+            {% endfor %}
+            <form method="POST">{% csrf_token %}
+              {{ note }}
+              <button type="submit" name="note" class="btn btn-primary btn-sm mt-3 float-start">Skomentuj</button>
+            </form>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
  
 {% endblock %}
 

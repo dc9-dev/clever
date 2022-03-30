@@ -3,17 +3,14 @@
 
 {% block content %}
 <div class="row ">
-    <div class="col-sm-12  d-flex justify-content-center">
+    <div class="col-sm-12 d-flex justify-content-center">
         <div class="card ">
             <div class="card-body ">
                 <div class="card-title">
                     <h6>{{ offer }}</h6>
                 </div>
-              
                 <table class="table table-bordered border-dark w-auto ">
-                   
                     <thead class="table-dark ">
-                       
                         <tr>
                             <td colspan="2">Nazwa towaru / usługi</td>
                             <td>Ilość</td>
@@ -22,25 +19,22 @@
                             <td>VAT %</td>
                             <td>Wartość VAT</td>
                             <td>Wartość brutto</td>
-                            
                         </tr>
-                        
                     </thead>
                     <tbody>
                         {% for item in offer.offeritem_set.all %}
                         <form method="POST">{% csrf_token %}
-                        <tr>
-                            <td colspan="2">{{ item.description }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{{ item.price_net_unit }}zł</td>
-                            <td>{{ item.price_net }}zł</td>
-                            <td>{{ item.get_vat_display }}</td>
-                            <td>{{ item.vat_amount}}zł</td>
-                            <td>{{ item.price_gross}}zł</td>
-                            
-                        </tr>
-                        <input type="hidden" name="item_id" value="{{ item.id }}"/>
-                    </form>
+                            <tr>
+                                <td colspan="2">{{ item.description }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.price_net_unit }}zł</td>
+                                <td>{{ item.price_net }}zł</td>
+                                <td>{{ item.get_vat_display }}</td>
+                                <td>{{ item.vat_amount}}zł</td>
+                                <td>{{ item.price_gross}}zł</td>
+                            </tr>
+                            <input type="hidden" name="item_id" value="{{ item.id }}" />
+                        </form>
                         {% endfor %}
                         <tr class='border-0 fw-bold'>
                             <td colspan="3" class='border-0'></td>
@@ -49,17 +43,18 @@
                             <td class='border-0'></td>
                             <td class='border-0'>{{ offer.total_vat }}zł</td>
                             <td class='border-0'>{{ offer.total_gross }}zł</td>
-                            
                         </tr>
                     </tbody>
-                   
                 </table>
-               
+                <small>
+                    <h6>Notatki:</h6>
+                    {% for note in offer.note_set.all %}
+                    {{ note.user.first_name }} {{ note.user.last_name|first }}.
+                    <p>{{ note.content }}</p>
+                    {% endfor %}
+                </small>
             </div>
         </div>
     </div>
 </div>
- 
 {% endblock %}
-
- 
