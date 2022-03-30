@@ -38,7 +38,7 @@ def html_to_pdf(template_src, context_dict={}):
      template = get_template(template_src)
      html  = template.render(context_dict)
      result = BytesIO()
-     pdf = pisa.pisaDocument(BytesIO(html.encode('UTF8')), result)
+     pdf = pisa.pisaDocument(BytesIO(html.encode('utf8')), result)
      if not pdf.err:
          return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
@@ -64,7 +64,7 @@ class GenereatePdfRaport(View):
             cash_filtered = cash.payment_set.filter(date__date=today)
             date = 'today'
 
-        open('templates/temp.html', 'w', encoding='UTF8').write(render_to_string('pdf/cash_report.html',
+        open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/cash_report.html',
          {'cash': cash, 
           'cash_filtered': cash_filtered, 
           'date': date,

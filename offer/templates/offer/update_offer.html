@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row ">
+    <div class="col-sm-12  d-flex justify-content-center">
+        <div class="card ">
+            <div class="card-body ">
+                <div class="card-title">
+                    <h6>{{ offer }}</h6>
+                </div>
+              
+                <table class="table table-bordered border-dark w-auto ">
+                    <form method="POST">{% csrf_token %}
+                        <tr>
+                            <td colspan="2">{{ form.description }}</td>
+                            <td>{{ form.quantity }}</td>
+                            <td>{{ form.price_net_unit }}</td>
+                            <td></td>
+                            <td>{{ form.vat }}</td>
+                            <td></td>
+                            <td></td>
+                            <td><button type="submit" class="btn btn-dark btn-sm">Dodaj</button></td>
+                        </tr>
+                        </form>
+                    <thead class="table-dark ">
+                       
+                        <tr>
+                            <td colspan="2">Nazwa towaru / usługi</td>
+                            <td>Ilość</td>
+                            <td>Cenna netto</td>
+                            <td>Wartość netto</td>
+                            <td>VAT %</td>
+                            <td>Wartość VAT</td>
+                            <td>Wartość brutto</td>
+                            <td>Akcja</td>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        {% for item in offer.offeritem_set.all %}
+                        <form method="POST">{% csrf_token %}
+                        <tr>
+                            <td colspan="2">{{ item.description }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price_net_unit }}zł</td>
+                            <td>{{ item.price_net }}zł</td>
+                            <td>{{ item.get_vat_display }}</td>
+                            <td>{{ item.vat_amount}}zł</td>
+                            <td>{{ item.price_gross}}zł</td>
+                            <td><button type="submit" name="delete" class="btn btn-danger btn-sm">Usuń</button></td>
+                        </tr>
+                        <input type="hidden" name="item_id" value="{{ item.id }}"/>
+                    </form>
+                        {% endfor %}
+                        <tr class='border-0 fw-bold'>
+                            <td colspan="3" class='border-0'></td>
+                            <td class="border-0  float-end">Razem:</td>
+                            <td class='border-0'>{{ offer.total_net }}zł</td>
+                            <td class='border-0'></td>
+                            <td class='border-0'>{{ offer.total_vat }}zł</td>
+                            <td class='border-0'>{{ offer.total_gross }}zł</td>
+                            <td class='border-0'></td>
+                        </tr>
+                    </tbody>
+                   
+                </table>
+                <a href="{% url 'detail-offer' offer.id %}" class="btn btn-success btn-sm float-end">Zakończ</a>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+{% endblock %}
+
+ 

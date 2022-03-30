@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="row">
+  <div class="col">
+    <div class="card recent-sales">
+      <div class="card-body">
+       <h5 class="card-title">Nowa oferta dla: </h5>
+       <div class="col-sm-5">
+       <form method="POST">{% csrf_token %}
+       <div class="input-group">
+       	{{ form.customer }}
+        <button class="btn btn-success bt-sm" type="submit">Dalej...</button>
+       </div>
+       </form>
+     </div>
+     <a href="{% url 'create-customer' %}" class="btn btn-info bt-sm float-end" type="submit">Nowy klient</a>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

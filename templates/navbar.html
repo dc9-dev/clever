@@ -30,7 +30,7 @@
             {% endif %}
             {% if user.is_staff %}
             <li class="nav-item">
-              <a class="nav-link collapsed" href="{% url 'cashes' %}">
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'cashes' %}">
                 <i class="bi bi-cash-coin"></i>
                 <span>Kasy</span>
               </a>
@@ -45,6 +45,12 @@
               <a class="dropdown-item d-flex align-items-center" href="{% url 'home-orders' %}">
                 <i class="bi bi-square"></i>
                 <span>Zamówienia </span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-offer' %}">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Oferta</span>
               </a>
             </li>
             <li>
@@ -102,8 +108,8 @@
           <span>Zamówienia</span>
         </a>
       </li><li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'home-orders' %}">
-          <i class="bi bi-square"></i>
+        <a class="nav-link collapsed" href="{% url 'home-offer' %}">
+          <i class="fa-solid fa-file-invoice"></i>
           <span>Oferta</span>
         </a>
       </li>
