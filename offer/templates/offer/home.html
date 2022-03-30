@@ -11,10 +11,11 @@
     <div class="col-sm-8">
         <div class="card">
             <div class="card-body">
-                <div class="card-title">
-                    <h6>oferty</h6>
-                </div>
-                <h1>testS</h1>
+                <ul class="list-group mt-3">
+                    {% for offer in object_list %}
+                    <a href="{% url 'detail-offer' offer.id %}"><li class="list-group-item">{{ offer }}</li></a>
+                    {% endfor %}
+                  </ul>
             </div>
         </div>
     </div>

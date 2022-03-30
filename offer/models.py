@@ -8,6 +8,7 @@ import datetime
 class Offer(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     number = models.CharField(max_length=255, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         counter = Offer.objects.count() + 1

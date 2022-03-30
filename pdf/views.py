@@ -3,6 +3,7 @@ from io import BytesIO
 
 from django.http import HttpResponse
 
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -11,6 +12,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Table, TableStyle
 
 from cash.models import Cash
+from offer.models import Offer
 from production.models import ProductionOrder
 
 from datetime import datetime, timedelta
@@ -43,6 +45,16 @@ def html_to_pdf(template_src, context_dict={}):
          return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
 
+class GeneratePdfOffer(View):
+    def get(self, request, *args, **kwargs):
+        offer = Offer.objects.get(id=20)
+
+        open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
+            {'offer': offer, }))
+            
+        pdf = html_to_pdf('temp.html')
+
+        return HttpResponse(pdf, content_type='application/pdf')
 
 class GenereatePdfRaport(View):
     def get(self, request, *args, **kwargs):  

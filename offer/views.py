@@ -11,6 +11,7 @@ from .models import Offer, OfferItem
 class HomeOffer(ListView):
     model = Offer
     template_name = 'offer/home.html'
+    ordering = ['-date']
 
 
 class CreateOfferView(CreateView):
@@ -66,3 +67,4 @@ def edit_offer(request, id):
 class OfferDetailView(DetailView):
     model = Offer
     template_name = 'offer/detail_offer.html'
+
