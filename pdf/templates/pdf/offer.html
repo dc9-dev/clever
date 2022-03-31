@@ -1,71 +1,131 @@
-<!DOCTYPE html>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Clever Space - Raporty</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{ offer }}</title>
     <style>
         @font-face {
-        font-family: "DejaVuSans";
-        src: url("~/domains/nesting.pl/public_python/tmp/fonts/DejaVuSans.ttf");
-        src: url("C:/DejaVuSans.ttf");
+            font-family: "DejaVuSans";
+            src: url("~/domains/nesting.pl/public_python/tmp/fonts/DejaVuSans.ttf");
+            src: url("C:/DejaVuSans.ttf");
         }
-        body {
-        font-family: "DejaVuSans";
-        font-size: 22px;
-        }
-     
-        h1 {
-          text-align: center;
-        }
-        td, th {
-          text-align: center;
-          border-bottom: 1px solid #000;
-          padding-top: 5px;
-        }
-      </style>
-</head>
-<body>
 
-        
-                <table class="table table-bordered border-dark w-auto ">
-                    <thead class="table-dark">
-                        <tr>
-                            <td colspan="2">Nazwa towaru / usługi</td>
-                            <td>Ilość</td>
-                            <td>Cenna netto</td>
-                            <td>Wartość netto</td>
-                            <td>VAT %</td>
-                            <td>Wartość VAT</td>
-                            <td>Wartość brutto</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in offer.offeritem_set.all %}
-                       
-                            <tr>
-                                <td colspan="2">{{ item.description }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.price_net_unit }}zł</td>
-                                <td>{{ item.price_net }}zł</td>
-                                <td>{{ item.get_vat_display }}</td>
-                                <td>{{ item.vat_amount}}zł</td>
-                                <td>{{ item.price_gross}}zł</td>
-                            </tr>
-                            
-                        {% endfor %}
-                        <tr class='border-0 fw-bold'>
-                            <td colspan="3" class='border-0'></td>
-                            <td class="border-0  float-end">Razem:</td>
-                            <td class='border-0'>{{ offer.total_net }}zł</td>
-                            <td class='border-0'></td>
-                            <td class='border-0'>{{ offer.total_vat }}zł</td>
-                            <td class='border-0'>{{ offer.total_gross }}zł</td>
-                        </tr>
-                    </tbody>
+        body {
+            font-family: "DejaVuSans";
+
+        }
+
+        .items td,
+        th {
+
+            text-align: center;
+            border: 1px solid gray;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>Oferta nr: {{ offer.number }}</td>
+            <td align="right">Warszawa, {{ offer.date|date:"d-m-Y" }}</td>
+        </tr>
+
+    </table>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td><img src="http://system.nesting.pl/static/assets/img/logo.jpg" width="150" /></td>
+        </tr>
+        <tr>
+            <td width="49%">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                <tr>
+                                    <td style="font-size:15px;">Sprzedawca</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:400; font-size:14px;">Nesting Polska Sp z o.o</td>
+                                </tr>
+                                <td style="font-size:13px;">Samarytanka 1/30<br> 03-592 Warszawa<br> NIP
+                                    524298412<br>ksiegowosc@nestingpolska.pl<br>Tel: 533 333 996</td>
+                    </tr>
+
                 </table>
-            </body>
-            </html>
+            </td>
+        </tr>
+    </table>
+    </td>
+    <td width="51%" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="font-size:15px;" align="right">Nabywca</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="font-size:15px;" align="right">{{ offer.customer.company }}</td>
+            </tr>
+            <tr>
+                <td style="font-size:13px;" align="right">{{ offer.customer.address_line_1 }}<br>
+                    {{ offer.customer.postcode }} {{ offer.customer.town_city }}<br> {{ offer.customer.phone_number }}<br>
+                    {{ offer.customer.email }}</td>
+            </tr>
+        </table>
+    </td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="items">
+                <thead>
+                    <tr style="background-color: #0990A6;">
+                        <td colspan="2">Nazwa towaru / usługi</td>
+                        <td>Ilość</td>
+                        <td>Cenna netto</td>
+                        <td>Wartość netto</td>
+                        <td>VAT %</td>
+                        <td>Wartość VAT</td>
+                        <td>Wartość brutto</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in offer.offeritem_set.all %}
+                    <tr>
+                        <td colspan="2">{{ item.description }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price_net_unit }}zł</td>
+                        <td>{{ item.price_net }}zł</td>
+                        <td>{{ item.get_vat_display }}</td>
+                        <td>{{ item.vat_amount}}zł</td>
+                        <td>{{ item.price_gross}}zł</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="fw-bold" style="background-color: #000; color: white;">
+                        <td colspan="3" style="border: none;"></td>
+                        <td style="border: none;">Razem:</td>
+                        <td style="border: none;">{{ offer.total_net }}zł</td>
+                        <td style="border: none;"></td>
+                        <td style="border: none;">{{ offer.total_vat }}zł</td>
+                        <td style="border: none;">{{ offer.total_gross }}zł</td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </table>
+</body>
+
+</html>

@@ -47,7 +47,7 @@ def html_to_pdf(template_src, context_dict={}):
 
 class GeneratePdfOffer(View):
     def get(self, request, *args, **kwargs):
-        offer = Offer.objects.get(id=20)
+        offer = Offer.objects.get(id=self.kwargs['id'])
 
         open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
             {'offer': offer, }))
