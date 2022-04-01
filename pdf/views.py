@@ -33,7 +33,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa  
 from django.views.generic import View
-from clever.settings import  MEDIA_ROOT
+from clever.settings.base import  MEDIA_ROOT
 
 def html_to_pdf(template_src, context_dict={}):
      template = get_template(template_src)
