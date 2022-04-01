@@ -1,5 +1,6 @@
 # -*- coding: latin-1 -*-
 from io import BytesIO
+from tempfile import NamedTemporaryFile
 
 from django.http import HttpResponse
 
@@ -20,7 +21,7 @@ from datetime import datetime, timedelta
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, Frame
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.views.generic import View
 
 from django.template.loader import render_to_string
@@ -48,11 +49,11 @@ class GeneratePdfOffer(View):
     def get(self, request, *args, **kwargs):
         offer = Offer.objects.get(id=self.kwargs['id'])
 
-        open('templates/temp2.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
+        open('tmp/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
             {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}))
-            
-        pdf = html_to_pdf('temp2.html')
-
+        
+        pdf = html_to_pdf('temp.html')
+       
         return HttpResponse(pdf, content_type='application/pdf')
 
 class GenereatePdfRaport(View):
@@ -75,7 +76,7 @@ class GenereatePdfRaport(View):
             cash_filtered = cash.payment_set.filter(date__date=today)
             date = 'today'
 
-        open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/cash_report.html',
+        open('tmp/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/cash_report.html',
          {'cash': cash, 
           'cash_filtered': cash_filtered, 
           'date': date,
