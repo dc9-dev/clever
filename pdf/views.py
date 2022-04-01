@@ -79,6 +79,7 @@ class GenereatePdfRaport(View):
          {'cash': cash, 
           'cash_filtered': cash_filtered, 
           'date': date,
+          'MEDIA_ROOT': MEDIA_ROOT,
           }))
         
         pdf = html_to_pdf('temp.html')
