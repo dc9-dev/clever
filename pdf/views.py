@@ -33,8 +33,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa  
 from django.views.generic import View
-
-
+from clever.settings import  MEDIA_ROOT
 
 def html_to_pdf(template_src, context_dict={}):
      template = get_template(template_src)
@@ -50,7 +49,7 @@ class GeneratePdfOffer(View):
         offer = Offer.objects.get(id=self.kwargs['id'])
 
         open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
-            {'offer': offer, }))
+            {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}))
             
         pdf = html_to_pdf('temp.html')
 
