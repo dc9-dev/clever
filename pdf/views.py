@@ -35,10 +35,8 @@ class GeneratePdfOffer(View):
     def get(self, request, *args, **kwargs):
         offer = Offer.objects.get(id=self.kwargs['id'])
 
-        open('templates/tmp/cash.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
-            {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}))
-        
-        pdf = html_to_pdf('cash.html')
+        ctx = {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}
+        pdf = html_to_pdf('pdf/offer.html', ctx)
        
         return HttpResponse(pdf, content_type='application/pdf')
 
@@ -62,14 +60,12 @@ class GenereatePdfRaport(View):
             cash_filtered = cash.payment_set.filter(date__date=today)
             date = 'today'
 
-        open('templates/tmp/raport.html', 'w', encoding='utf8').write(render_to_string('pdf/cash_report.html',
-         {'cash': cash, 
+        
+        ctx = {'cash': cash, 
           'cash_filtered': cash_filtered, 
           'date': date,
-          'MEDIA_ROOT': MEDIA_ROOT,
-          }))
-        
-        pdf = html_to_pdf('raport.html')
+          'MEDIA_ROOT': MEDIA_ROOT,}
+        pdf = html_to_pdf('pdf/cash_report.html', ctx)
 
         return HttpResponse(pdf, content_type='application/pdf')
 
