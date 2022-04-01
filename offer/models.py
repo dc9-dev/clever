@@ -88,3 +88,4 @@ class Note(models.Model):
     date = models.DateField(auto_now_add=True)
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     content = models.TextField()
+    visible = models.BooleanField(default=False)
