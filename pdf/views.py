@@ -48,7 +48,7 @@ class GeneratePdfOffer(View):
     def get(self, request, *args, **kwargs):
         offer = Offer.objects.get(id=self.kwargs['id'])
 
-        open('templates/temp.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
+        open('templates/temp2.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
             {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}))
             
         pdf = html_to_pdf('temp.html')
