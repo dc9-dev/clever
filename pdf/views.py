@@ -51,7 +51,7 @@ class GeneratePdfOffer(View):
         open('templates/temp2.html', 'w', encoding='utf8').write(render_to_string('pdf/offer.html',
             {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}))
             
-        pdf = html_to_pdf('temp.html')
+        pdf = html_to_pdf('temp2.html')
 
         return HttpResponse(pdf, content_type='application/pdf')
 
