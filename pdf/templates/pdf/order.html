@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{ production }}</title>
+
+    <style>
+        @font-face {
+            font-family: "Jura";
+            src: url("{{ MEDIA_ROOT}}/font/Jura.ttf");
+        }
+
+        @font-face {
+            font-family: "Jura";
+            font-style: normal;
+            font-weight: 700;
+            src: url("{{ MEDIA_ROOT}}/font/Jura-Bold.ttf");
+        }
+
+        body {
+            font-family: "Jura";
+
+        }
+
+        .items td,
+        th {
+
+            text-align: center;
+            border: 1px solid gray;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td style="font-size: large; font-weight: 700;">Zamowienie nr: {{ production.order }}</td>
+            <td align="right">Warszawa, {{ production.date|date:"d-m-Y" }}</td>
+        </tr>
+
+    </table>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td><img src="http://system.nesting.pl/static/assets/img/logo.jpg" width="150" /></td>
+        </tr>
+        <tr>
+            <td width="49%">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                                <tr>
+                                    <td style="font-size: large; font-weight: 700;">Sprzedawca</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: large; font-weight: 700;">Nesting Polska Sp z o.o</td>
+                                </tr>
+                                <td style="font-size:13px;">Samarytanka 1/30<br> 03-592 Warszawa<br> NIP
+                                    524298412<br>ksiegowosc@nestingpolska.pl<br>Tel: 533 333 996</td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+    </td>
+    <td width="51%" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="font-size: large; font-weight: 700; " align="right">Nabywca</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="font-size: large; font-weight: 700;" align="right">{{ production.customer.company }}</td>
+            </tr>
+            <tr>
+                <td style="font-size:13px;" align="right">{{ production.customer.address_line_1 }}<br>
+                    {{ production.customer.postcode }} {{ production.customer.town_city }}<br> {{ production.customer.phone_number }}<br>
+                    {{ production.customer.email }}</td>
+            </tr>
+        </table>
+    </td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="items">
+                <thead>
+                    <tr style="background-color: #0990A6;">
+                        <td colspan="2" style="font-size: large; font-weight: 700;">Materiał</td>
+                        <td style="font-size: large; font-weight: 700;">Usługi</td>
+                        <td style="font-size: large; font-weight: 700;">Ilość</td>
+                        <td style="font-size: large; font-weight: 700;">Cena(j.)</td>
+                        <td style="font-size: large; font-weight: 700;">Total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ms %}
+                    <tr>
+                        <td colspan="2">{{ item.material }}</td>
+                        <td>{{ item.services }}</td>
+                        <td>{{ item.area }}</td>
+                        <td>{{ item.price }}zł</td>
+                        <td>{{ item.total }}zł</td>
+                        
+                    </tr>
+                    {% endfor %}
+                    <tr class="fw-bold" style="background-color: #000; color: white;">
+                        <td colspan="4" style="border: none;"></td>
+                        <td style="border: none; font-size: large; font-weight: 700;">Razem:</td>
+                        <td style="border: none; font-size: large; font-weight: 700;">{{ production.get_total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>Opis: </td>
+    </tr>
+    <tr>
+        <td>{{ production.description }}</td>
+    </tr>
+    </table>
+</body>
+
+</html>

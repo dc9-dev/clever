@@ -82,7 +82,7 @@
             <p>{{ note.content }}</p>
             {% endfor %}
             <form method="POST">{% csrf_token %}
-              {{ note }}
+              {{ note.content }} 
               <button type="submit" name="note" class="btn btn-primary btn-sm mt-3 float-start">Skomentuj</button>
             </form>
           </small>

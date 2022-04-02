@@ -34,6 +34,7 @@ class NoteForm(forms.ModelForm):
                     label='dodaj notatkę', 
                     widget=forms.Textarea(attrs={'rows': '2',})
                     )
+   
 
     class Meta:
         model = Note
