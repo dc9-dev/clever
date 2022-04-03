@@ -165,7 +165,7 @@ class ProductionOrder(models.Model):
             orig = ProductionOrder.objects.get(id=self.id)
         else:
             counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-            self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
+            self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%d/%m/%y"))
         super(ProductionOrder, self).save(*args, **kwargs)
 
     def __str__(self):
