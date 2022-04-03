@@ -1,27 +1,16 @@
-# -*- coding: latin-1 -*-
 from django.http import HttpResponse
+from django.views.generic import View
+from django.template.loader import get_template
 
-
+from clever.settings.base import  MEDIA_ROOT
 from cash.models import Cash
 from offer.models import Offer
 from production.models import ProductionOrder
 
-
 from datetime import datetime, timedelta
-
-from django.views.generic import View
-
-from django.template.loader import render_to_string
-
-
-
-
 from io import BytesIO
+from xhtml2pdf import pisa 
 
-from django.template.loader import get_template
-from xhtml2pdf import pisa  
-
-from clever.settings.base import  MEDIA_ROOT
 
 def html_to_pdf(template_src, context_dict={}):
      template = get_template(template_src)
@@ -33,17 +22,17 @@ def html_to_pdf(template_src, context_dict={}):
      return None
 
 class GeneratePdfOffer(View):
+
     def get(self, request, *args, **kwargs):
         offer = Offer.objects.get(id=self.kwargs['id'])
-
         ctx = {'offer': offer, 'MEDIA_ROOT': MEDIA_ROOT}
         pdf = html_to_pdf('pdf/offer.html', ctx)
        
         return HttpResponse(pdf, content_type='application/pdf')
 
 class GenereatePdfRaport(View):
-    def get(self, request, *args, **kwargs):  
 
+    def get(self, request, *args, **kwargs):  
         cash = Cash.objects.get(id=self.kwargs['id'])
         today = datetime.today()
 
@@ -61,11 +50,12 @@ class GenereatePdfRaport(View):
             cash_filtered = cash.payment_set.filter(date__date=today)
             date = 'today'
 
-        
-        ctx = {'cash': cash, 
-          'cash_filtered': cash_filtered, 
-          'date': date,
-          'MEDIA_ROOT': MEDIA_ROOT,}
+        ctx = {
+            'cash': cash, 
+            'cash_filtered': cash_filtered, 
+            'date': date,
+            'MEDIA_ROOT': MEDIA_ROOT,
+            }
         pdf = html_to_pdf('pdf/cash_report.html', ctx)
 
         return HttpResponse(pdf, content_type='application/pdf')
@@ -76,10 +66,11 @@ class GenerateOrderPdf(View):
     def get(self, request, *args, **kwargs):
         production = ProductionOrder.objects.get(id=self.kwargs['id'])
         ms = production.materialservices_set.all()
-        #d = datetime.today()
-
-        ctx = {'production': production, 'ms': ms, 'MEDIA_ROOT': MEDIA_ROOT}
+        ctx = {
+            'production': production,
+            'ms': ms, 
+            'MEDIA_ROOT': MEDIA_ROOT,
+            }
         pdf = html_to_pdf('pdf/order.html', ctx)
        
         return HttpResponse(pdf, content_type='application/pdf')
-
