@@ -161,11 +161,9 @@ class ProductionOrder(models.Model):
 
     def save(self, *args, **kwargs):
         dt = timezone.now()
-        if self.pk is not None:
-            orig = ProductionOrder.objects.get(id=self.id)
-        else:
-            counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-            self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%d/%m/%y"))
+        if self.pk is None:
+           counter = ProductionOrder.objects.filter(date__month=dt.month).count()
+           self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%d/%m/%y"))
         super(ProductionOrder, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -194,7 +192,7 @@ class MaterialServices(models.Model):
                                  null=True,
                                  on_delete=models.CASCADE)
     services = models.ForeignKey(Services,
-                                 blank=True,
+                                 blank=False,
                                  null=True,
                                  on_delete=models.CASCADE)
     area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
