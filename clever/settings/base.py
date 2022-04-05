@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
     'account',
     'cash',
-    'order',
+    #'order',
     'stock',
     'production',
     'offer',

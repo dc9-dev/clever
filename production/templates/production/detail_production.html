@@ -4,16 +4,22 @@
   <div class="col-sm-12">
     <div class="card recent-sales">
       <div class="card-body">
-       <h5 class="card-title">{{ production.order }} - {{ order.customer }}{% if production.status != 3 %} {% if request.user.id == production.user.id or request.user.is_superuser %}<a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>{% endif %}{% endif %}</h5>
+       <h5 class="card-title">
+         {{ production.order }} - {{ order.customer }}
+          {% if production.status != 3 %}
+            {% if production.status == 1 %} 
+            <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Rozpocznij produkcje</button></a>
+              {% elif request.user.id == production.user.id or request.user.is_superuser %}
+              <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>
+            {% endif %}
+          {% endif %}
+       </h5>
        <div class="row">
          <div class="col-sm-12">
            <div class="table-responsive"> 
               <table class="table table-borderless table-hover table-sm text-start">
               <thead>
-               <tr>
-                <td colspan="6"><span class="badge {% if production.status == 3 %} bg-success  {% elif production.status == 2 %} bg-dark  {% endif %} ">
-             Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span></td>
-              </tr>
+             
                 <tr>
                   <th scope="col">Materiał</th>
                   <th scope="col">Ilość m2</th>
@@ -50,8 +56,16 @@
       </div>
     </div>
   </div>
+{% if production.status != 1 %}
 {% include 'stock/summary.html' %}
+{% endif %}
 </div>
   
 
  {% endblock %}
+
+
+ <tr>
+  <td colspan="6"><span class="badge {% if production.status == 3 %} bg-success  {% elif production.status == 2 %} bg-dark  {% endif %} ">
+Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span></td>
+</tr>

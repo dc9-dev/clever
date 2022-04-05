@@ -3,29 +3,27 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
-from order.models import Material, IntegerRangeField
+from stock.models import Material, IntegerRangeField
 from account.models import Customer
 from decimal import Decimal
 import os
 
 class Production(models.Model):
-    PREPARATION = 0
     PENDING = 1
     DURING = 2
     DONE = 3
     STATUS = (
         ('zmień status', 'zmień status'),
-        (PREPARATION, 'Przygotowywanie'),
         (PENDING, 'Oczekuję'),
         (DURING, 'W trakcie'),
         (DONE, 'Zakończone'),
     )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
-    status = models.SmallIntegerField(choices=STATUS, default=DURING)
+    status = models.SmallIntegerField(choices=STATUS, default=PENDING)
     
     def __str__(self):
         return self.order

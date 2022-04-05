@@ -1,16 +1,44 @@
-from pyexpat import model
-from tabnanny import verbose
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from order.models import Material, IntegerRangeField
 from phonenumber_field.modelfields import PhoneNumberField
 from address.models import AddressField
 from decimal import Decimal
 
 
+class IntegerRangeField(models.IntegerField):
+
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
+        defaults.update(kwargs)
+        return super(IntegerRangeField, self).formfield(**defaults)
+
+
 class Warehouse(models.Model):
     title = models.CharField(max_length=255)
+
+
+class Material(models.Model):
+
+    short_name = models.CharField(max_length=255, blank=False, null=True)
+    name = models.CharField(max_length=255, blank=False, null=True)
+    quantity = models.SmallIntegerField(default=0, blank=False, null=True)
+    material_area = models.DecimalField(default=Decimal('5.796'), decimal_places=4, blank=False, max_digits=10)
+
+    class Meta:
+        verbose_name = "materiał"
+        verbose_name_plural = "materiały"
+
+    def __str__(self):
+        return self.short_name
+
+    def caluclate_material(self):
+
+        return self.quantity * self.material_area
 
 
 class Stock(models.Model):
@@ -56,7 +84,8 @@ class GoodsReceivedNote(models.Model):
     def save(self, *args, **kwargs):
         dt = timezone.now()
         counter = GoodsReceivedNote.objects.filter(date__month=dt.month).count()
-        self.title = "PZ/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
+        if self.pk is None:
+            self.title = "PZ/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
         super(GoodsReceivedNote, self).save(*args, **kwargs)
 
     def __str__(self):

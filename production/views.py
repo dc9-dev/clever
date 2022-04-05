@@ -22,16 +22,22 @@ from clever.decorators import staff_or_404
 from stock.models import Stock
 from stock.forms import StockCreateForm, StockCreateInForm
 from stock.filters import StockFilter
-from order.models import Material, Order
+from stock.models import Material
 
 
 @staff_or_404
 def ProductionHome(request):
-    productions = Production.objects.all().order_by('-date')
-    production_material = Production.objects.get(id=1).productionmaterial_set.all()
-    ctx = {'productions': productions,
-           'test': production_material, }
+    
+    productions_pending = Production.objects.filter(status=1).order_by('-date')[:25]
+    productions_during = Production.objects.filter(status=2).order_by('-date')[:25]
+    productions_done = Production.objects.filter(status=3).order_by('-date')[:25]
 
+    ctx = {
+        'pending': productions_pending,
+        'during': productions_during,
+        'done': productions_done,
+    }
+   
     return render(request, 'production/home.html', ctx)
 
 
@@ -49,16 +55,16 @@ def ProductionStatus(request, id):
         return redirect('detail-production', id=production.id)
 
 
-@staff_or_404
+
 def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
-    productionOrder.status = 2
+    productionOrder.status = 1
     productionOrder.save()
-    user_id = request.user.id
+    #user_id = request.user.id
     production, created = Production.objects.get_or_create(
         id=productionOrder.id,
         customer=productionOrder.customer,
-        user_id=user_id,
+        #user_id=user_id,
         order=productionOrder.order,
         date=productionOrder.date, )
 
@@ -83,12 +89,20 @@ def CreateProduction(request, id):
 
 @staff_or_404
 def EditProduction(request, id):
+    productionOrder = ProductionOrder.objects.get(id=id)
+    
+
     try:
         production = Production.objects.get(id=id)
+        if production.status == 1:
+            production.user_id = request.user.id
+            production.status = 2
+            production.save()
+            productionOrder.status = 2
+            productionOrder.save()
     except Production.DoesNotExist:
         return redirect('stock')
 
-    productionOrder = ProductionOrder.objects.get(id=id)
     materials = production.productionmaterial_set.all()
 
     ctx = {
@@ -280,6 +294,7 @@ def EditOrder(request, id):
     if request.method == 'POST' and 'done' in request.POST:
         order.status = 1
         order.save()
+        CreateProduction(request.POST, order.id)
         return redirect('detail-order', id=order.id)
 
     if request.method == 'POST' and 'comment' in request.POST:

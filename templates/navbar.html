@@ -2,7 +2,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+      <a href="" class="logo d-flex align-items-center">
         <img src="{% static 'assets/img/logo.jpg' %}" alt="">
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -19,53 +19,13 @@
             </li>
               <hr class="dropdown-divider">
             </li>
-            {% if user.is_superuser %}
+           
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'admin:index' %}">
-                <i class="bi bi-gear"></i>
-                <span>Panel Admina</span>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'detail-user' request.user.id %}">
+                <i class="fa-solid fa-user"></i>
+                <span>Mój Profil</span>
               </a>
             </li>
-            
-            {% endif %}
-            {% if user.is_staff %}
-            <li class="nav-item">
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'cashes' %}">
-                <i class="bi bi-cash-coin"></i>
-                <span>Kasy</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'grn' %}">
-                <i class="bi bi-bag-plus"></i>
-                <span>Przyjęcie Materiału</span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-orders' %}">
-                <i class="bi bi-square"></i>
-                <span>Zamówienia </span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-offer' %}">
-                <i class="fa-solid fa-file-invoice"></i>
-                <span>Oferta</span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'warehouses' %}">
-                <i class="fa-solid fa-warehouse"></i>
-                <span>Magazyn</span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'home-production' %}">
-                <i class="bi bi-square"></i>
-                <span>Produkcja</span>
-              </a>
-            </li>
-            {% endif %}
             <li>
               <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
                 <i class="bi bi-box-arrow-right"></i>
@@ -80,12 +40,6 @@
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
-      <li class="nav-item">
-        <a class="nav-link " href="{% url 'home' %}">
-          <i class="bi bi-grid"></i>
-          <span>Strona główna</span>
-        </a>
-      </li>
       {% if user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:index' %}">
@@ -104,19 +58,13 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home-orders' %}">
-          <i class="bi bi-square"></i>
+          <i class="fa-solid fa-rectangle-list"></i>
           <span>Zamówienia</span>
         </a>
       </li><li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home-offer' %}">
           <i class="fa-solid fa-file-invoice"></i>
           <span>Oferta</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'home-orders' %}">
-          <i class="bi bi-square"></i>
-          <span>Frezer</span>
         </a>
       </li>
       <li class="nav-item">
@@ -133,7 +81,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'home-production' %}">
-          <i class="bi bi-square"></i>
+          <i class="fa-solid fa-laptop-file"></i>
           <span>Produkcja</span>
         </a>
       </li>

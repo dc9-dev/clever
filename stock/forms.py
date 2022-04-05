@@ -1,6 +1,6 @@
 from django import forms
-from .models import Stock, GoodsReceivedNote, GRNMaterial, Contractor
-from order.models import Material
+from .models import Stock, GoodsReceivedNote, GRNMaterial, Contractor, Material
+
 from production.models import Services
 
 

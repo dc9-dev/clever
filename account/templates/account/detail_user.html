@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %} 
+<div class="row">
+    
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body pt-3">
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="mb-0">Imię i Naziwsko</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+              {{ user.first_name }} {{ user.last_name }}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="mb-0">Email</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+              {{ user.email }}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="mb-0">Hasło</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+              <small>******** <a href="{% url 'change-password' user.id %}" class="link-dark">zmień hasło</a></small>
+            </div>
+          </div>
+      </div>
+      </div>
+      </div>
+    </div>
+
+   
+
+
+{% endblock %}
