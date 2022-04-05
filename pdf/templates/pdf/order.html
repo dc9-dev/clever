@@ -107,9 +107,19 @@
                 <tbody>
                     {% for item in ms %}
                     <tr>
-                        <td colspan="2">{{ item.material }}</td>
+                        <td colspan="2">{% if item.material == None %}
+                    
+                            {% else %}
+                            {{ item.material }}
+                            {% endif %}</td>
                         <td>{{ item.services }}</td>
-                        <td>{{ item.area }}</td>
+                       
+                        <td>{% if item.services.units == "km" %}
+                            {{ item.area|floatformat:0 }}
+                            {% else %}
+                            {{ item.area }}
+                            {% endif %}
+                            {{ item.services.units }}</td>
                         <td>{{ item.price }}zł</td>
                         <td>{{ item.total|floatformat:2 }}zł</td>
                         
