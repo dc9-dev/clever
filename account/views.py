@@ -48,7 +48,7 @@ def register(request):
             new_user.save()
             user = authenticate(email=user_form.cleaned_data['email'], password=user_form.cleaned_data['password'])
             login(request, user)
-            return redirect('warehouses')
+            return redirect('detail-user', user.id)
         else:
             user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'form': user_form})
