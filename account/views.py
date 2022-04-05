@@ -48,7 +48,7 @@ def register(request):
             new_user.save()
             user = authenticate(email=user_form.cleaned_data['email'], password=user_form.cleaned_data['password'])
             login(request, user)
-            return redirect('home')
+            return redirect('warehouses')
         else:
             user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'form': user_form})
@@ -63,7 +63,7 @@ def password_change(request, id):
             #keep current user logged in
             update_session_auth_hash(request, user)
             messages.success(request, 'password updated!')
-            return redirect('detail-user')
+            return redirect('detail-user', request.user.id) 
         else:
             messages.error(request, 'Please correct the error below.')
     else:

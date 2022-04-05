@@ -31,7 +31,11 @@
             <div class="col-sm-9 text-secondary">
               <small>******** <a href="{% url 'change-password' user.id %}" class="link-dark">zmień hasło</a></small>
             </div>
+            
           </div>
+          {% for message in messages %}
+        <p class="text-center messages">{{message}}</p>
+        {% endfor %}	
       </div>
       </div>
       </div>

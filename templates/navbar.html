@@ -50,6 +50,7 @@
      
       {% endif %}
       {% if user.is_staff %}
+      {% if moderator in request.user.groups.all or user.is_superuser %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'cashes' %}">
           <i class="bi bi-cash-coin"></i>
@@ -68,15 +69,16 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'warehouses' %}">
-          <i class="fa-solid fa-warehouse"></i>
-          <span>Magazyn</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'grn' %}">
           <i class="bi bi-bag-plus"></i>
           <span>Przyjęcie Materiału</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'warehouses' %}">
+          <i class="fa-solid fa-warehouse"></i>
+          <span>Magazyn</span>
         </a>
       </li>
       <li class="nav-item">
