@@ -36,7 +36,7 @@
     <table>
         <tr>
             <td style="font-size: large; font-weight: 700;">Zamowienie nr: {{ production.order }}</td>
-            <td align="right">Warszawa, {{ production.date|date:"d-m-Y" }}</td>
+            <td style="font-size: large; font-weight: 700;" align="right">Warszawa, {{ production.date|date:"d-m-Y" }}</td>
         </tr>
 
     </table>
@@ -111,14 +111,14 @@
                         <td>{{ item.services }}</td>
                         <td>{{ item.area }}</td>
                         <td>{{ item.price }}zł</td>
-                        <td>{{ item.total }}zł</td>
+                        <td>{{ item.total|floatformat:2 }}zł</td>
                         
                     </tr>
                     {% endfor %}
                     <tr class="fw-bold" style="background-color: #000; color: white;">
                         <td colspan="4" style="border: none;"></td>
                         <td style="border: none; font-size: large; font-weight: 700;">Razem:</td>
-                        <td style="border: none; font-size: large; font-weight: 700;">{{ production.get_total }}</td>
+                        <td style="border: none; font-size: large; font-weight: 700;">{{ production.get_total|floatformat:2 }}zł</td>
                     </tr>
                 </tbody>
             </table>
