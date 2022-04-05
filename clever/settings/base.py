@@ -120,8 +120,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Custom user model
 AUTH_USER_MODEL = 'account.UserBase'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/test'
+LOGIN_REDIRECT_URL = '/stock/'
 LOGIN_URL = '/account/login/'
 
 

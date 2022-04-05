@@ -3,10 +3,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, View
 from django.urls import reverse_lazy, reverse
 from .forms import LoginForm, UserRegistrationForm, CustomerCreateForm
 from .models import Customer, UserBase
+
+
+
 
 def loginUser(request):
     if request.method == 'POST':

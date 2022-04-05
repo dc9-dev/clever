@@ -1,11 +1,13 @@
 
+from django.contrib.auth import views as auth_views
+from django.shortcuts import redirect
 from django.urls import path
 
 from . import views
 
 
 urlpatterns = [
-    path('login', views.loginUser, name='login'),
+    path('', views.loginUser, name='login'),
     path('logout', views.logoutUser, name='logout'),
     path('register', views.register, name='register'),
     path('detail/<int:pk>', views.UserDetailView.as_view(), name='detail-user'),
