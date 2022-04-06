@@ -76,6 +76,14 @@
         </a>
       </li>
       {% endif %}
+      {% if group.name == 'frezer' %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'home-production' %}">
+          <i class="fa-solid fa-laptop-file"></i>
+          <span>Produkcja</span>
+        </a>
+      </li>
+      {% endif %}
       {% endfor %}
    
       <li class="nav-item">
@@ -96,12 +104,7 @@
         </ul>
       </li>
       
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'home-production' %}">
-          <i class="fa-solid fa-laptop-file"></i>
-          <span>Produkcja</span>
-        </a>
-      </li>
+     
       {% endif %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'logout' %}">
