@@ -22,8 +22,15 @@ class Warehouse(models.Model):
     title = models.CharField(max_length=255)
 
 
-class Material(models.Model):
+class Gender(models.Model):
+    title = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.title
+
+
+class Material(models.Model):
+    gender = models.ForeignKey(Gender, on_delete=models.SET_NULL, null=True)
     short_name = models.CharField(max_length=255, blank=False, null=True)
     name = models.CharField(max_length=255, blank=False, null=True)
     quantity = models.SmallIntegerField(default=0, blank=False, null=True)
@@ -42,7 +49,7 @@ class Material(models.Model):
 
 
 class Stock(models.Model):
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    
     length = IntegerRangeField(min_value=50, max_value=2800, null=True)
     width = IntegerRangeField(min_value=50, max_value=2070, null=True)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
@@ -50,6 +57,12 @@ class Stock(models.Model):
     def __str__(self):
         return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
 
+    def area(self):
+        total = 0
+        for stock in Stock.objects.filter(material=self.material):
+            result = stock.width * stock.length
+            total += result
+        return total
 
 class Contractor(models.Model):
     name = models.CharField(max_length=200)

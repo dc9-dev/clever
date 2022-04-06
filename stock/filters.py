@@ -7,10 +7,11 @@ from .models import *
 class StockFilter(django_filters.FilterSet):
     length = NumberFilter(lookup_expr='gte')
     width = NumberFilter(lookup_expr='gte')
+    
 
     class Meta:
         model = Stock
-        exclude = ['warehouse']
+        fields = '__all__'
 
 
 class GrnFilter(django_filters.FilterSet):

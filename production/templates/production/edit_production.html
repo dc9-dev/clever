@@ -1,25 +1,47 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
+  <div class="col-sm-4">
+    <table class="table table-bordered border-primary text-start">
+      <tr>
+        <td colspan="2" class="text-center">{{ production.order }}</td>
+      </tr>
+      <tr>
+        <td>Klient:</td>
+        <td>{{ order.customer }}</td>
+      </tr>
+      <tr>
+        <td>Status:</td>
+        <td>{{ production.get_status_display}}</td>
+      </tr>
+      <tr>
+        <td>Operator:</td>
+        <td>{{ production.user.first_name }} {{ production.user.last_name }}</td>
+      </tr>
+      <tr>
+        <td>Data:</td>
+        <td>{{ production.date }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Zakończ zlecenie </button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+
   <div class="col-sm-12">
     <div class="card ">
       <div class="card-body">
-       <div class="wrapper">
-       <h5 class="card-title">{{ production.order }} - {{ order.customer }}
-        <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm float-end">Zakończ zlecenie </button>
-        </form>
-      </h5>
-       </div>
+ 
        <div class="col-sm-12">
 
          <div class="table-responsive"> 
            <table class="table table-borderless table-hover table-sm text-start">
             <thead>
-              <tr>
-                <td colspan="6"><span class="badge {% if production.status == 3 %} bg-success  {% elif production.status == 2 %} bg-dark  {% endif %} ">
-             Operator: {{ production.user.first_name }} {{ production.user.last_name }} | {{ production.date }} | {{ production.get_status_display}}</span></td>
-              </tr>
+         
               <tr>
                 <th scope="col">Materiał</th>
                 <th scope="col">Ilość m2</th>

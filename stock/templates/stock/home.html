@@ -2,20 +2,39 @@
 {% load static %}
 
 {% block content %}
-  <div class="row">
-    {% for wh in object_list %}
-    <div class="col">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">{{ wh.title }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">aSd sad asdsa</h6>
-          <p class="card-text">asd asdas</p>
-          <a href="{% url 'cash-detail' wh.id %}" class="btn btn-success btn-sm">Szczegóły</a>
-          
-        </div>
-      </div>
-    </div>
-    {% endfor %}
+<div class="row">
+  
+  {% for gender in object_list %}
+  {% if gender.material_set.all %}
+  <div class="col-sm-6">
+        <table class="table table-dark table-hover" style="font-size: 10px;">
+          <thead>
+            <tr>
+              <td colspan="2" style="background-color: #0990A6;">{{ gender }}</td>
+            </tr>
+          </thead>
+          <thead>
+            <tr>
+              <td>materiał</td>
+              <td>płyty</td>
+              <td>pow. płyt</td>
+              <td>formatki</td>
+              
+            </tr>
+          </thead>
+          {% for mat in gender.material_set.all %}
+          <tr>
+            <td>{{ mat.name }}</td>
+            <td>{{ mat.quantity}}szt.</td>
+            <td>{{ mat.caluclate_material|floatformat:2 }}m2</td>
+            <td>{{ mat.stocks.count }}szt.</td>
+           
+          </tr>
+          {% endfor %}
+        </table>
   </div>
+  {% endif %}
+  {% endfor %}
+
+</div>
 {% endblock %}
-<!-- <a href="{% url 'cash-report' cash.id %}" class="btn btn-danger btn-sm float-end">Raport</a> -->

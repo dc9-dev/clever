@@ -11,17 +11,17 @@ from django.contrib.auth.decorators import login_required
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Contractor, Stock, Material, GoodsReceivedNote, Warehouse
+from .models import Contractor, Stock, Material, GoodsReceivedNote, Warehouse, Gender
 
 
-class WarehouseListView(ListView, LoginRequiredMixin ):
-    model = Warehouse
+class WarehouseListView(ListView, LoginRequiredMixin):
+    model = Gender
     template_name = 'stock/home.html'
 
 
 class StockView(ListView):
     model = Stock
-    template_name = 'stock/home.html' 
+    template_name = 'stock/stocks.html' 
 
     def get_context_data(self, **kwargs):
 
@@ -29,7 +29,6 @@ class StockView(ListView):
         context.update({
             'filter': StockFilter(self.request.GET,
                                   queryset=self.get_queryset()),
-            'materials': Material.objects.all().order_by('name'),
             })
         return context
 
@@ -42,12 +41,13 @@ class CreateStock(CreateView):
         return render(request, 'stock/create_stock.html', context)
 
     def post(self, request, *args, **kwargs):
-
         form = StockCreateForm(request.POST)
         if form.is_valid():
             form.save()
-
-            return redirect('stock')
+            return redirect('stocks')
+        else:
+            print(form.is_valid())
+            print(form.errors)
 
         for index, i in enumerate(Stock.objects.all()):
             i.id = index + 1
@@ -90,6 +90,7 @@ def AddStock(request, id):
             stock.material.id = request.POST['material']
             stock.save()
             return redirect('stock')
+       
 
     return render(request, 'stock/create_stock.html', {'form': form})
 
