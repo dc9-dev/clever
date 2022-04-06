@@ -50,7 +50,8 @@
      
       {% endif %}
       {% if user.is_staff %}
-      {% if moderator in request.user.groups.all or user.is_superuser %}
+      {% for group in request.user.groups.all %}
+        {% if group.name == 'moderator' %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'cashes' %}">
           <i class="bi bi-cash-coin"></i>
@@ -75,6 +76,7 @@
         </a>
       </li>
       {% endif %}
+      {% endfor %}
    
       <li class="nav-item">
         <a class="nav-link" data-bs-target="#stock-nav" data-bs-toggle="collapse" href="#" aria-expanded="false">
