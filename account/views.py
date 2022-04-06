@@ -20,7 +20,7 @@ def loginUser(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('warehouses')
+                    return redirect('home-stock')
                 else:
                     print("The password is valid, but the account has been disabled!")
                 # if user.is_active:
