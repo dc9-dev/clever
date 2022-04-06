@@ -74,3 +74,8 @@ class GenerateOrderPdf(View):
         pdf = html_to_pdf('pdf/order.html', ctx)
        
         return HttpResponse(pdf, content_type='application/pdf')
+
+
+class GenerateStockPdf(View):
+    def get(self, request, *args, **kwargs):
+        so
