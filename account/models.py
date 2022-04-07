@@ -84,7 +84,7 @@ class Customer(models.Model):
     address_line_1 = models.CharField(max_length=150, blank=True)
     address_line_2 = models.CharField(max_length=150, blank=True)
     town_city = models.CharField(max_length=150, blank=True)
-    balance =  models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    balance =  models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=True, max_digits=10)
 
     class Meta:
         verbose_name = "Klient"
@@ -93,10 +93,5 @@ class Customer(models.Model):
     def __str__(self):
         return self.company
 
-    def get_absolute_url(self):
-        return reverse('accounts:detail-customer', args=[self.id])
-
-    def save(self, *args, **kwargs):
-        if self.company == '':
-            self.company = self.first_name + ' ' + self.last_name
-        super(Customer, self).save(self, *args, **kwargs)
+   
+    

@@ -1,12 +1,13 @@
-from re import template
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from django.views.generic import CreateView, DetailView, View
-from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.urls import reverse_lazy
 from .forms import LoginForm, UserRegistrationForm, CustomerCreateForm
 from .models import Customer, UserBase
+from stock.models import Contractor
 
 
 
@@ -89,13 +90,29 @@ class CustomerCreateView(CreateView):
         context = {'form': CustomerCreateForm()}
         return super().get(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        print(form.cleaned_data)
-        return super().form_valid(form)
-            
+
+class CustomerUpdateView(UpdateView):
+    model = Customer
+    template_name = 'account/update_customer.html'
+    fields = '__all__'
+    succes_url = reverse_lazy('detail-customer')
+
+    def get_success_url(self):
+        return reverse_lazy('detail-customer', kwargs = {'pk': self.object.pk})
+
 
 class CustomerDetailView(DetailView):
     model = Customer
     template_name = 'account/detail_customer.html'
 
 
+class CustomerListView(ListView):
+    model = Customer
+    template_name = 'account/list_customer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'contractors': Contractor.objects.all(),
+            })
+        return context

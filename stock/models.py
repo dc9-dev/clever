@@ -98,7 +98,7 @@ class GoodsReceivedNote(models.Model):
         dt = timezone.now()
         counter = GoodsReceivedNote.objects.filter(date__month=dt.month).count()
         if self.pk is None:
-            self.title = "PZ/{0:0=3d}/{1}".format(counter, dt.strftime("%m/%y"))
+            self.title = "PZ/{0:0=3d}/{1}".format(counter, dt.strftime("%d/%m/%y"))
         super(GoodsReceivedNote, self).save(*args, **kwargs)
 
     def __str__(self):

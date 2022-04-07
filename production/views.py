@@ -10,17 +10,16 @@ from .forms import (AttachmentForm,
                     CreateOrderForm,
                     EditOrderForm,
                     CommentForm)
-from .models import (MaterialServices, Production,
-                     ProductionStock,
+from .models import (MaterialServices,
+                     Production,
                      ProductionMaterial,
-                     ProductionComments,
                      ProductionOrder,
                      )
 from .filters import ProductionOrderFilter
 
 from clever.decorators import staff_or_404
 from stock.models import Stock
-from stock.forms import StockCreateForm, StockCreateInForm
+from stock.forms import StockCreateInForm
 from stock.filters import StockFilter
 from stock.models import Material
 

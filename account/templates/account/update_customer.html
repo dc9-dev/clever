@@ -1,0 +1,60 @@
+
+{% extends 'main.html' %} 
+{% load bootstrap %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+           <div class="card-body">
+            <div class="tab-content pt-2">
+                
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+               
+                  <h5 class="card-title">Profil klienta</h5>
+                  <form method="POST">{% csrf_token %}
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Imię i Nazwisko</div>
+                    <div class="col-lg-9 col-md-8">{{ form.first_name }} {{ form.last_name }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Firma</div>
+                    <div class="col-lg-9 col-md-8">{{ form.company }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">ulica</div>
+                    <div class="col-lg-9 col-md-8">{{ form.address_line_1 }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Kod pocztowy</div>
+                    <div class="col-lg-9 col-md-8">{{ form.postcode }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Miejscowość</div>
+                    <div class="col-lg-9 col-md-8">{{ form.town_city }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Telefon</div>
+                    <div class="col-lg-9 col-md-8">{{ form.phone_number }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">{{ form.email }}</div>
+                  </div>
+                  <button type="submit" class="btn btn-success btn-sm">Zapisz</button>
+                </form>
+                </div>
+               
+              </div>
+           </div>
+       </div>
+    </div>
+</div>
+
+{% endblock %}

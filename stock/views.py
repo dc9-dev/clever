@@ -1,8 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
-from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.views.generic.list import MultipleObjectMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
@@ -11,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
 from production.models import ProductionMaterial, Services
-from .models import Contractor, Stock, Material, GoodsReceivedNote, Warehouse, Gender
+from .models import Contractor, Stock, Material, GoodsReceivedNote, Gender
 
 
 class WarehouseListView(ListView, LoginRequiredMixin):
@@ -24,7 +23,6 @@ class StockView(ListView):
     template_name = 'stock/stocks.html' 
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
         context.update({
             'filter': StockFilter(self.request.GET,
@@ -227,3 +225,14 @@ class ContractorCreateView(CreateView):
     form_class = CreateContractorForm
 
 
+class ContractorUpdateView(UpdateView):
+    model = Contractor
+    template_name = "account/update_contractor.html"
+    fields = '__all__'
+    
+    def get_success_url(self):
+        return reverse_lazy('detail-contractor', kwargs = {'pk': self.object.pk })
+
+class ContractorDetailView(DetailView):
+    model = Contractor
+    template_name = "account/detail_contractor.html"

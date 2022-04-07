@@ -1,21 +1,49 @@
 
 {% extends 'main.html' %} 
-{% load bootstrap %}
+
 {% block content %}
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="card">
-            <div class="card-title">
-                <div class="card-body">
-                    
-                    {% for obj in object_list %} 
-                        {{ obj.first_name }}
-                    {% endfor %}
-                   
+       <div class="card">
+           <div class="card-body">
+            <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+               
+                  <h5 class="card-title">Profil klienta</h5>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Imię i Nazwisko</div>
+                    <div class="col-lg-9 col-md-8">{{ object.first_name }} {{ object.last_name }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Firma</div>
+                    <div class="col-lg-9 col-md-8">{{ object.company }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Adres</div>
+                    <div class="col-lg-9 col-md-8">{{ object.address_line_1 }}, {{ object.postcode }} {{ object.town_city }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Telefon</div>
+                    <div class="col-lg-9 col-md-8">{{ object.phone_number }}</div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">{{ object.email }}</div>
+                  </div>
+
+                  <a href="{% url 'update-customer' object.id %}" class="btn btn-success btn-sm">Edytuj</a>
                 </div>
-            </div>
-        </div>
+
+              </div>
+           </div>
+       </div>
     </div>
 </div>
 

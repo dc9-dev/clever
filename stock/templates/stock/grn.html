@@ -7,9 +7,14 @@
 
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Przyjęcie z zewnątrz<a href="{% url 'create-contractor' %}"
-            class="btn btn-success btn-sm float-end">Nowy kontrahent</a></h5>
-
+        <h5 class="card-title">Przyjęcie z zewnątrz</h5>
+        <div class="row">
+          <div class="col-sm-12 mb-3">
+            <a href="{% url 'edit-contractor' %}" class="btn btn-secondary btn-sm float-end">Edycja kontrahenta</a>
+            <a href="{% url 'create-contractor' %}" class="btn btn-success btn-sm float-start">Nowy kontrahent</a>
+            
+          </div>
+        </div> 
         <div class="col-sm-12">
           <form method="POST" action="">{% csrf_token %}
             <div class="row">

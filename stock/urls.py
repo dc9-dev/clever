@@ -15,4 +15,5 @@ urlpatterns = [
     path('material/create/', views.MaterialCreateView.as_view(), name='create-material'),
     path('services/create/', views.ServicesCreateView.as_view(), name='create-services'),
     path('contractor', views.ContractorCreateView.as_view(), name='create-contractor'),
+    path('contractor/edit/', views.ContractorUpdateView.as_view(), name='edit-contractor'),
 ]
