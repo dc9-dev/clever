@@ -5,7 +5,7 @@ from django.template.loader import get_template
 from clever.settings.base import MEDIA_ROOT
 from cash.models import Cash
 from offer.models import Offer
-from production.models import ProductionOrder
+from production.models import ProductionOrder, ProductionStockIn
 from stock.models import Stock
 
 from datetime import datetime, timedelta
@@ -83,7 +83,7 @@ class GenerateOrderPdf(View):
 
 
 def generate_stock_label(request, id):
-    stock = Stock.objects.get(id=id)
+    stock = ProductionStockIn.objects.get(id=id)
     buf = BytesIO()
     
     c = canvas.Canvas(buf, pagesize=landscape(A9), bottomup=0)
@@ -92,11 +92,11 @@ def generate_stock_label(request, id):
     textob.setFont("Helvetica", 18)    
     textob.textLine("{}x{}".format(stock.length, stock.width))
     textob.textLine("{}".format(stock.material))
-    textob.textLine("#{}".format(stock.id))
+    textob.textLine("#{}".format(stock.number))
 
     c.drawText(textob)
     c.showPage()
     c.save()
     buf.seek(0)
 
-    return FileResponse(buf, as_attachment=True, filename='{}.pdf'.format(stock))
+    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.number))
