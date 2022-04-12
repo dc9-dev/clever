@@ -45,14 +45,12 @@ class Payment(models.Model):
             cash.amount += self.amount
             self.cash_amount = cash.amount
             cash.save()
-            if self.id_number == cash.payment_set.count() + 1: 
-                self.id_number = cash.payment_set.count() + 2
+            if self.id_number == cash.payment_set.first().id_number: 
+                self.id_number = cash.payment_set.first().id_number + 1
             else:
-                self.id_number = cash.payment_set.count() + 2
+                self.id_number = cash.payment_set.first().id_number + 1
 
-        
         super(Payment, self).save(*args, **kwargs)
-        print(cash.payment_set.count())
 
     def delete(self, *args, **kwargs):
         cash = Cash.objects.get(id=self.cash.id)

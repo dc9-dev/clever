@@ -4,7 +4,7 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from address.models import AddressField
 from decimal import Decimal
-
+import os
 
 class IntegerRangeField(models.IntegerField):
 
@@ -129,6 +129,24 @@ class GoodsReceivedNote(models.Model):
         return total
 
 
+class Comment(models.Model):
+    date = models.DateField(auto_now_add=True)
+    grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
+    content = models.TextField()
+
+
+class Attachment(models.Model):
+    grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='grn/attachments/')
+
+    def __str__(self):
+        return os.path.basename(self.file.name)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()
+        super().delete(*args, **kwargs)
+
+
 class GRNMaterial(models.Model):
 
     VAT_8 = 0
@@ -137,6 +155,7 @@ class GRNMaterial(models.Model):
         (VAT_8, '8%'),
         (VAT_23, '23%')
     )
+
     
     grn = models.ForeignKey(GoodsReceivedNote, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)

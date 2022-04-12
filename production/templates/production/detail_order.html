@@ -6,7 +6,7 @@
     <div class="card">
       <div class="card-body">
         <div class="col-sm-12">
-          <div class="col-sm-6 mt-3">
+          <div class="col-sm-6 mt-3 float-start">
             <table class="table table-borderless table-sm text-start">
               <tbody>
                 <tr>
@@ -53,6 +53,18 @@
                 </tr>
               </tbody>
             </table>
+          
+          </div>
+          <div class="d-grid gap-2 col-3 mx-auto float-end mt-3">
+            <a href="{% url 'edit-order' order.id %}" class="btn btn-warning btn-sm">Edytuj zamówienie</a>
+            {% if order.status != 1 %}
+                  <a href="{% url 'detail-production' order.id %}" class="btn btn-warning btn-sm">Zobacz produkcję</a>
+            {% endif %}
+            {% if order.status == 3 %}
+                  <a href="{% url 'detail-production' order.id %}" class="btn btn-success btn-sm">Rozlicz</a>
+            {% endif %}
+            <a href="{% url 'getpdf' order.id %}" class="btn btn-danger btn-sm">Generuj PDF</a></td>
+            <a href="{% url 'send-mail' order.id %}" class="btn btn-success btn-sm">Wyślij email</a></td>
           </div>
           <table class="table table-success table-striped">
             <thead>
@@ -90,16 +102,12 @@
             </tbody>
             <tfoot class="dark">
               <tr>
-                <td><a href="{% url 'getpdf' order.id %}" class="btn btn-danger btn-sm">Generuj PDF</a></td>
                 <td>
-                  {% if order.status != 1 %}
-                  <a href="{% url 'detail-production' order.id %}" class="btn btn-warning btn-sm">Zobacz produkcję</a>
-                  {% endif %}
+                <td>
+                  
                 </td>
                 <td>
-                  {% if order.status == 3 %}
-                  <a href="{% url 'detail-production' order.id %}" class="btn btn-success btn-sm">Rozlicz</a>
-                  {% endif %}
+                  
                 </td>
                 <td>Razem: </td>
                 <td class="fw-bold"> {{ order.get_total|floatformat:2 }}pln</td>

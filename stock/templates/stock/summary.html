@@ -10,7 +10,10 @@
      <h6>Formatki z magazynu: {{ material.stock_area|floatformat:3 }}m2</h6>
      <h6>Formatki do magazynu: {{ material.stockIn_area|floatformat:3 }}m2</h6>
      <br>
+     {% if request.user.is_superuser %}
      <h6 class="fw-bold">Odpad: {{ material.waste|floatformat:3 }}m2</h6>
+     <h6>Procent odpadu: {{ material.waste_precent|floatformat:2 }}%</h6>
+         {% endif %}
      <br>
      {% if not material.comments.all %}
          <h6>Uwagi:</h6>
@@ -22,9 +25,7 @@
             
         {% endfor %}
      {% endif %}   
-      <hr>{% if request.user.is_superuser %}
-      <h1>Procent odpadu: {{ material.waste_precent|floatformat:2 }}%</h1>
-          {% endif %}
+     <hr>
       {% endfor %}
       
    </div>

@@ -44,8 +44,7 @@
                 <th scope="col" colspan="10">Materiał</th>
               </tr>
               <tr>
-                <td>Nazwa skrócona</td>
-                <td>Pełna nazwa</td>
+                <td colspan="2">Nazwa</td>
                 <td>Ilość(m2)</td>
                 <td>Szt.</td>
                 <td>Cena(netto)</td>
@@ -60,8 +59,7 @@
               {% for material in materials %}
               <form method="POST">{% csrf_token %}
               <tr>
-                <th scope="row">{{ material.material.short_name }}</th>
-                <td>{{ material.material.name }}</td>
+                <td colspan="2">{{ material.material.short_name }}</td>
                 <td>{{ material.area }}</td>
                 <td>{{ material.quantity }}</td>
                 <td>{{ material.price_net_unit }}zł/m2</td>
@@ -86,8 +84,7 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <td>{{ form.material }}</td>
-                  <td></td>
+                  <td colspan="2">{{ form.material }}</td>
                   <td>{{ form.area }}</td>
                   <td></td>
                   <td>{{ form.price_net_unit}}</td>
@@ -116,6 +113,40 @@
       </div>
     </div>
   </div>
-
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Komentarze:</h6>
+            {% for comment in grn.comment_set.all %}
+           
+            <p>{{ comment.content }}</p>
+            {% endfor %}
+            <form method="POST">{% csrf_token %}
+              {{ comment }}
+              <button type="submit" name="comment" class="btn btn-primary btn-sm mt-3 float-start">Skomentuj</button>
+            </form>
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Załaczniki:</h6>
+            {% for attachment in grn.attachment_set.all %}
+            <p><a class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
+            {% endfor %}
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              {{ attachment }}
+              <button type="submit" class="btn btn-success btn-sm  mt-3 ms-3" name="file">Prześlij plik</button>
+            </form>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

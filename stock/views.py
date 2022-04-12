@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from .filters import StockFilter, GrnFilter
-from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm
+from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm, CommentForm, AttachmentForm
 from production.models import ProductionMaterial, Services
 from .models import Contractor, Stock, Material, GoodsReceivedNote, Gender
 
@@ -124,11 +124,12 @@ def EditGRN(request, id):
     grn = GoodsReceivedNote.objects.get(id=id)
     materials = grn.grnmaterial_set.all()
     form = GRNMaterailForm()
+    comment = CommentForm()
+    attachment = AttachmentForm()
 
     if request.method == 'POST':
         if 'addMaterial' in request.POST:
             form = GRNMaterailForm(request.POST)
-            print(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
 
@@ -161,10 +162,28 @@ def EditGRN(request, id):
         obj.delete()
         return redirect('edit-grn', id=grn.id)
 
+    if request.method == 'POST' and 'comment' in request.POST:
+        comment = CommentForm(request.POST)
+        if comment.is_valid():
+            comment.instance.grn = grn
+            comment.save()
+
+        return redirect('edit-grn', id=grn.id)
+
+    if request.method == 'POST' and 'file' in request.POST:
+        attachment = AttachmentForm(request.POST, request.FILES)
+        if attachment.is_valid():
+            attachment.instance.grn_id = grn.id
+            attachment.save()
+
+        return redirect('edit-grn', id=grn.id)
+
     ctx = {
         'grn': grn,
         'form': form,
         'materials': materials,
+        'comment': comment,
+        'attachment': attachment,
         }
 
     return render(request, 'stock/edit_grn.html', ctx)

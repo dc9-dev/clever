@@ -4,7 +4,11 @@
   <div class="col-sm-12">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Przyjęcie z zewnątrz</h5>
+        <h5 class="card-title">Przyjęcie z zewnątrz
+          {% if grn.status != 1 %}
+            <a href="{% url 'edit-grn' grn.id %}" class="btn btn-primary btn-sm">edytuj</a>
+          {% endif %}
+        </h5>
         <div class="col-sm-12">
           <table class="table table-dark">
             <thead>
@@ -96,6 +100,33 @@
               </form>
             </tfooter>
           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Komentarze:</h6>
+            {% for comment in grn.comment_set.all %}
+           
+            <p>{{ comment.content }}</p>
+            {% endfor %}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body pt-3">
+          <small>
+            <h6>Załaczniki:</h6>
+            {% for attachment in grn.attachment_set.all %}
+            <p><a class="link-dark" href="{{ attachment.file.url }}">{{ attachment }}</a></p>
+            {% endfor %}
+          </small>
         </div>
       </div>
     </div>

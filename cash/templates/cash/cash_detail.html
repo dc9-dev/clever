@@ -43,7 +43,7 @@
               {% for payment in page_obj %}
               <tr class="{% if payment.status != 0 %} table-success {% else %} table-danger {% endif %}">
                 <td>{{ payment.id_number }}</td>
-                <td>{{ payment.date|date:'d/m/y' }}<br>{{ request.user.first_name }} {{ request.user.last_name|first }}.
+                <td>{{ payment.date|date:'d/m/y' }}<br>{{ payment.user.first_name }} {{ payment.user.last_name|first }}.
                 </td>
                 <td>{{ payment.title }}</td>
                 <td>{{ payment.number }}</td>

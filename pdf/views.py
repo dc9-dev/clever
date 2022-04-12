@@ -1,15 +1,21 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.generic import View
 from django.template.loader import get_template
 
-from clever.settings.base import  MEDIA_ROOT
+from clever.settings.base import MEDIA_ROOT
 from cash.models import Cash
 from offer.models import Offer
 from production.models import ProductionOrder
+from stock.models import Stock
 
 from datetime import datetime, timedelta
 from io import BytesIO
-from xhtml2pdf import pisa 
+from xhtml2pdf import pisa
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.pagesizes import landscape, A9
+
 
 
 def html_to_pdf(template_src, context_dict={}):
@@ -76,6 +82,21 @@ class GenerateOrderPdf(View):
         return HttpResponse(pdf, content_type='application/pdf')
 
 
-class GenerateStockPdf(View):
-    def get(self, request, *args, **kwargs):
-        so
+def generate_stock_label(request, id):
+    stock = Stock.objects.get(id=id)
+    buf = BytesIO()
+    
+    c = canvas.Canvas(buf, pagesize=landscape(A9), bottomup=0)
+    textob = c.beginText()
+    textob.setTextOrigin(cm, cm)
+    textob.setFont("Helvetica", 18)    
+    textob.textLine("{}x{}".format(stock.length, stock.width))
+    textob.textLine("{}".format(stock.material))
+    textob.textLine("#{}".format(stock.id))
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename='{}.pdf'.format(stock))

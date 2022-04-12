@@ -78,6 +78,7 @@ class Customer(models.Model):
     company = models.CharField(max_length=150, blank=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
+    nip = models.PositiveIntegerField(blank=True)
     # Delivery details
     phone_number = models.CharField(max_length=15, blank=True)
     postcode = models.CharField(max_length=12, blank=True)
