@@ -13,7 +13,7 @@ from xhtml2pdf import pisa
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import landscape, A9
+from reportlab.lib.pagesizes import landscape, A8
 
 
 
@@ -85,13 +85,24 @@ def generate_stock_label(request, id):
     stock = ProductionStockIn.objects.get(id=id)
     buf = BytesIO()
     
-    c = canvas.Canvas(buf, pagesize=landscape(A9), bottomup=0)
+    c = canvas.Canvas(buf, pagesize=A8, bottomup=0)
     textob = c.beginText()
     textob.setTextOrigin(cm, cm)
-    textob.setFont("Helvetica", 18)    
+    textob.setFont("Helvetica", 10)
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("{}".format(stock.material))  
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("")
+    textob.setFont("Helvetica", 42)   
+    textob.textLine("#{}".format(stock.number)) 
+    
+    textob.setFont("Helvetica", 14)   
     textob.textLine("{}x{}".format(stock.length, stock.width))
-    textob.textLine("{}".format(stock.material))
-    textob.textLine("#{}".format(stock.number))
+    
+    
 
     c.drawText(textob)
     c.showPage()
