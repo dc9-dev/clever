@@ -6,7 +6,6 @@ from clever.settings.base import MEDIA_ROOT
 from cash.models import Cash
 from offer.models import Offer
 from production.models import ProductionOrder, ProductionStockIn
-from stock.models import Stock
 
 from datetime import datetime, timedelta
 from io import BytesIO
