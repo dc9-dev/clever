@@ -1,7 +1,8 @@
 {% extends 'main.html' %}
 {% block content %}
 <div class="row">
-  <div class="col-sm-4">
+  <div class="row">
+  <div class="col-12">
     <table class="table table-bordered border-primary text-start">
       <tr>
         <td colspan="2" class="text-center">{{ production.order }}</td>
@@ -23,17 +24,24 @@
         <td>{{ production.date }}</td>
       </tr>
       <tr>
-        <td colspan="2">
-          <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm">Zakończ zlecenie </button>
-          </form>
-          <a href="{% url 'comment-production' production.pk %}?next={{ request.path }}" class="btn btn-dark btn-sm">Dodaj komentarz</a>
-          <a href="{% url 'label-production' production.id %}" class="btn btn-dark btn-sm">Drukuj etykiete</a>
-        </td>
+        <td>Komentarz:</td>
+        <td>{{ production.comments }}</td>
       </tr>
     </table>
+    <div class="d-grid gap-2 col-sm-4 mx-auto float-start mt-3">
+      <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Zakończ zlecenie </button>
+      </form>
+      <a href="{% url 'comment-production' production.pk %}?next={{ request.path }}" class="btn btn-dark btn-sm">Dodaj komentarz</a>
+      <a href="{% url 'label-production' production.id %}" class="btn btn-dark btn-sm">Drukuj etykietę</a>
+    </div>
+    </div>
   </div>
+</div>
+  
 
+  
+  
   <div class="col-sm-12">
     <div class="card ">
       <div class="card-body">
