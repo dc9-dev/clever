@@ -5,7 +5,7 @@ from django.template.loader import get_template
 from clever.settings.base import MEDIA_ROOT
 from cash.models import Cash
 from offer.models import Offer
-from production.models import ProductionOrder, ProductionStockIn
+from production.models import Production, ProductionOrder, ProductionStockIn
 
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -81,6 +81,14 @@ class GenerateOrderPdf(View):
         return HttpResponse(pdf, content_type='application/pdf')
 
 
+class GenerateProductionPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        production = Production.objects.get(id=self.kwargs['id'])
+        pdf = html_to_pdf('pdf/production.html', { 'production': production, 'MEDIA_ROOT': MEDIA_ROOT, } )
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
 def generate_stock_label(request, id):
     stock = ProductionStockIn.objects.get(id=id)
     buf = BytesIO()
@@ -110,3 +118,5 @@ def generate_stock_label(request, id):
     buf.seek(0)
 
     return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.number))
+
+

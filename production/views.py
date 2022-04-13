@@ -89,8 +89,6 @@ def CreateProduction(request, id):
 @staff_or_404
 def EditProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
-    
-
     try:
         production = Production.objects.get(id=id)
         if production.status == 1:
@@ -151,6 +149,14 @@ def ProductionMaterialDecrement(request, id):
 
     return redirect('edit-production', id=productionMaterial.production.id)
 
+
+class ProductionLabel(UpdateView):
+    model = Production
+    fields = ['comments']
+    template_name = "production/label.html"
+
+    def get_success_url(self):
+        return self.request.GET.get('next', reverse_lazy('edit-production'))
 
 @staff_or_404
 def ProductionComments(request, id):

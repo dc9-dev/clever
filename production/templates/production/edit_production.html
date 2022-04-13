@@ -27,6 +27,8 @@
           <form method="POST" action="{% url 'status' production.id %}">{% csrf_token %}
             <button type="submit" class="btn btn-danger btn-sm">Zakończ zlecenie </button>
           </form>
+          <a href="{% url 'comment-production' production.pk %}?next={{ request.path }}" class="btn btn-dark btn-sm">Dodaj komentarz</a>
+          <a href="{% url 'label-production' production.id %}" class="btn btn-dark btn-sm">Drukuj etykiete</a>
         </td>
       </tr>
     </table>

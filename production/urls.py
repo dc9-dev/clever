@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:id>/detail', views.DetailProduction, name='detail-production'),
     path('<int:id>/filter', views.ProductionStockFilter, name='production-filter'),
     path('<int:id>/stockin', views.ProductionStockIn, name='stockin'),
+    path('<int:pk>/comments', views.ProductionLabel.as_view(), name='comment-production'),
     path('comments/<int:id>', views.ProductionComments, name='comments'),
     path('status/<int:id>', views.ProductionStatus, name='status'),
     path('order/', views.HomeOrders, name='home-orders'),
