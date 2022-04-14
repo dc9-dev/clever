@@ -29,13 +29,6 @@ class Production(models.Model):
     def __str__(self):
         return self.order
 
-    def save(self, *args, **kwargs):
-        rename = list(self.order)
-        rename[0] = 'P'
-        rename[1] = 'R'
-        self.order = ''.join(rename)
-        super(Production, self).save(*args, **kwargs)
-
 
 class ProductionMaterial(models.Model):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
