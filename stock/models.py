@@ -63,6 +63,7 @@ class Stock(models.Model):
             result = stock.width * stock.length
             total += result
         return total
+    
 
 class Contractor(models.Model):
     name = models.CharField(max_length=200)

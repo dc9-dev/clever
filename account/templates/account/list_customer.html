@@ -5,11 +5,16 @@
     <div class="col-sm-6">
         <table class="table table-dark table-hover text-start fw-bold" style="font-size: 10px;">
         <tr>
+            <form method="GET">{% csrf_token %}
+                {{ customers.form.company }}
+                <button type="submit" class="btn btn-danger btn-sm">Szukaj</button>
+            </form>
+            
             <td class="text-center" style="background-color: #0990A6;">Klienci</td>
         </tr>
-        {% for customer in object_list %}
+        {% for customer in customers.qs %}
         <tr>
-            <td  style="background-color: #5B5B5B"><span class="p-1">{{customer}}</span>
+            <td  style="background-color: #5B5B5B"><span class="p-1">{{ customer }}</span>
                 <a href="{% url 'detail-customer' customer.id %}" class="link-light float-end m-1">podgląd</a>
                 <a href="{% url 'update-customer' customer.id %}" class="link-light float-end m-1">edycja</a>
             </td>
@@ -20,11 +25,21 @@
     <div class="col-sm-6">
         <table class="table table-dark table-hover text-start fw-bold" style="font-size: 10px;">
         <tr>
-            <td class="text-center" style="background-color: #0990A6;">Kontrahenci</td>
+            <form method="GET">{% csrf_token %}
+                {{ contractors.form.name }}
+            <button type="submit" class="btn btn-danger btn-sm">Szukaj</button>
+            </form>
+            <td class="text-center" style="background-color: #0990A6;">
+                Kontrahenci
+                
+            </td>
         </tr>
-        {% for contractor in contractors %}
+  
+        </tr>
+      
+        {% for contractor in contractors.qs %}
         <tr>
-            <td  style="background-color: #5B5B5B"><span class="p-1">{{contractor}}</span>
+            <td  style="background-color: #5B5B5B"><span class="p-1">{{ contractor }}</span>
                 <a href="{% url 'detail-contractor' contractor.id %}" class="link-light float-end m-1">podgląd</a>
                 <a href="{% url 'detail-contractor' contractor.id %}" class="link-light float-end m-1">edycja</a>
             </td>

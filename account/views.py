@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.urls import reverse_lazy
+from .filters import ContractorFilter, CustomerFilter
 from .forms import LoginForm, UserRegistrationForm, CustomerCreateForm
 from .models import Customer, UserBase
 from stock.models import Contractor
@@ -113,6 +114,11 @@ class CustomerListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'contractors': Contractor.objects.all(),
-            })
+            'customers': CustomerFilter(self.request.GET,
+                                    queryset=self.get_queryset()),
+            'contractors': ContractorFilter(self.request.GET,
+                                    queryset=Contractor.objects.all()),
+        })
         return context
+
+
