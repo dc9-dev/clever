@@ -299,7 +299,7 @@ def EditOrder(request, id):
     if request.method == 'POST' and 'done' in request.POST:
         order.status = 1
         order.save()
-        CreateProduction(request.POST, order.id)
+        # CreateProduction(request.POST, order.id)
         return redirect('detail-order', id=order.id)
 
     if request.method == 'POST' and 'comment' in request.POST:
