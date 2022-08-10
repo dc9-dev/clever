@@ -109,6 +109,7 @@ def generate_stock_label(request, id):
     
     textob.setFont("Helvetica", 14)   
     textob.textLine("{}x{}".format(stock.length, stock.width))
+    textob.textLine(stock.created_by)
     
     
 

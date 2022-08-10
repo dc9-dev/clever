@@ -1,48 +1,72 @@
-{% extends 'main.html' %} 
-{% block content  %}
-<div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Formatki <a href="{% url 'create-stock' %}"><button class="btn btn-primary btn-sm">Nowa
-              Formatka</button></a></h5>
-        <div class="table-responsive">
-          <table class="table table-borderless table-hover table-sm">
-            {% include 'stock/search.html' %}
-            <thead>
-              <tr>
-                <th scope="col">#ID</th>
-                <th scope="col">Długość</th>
-                <th scope="col">Szerokość</th>
-                <th scope="col">Materiał</th>
-                <th scope="col">Akcja</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for stock in filter.qs %}
-              <tr>
-                <td scope="row">{{ stock.id }}</td>
-                <td>{{ stock.length }}mm</td>
-                <td>{{ stock.width }}mm</td>
+{% extends 'main.html' %} {% block content %}
+<div class="col-sm-9">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">
+        Formatki
+        <a href="{% url 'create-stock' %}"
+          ><button class="btn btn-primary btn-sm">Nowa Formatka</button></a
+        >
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-borderless table-hover table-sm">
+          {% include 'stock/search.html' %}
+          <thead>
+            <tr>
+              <th scope="col">#ID</th>
+              <th scope="col">Długość</th>
+              <th scope="col">Szerokość</th>
+              <th scope="col">Materiał</th>
+              <th scope="col">Akcja</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in filter.qs %}
+            <tr>
+              <td scope="row">{{ stock.id }}</td>
+              <td>{{ stock.length }}mm</td>
+              <td>{{ stock.width }}mm</td>
+              {% if stock.length == 0 %}
+              <td>
+                <p>------</p>
+              </td>
+              {% else %}
+              <td>{{ stock.material }}</td>
+              {% endif %}
+              <td>
                 {% if stock.length == 0 %}
-                <td>
-                  <p>------</p>
-                </td>
+                <a href="{% url 'add-stock' stock.id %}"
+                  ><button type="button" class="btn btn-primary btn-sm">
+                    dodaj
+                  </button></a
+                >
                 {% else %}
-                <td>{{ stock.material }}</td>
+                <div class="row">
+                  <div class="col">
+                    <a
+                      href="{% url 'label-pdf' stock.id %}"
+                      class="btn btn-primary btn-sm"
+                      >Drukuj</a
+                    >
+                  </div>
+                  <div class="col">
+                    <a
+                      href="{% url 'delete-stock' stock.id %}"
+                      class="btn btn-danger btn-sm"
+                      >Usuń</a
+                    >
+                  </div>
+                </div>
+
                 {% endif %}
-                <td>
-                  {% if stock.length == 0 %}
-                  <a href="{% url 'add-stock' stock.id %}"><button type="button" class="btn btn-primary btn-sm">dodaj</button></a>
-                  {% else %}
-                  <a href="{% url 'delete-stock' stock.id %}" class="btn btn-danger btn-sm">Usuń</a>
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
 
-{% endblock %}
+  {% endblock %}
+</div>

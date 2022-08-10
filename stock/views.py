@@ -1,6 +1,7 @@
+from io import BytesIO
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -9,6 +10,10 @@ from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm, CommentForm, AttachmentForm
 from production.models import ProductionMaterial, Services
 from .models import Contractor, Stock, Material, GoodsReceivedNote, Gender
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.pagesizes import A8
 
 
 class WarehouseListView(ListView, LoginRequiredMixin):
@@ -267,3 +272,34 @@ class ContractorUpdateView(UpdateView):
 class ContractorDetailView(DetailView):
     model = Contractor
     template_name = "account/detail_contractor.html"
+    
+def Generate_stock_label_not_production(request, id):
+    stock = Stock.objects.get(id=id)
+    buf = BytesIO()
+    
+    c = canvas.Canvas(buf, pagesize=A8, bottomup=0)
+    textob = c.beginText()
+    textob.setTextOrigin(cm, cm)
+    textob.setFont("Helvetica", 10)
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("{}".format(stock.material))  
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("")
+    textob.textLine("")
+    textob.setFont("Helvetica", 42)   
+    textob.textLine("#{}".format(stock.id)) 
+    
+    textob.setFont("Helvetica", 14)   
+    textob.textLine("{}x{}".format(stock.length, stock.width))
+    textob.textLine(stock.created_by)
+    
+    
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.id))

@@ -1,53 +1,84 @@
-{% extends 'main.html' %}
-{% load static %}
-{% block content %}
+{% extends 'main.html' %} {% load static %} {% block content %}
 
 <div class="row">
-
-	<div class="col-sm-4">
-		<div class="card">
-			<div class="card-body">
-				<h6 class="mt-3">Do realizacji ( {{ pending.count }} )</h6>
-				<ul class="list-group">
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mt-3">Do realizacji ( {{ pending.count }} )</h6>
+        <ul class="list-group">
           {% for production in pending %}
-					<li class="list-group-item"><small><a href="{% url 'detail-production' production.id %}" class="link-dark">{{ production }}</a></small></li>
+          <li class="list-group-item">
+            <small
+              ><a
+                href="{% url 'detail-production' production.id %}"
+                class="link-dark"
+                >{{ production.order }} - {{production.customer}}</a
+              ></small
+            >
+          </li>
           {% endfor %}
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-4">
-		<div class="card">
-			<div class="card-body">
-				<h6 class="mt-3">W trakcie ( {{ during.count }} )</h6>
-				<ul class="list-group list-group-flush">
-					{% for production in during %}
-					<li class="list-group-item"><small><a href="{% url 'detail-production' production.id %}" class="link-dark">{{ production }}</a></small></li>
-                  {% endfor %}
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-4">
-		<div class="card">
-			<div class="card-body">
-				<h6 class="mt-3">Zakończone ( {{ done.count }} )</h6>
-				<ul class="list-group list-group-flush">
-					{% for production in done %}
-					{% if request.user.is_superuser %}
-					<li class="list-group-item"><small><a href="{% url 'detail-production' production.id %}" class="link-dark">{{ production }}</a></small>
-						{% for material in production.productionmaterial_set.all %}
-					<small> <span class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}">{{ material.waste_precent|floatformat:2  }}%</span></small>
-                     {% endfor %}
-					</li>
-					
-					{% else %}
-					<li class="list-group-item"><small><a href="{% url 'detail-production' production.id %}" class="link-dark">{{ production }}</a></small></li>
-					{% endif %}
-                    {% endfor %}
-				</ul>
-			</div>
-		</div>
-	</div>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mt-3">W trakcie ( {{ during.count }} )</h6>
+        <ul class="list-group list-group-flush">
+          {% for production in during %}
+          <li class="list-group-item">
+            <small
+              ><a
+                href="{% url 'detail-production' production.id %}"
+                class="link-dark"
+                >{{ production.order }} - {{production.customer}}</a
+              ></small
+            >
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mt-3">Zakończone ( {{ done.count }} )</h6>
+        <ul class="list-group list-group-flush">
+          {% for production in done %} {% if request.user.is_superuser %}
+          <li class="list-group-item">
+            <small
+              ><a
+                href="{% url 'detail-production' production.id %}"
+                class="link-dark"
+                >{{ production.order }} - {{production.customer}}</a
+              ></small
+            >
+            {% for material in production.productionmaterial_set.all %}
+            <small>
+              <span
+                class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
+                >{{ material.waste_precent|floatformat:2 }}%</span
+              ></small
+            >
+            {% endfor %}
+          </li>
+
+          {% else %}
+          <li class="list-group-item">
+            <small
+              ><a
+                href="{% url 'detail-production' production.id %}"
+                class="link-dark"
+                >{{ production }}</a
+              ></small
+            >
+          </li>
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
