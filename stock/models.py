@@ -53,6 +53,7 @@ class Stock(models.Model):
     length = IntegerRangeField(min_value=50, max_value=2800, null=True)
     width = IntegerRangeField(min_value=50, max_value=2070, null=True)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
+    created_by = models.CharField(max_length=120, null=True, blank=True);
 
     def __str__(self):
         return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)

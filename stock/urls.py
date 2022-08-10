@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.WarehouseListView.as_view(), name='home-stock'),
     path('new/', staff_member_required(views.CreateStock.as_view()), name='create-stock'),
     path('add/<int:id>', views.AddStock, name='add-stock'),
+    path('stocks/delete/<int:id>', views.DeleteStock, name='delete-stock'),
     path('take/<int:id1>/<int:id2>', views.TakeStock, name='take-stock'),
     path('grn/', views.GRN, name='grn'),
     path('grn/edit/<int:id>', views.EditGRN, name='edit-grn'),

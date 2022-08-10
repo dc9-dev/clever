@@ -34,7 +34,7 @@
                   {% if stock.length == 0 %}
                   <a href="{% url 'add-stock' stock.id %}"><button type="button" class="btn btn-primary btn-sm">dodaj</button></a>
                   {% else %}
-
+                  <a href="{% url 'delete-stock' stock.id %}" class="btn btn-danger btn-sm">Usuń</a>
                   {% endif %}
                 </td>
               </tr>

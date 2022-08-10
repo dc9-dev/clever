@@ -39,18 +39,32 @@ class CreateStock(CreateView):
     def post(self, request, *args, **kwargs):
         form = StockCreateForm(request.POST)
         if form.is_valid():
-            form.save()
+            s = form.save(commit=False)
+            s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
+            
+            # get first free id between 1 and 100
+            all_stocks = Stock.objects.all()
+            for index, i in enumerate(Stock.objects.all()):
+                if index+1 != i.id:
+                    s.id = index+1
+                    s.save()
+                    break
             return redirect('stocks')
         else:
             print(form.is_valid())
             print(form.errors)
 
+        # not sure what this does?
         for index, i in enumerate(Stock.objects.all()):
             i.id = index + 1
             i.save()
 
         return render(request, 'stock/create_stock.html', {'form': form})
 
+def DeleteStock(request, id):
+    s = Stock.objects.get(pk=id)
+    s.delete()
+    return redirect('stocks')
 
 def TakeStock(request, id1, id2):
 
