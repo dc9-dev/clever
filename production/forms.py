@@ -1,4 +1,6 @@
 from django import forms
+
+from account.models import Customer
 from .models import (Attachment,
                      ProductionMaterial,
                      ProductionComments,
@@ -23,7 +25,7 @@ class ProductionCommentsForm(forms.ModelForm):
 
 
 class CreateOrderForm(forms.ModelForm):
-
+    customer = forms.ModelChoiceField(Customer.objects.order_by('company'))
     class Meta:
         model = ProductionOrder
         fields = ['customer']

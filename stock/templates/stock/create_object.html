@@ -1,14 +1,17 @@
-{% extends 'main.html' %}
+{% extends 'main.html' %} {% block content %}
 
-{% block content %}
 <div class="row">
   <div class="col-sm-6">
     <div class="card">
-      <div class="card-title"></div>
-      <div class="card-body">
-        <form method="POST" action="">{% csrf_token %}
+      <div class="card-title">
+        {% if request.resolver_match.url_name == 'create-contractor' %}
+        <div style="margin-left: 22px">Dodaj kontrahenta</div>
 
-          {{ form.as_p }}
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <form method="POST" action="">
+          {% csrf_token %} {{ form.as_p }}
 
           <button class="btn btn-primary btm-sm" type="submit">Dodaj</button>
         </form>

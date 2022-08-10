@@ -7,8 +7,9 @@
         <tr>
             <form method="GET">{% csrf_token %}
                 {{ customers.form.company }}
-                <button type="submit" class="btn btn-danger btn-sm">Szukaj</button>
+                <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 2px; margin-bottom: 2px;">Szukaj</button>
             </form>
+            <a href="/customer/create" class="btn btn-primary btn-sm" style="margin-left: 2px; margin-bottom: 2px;">Dodaj klienta</a>
             
             <td class="text-center" style="background-color: #0990A6;">Klienci</td>
         </tr>
@@ -27,7 +28,9 @@
         <tr>
             <form method="GET">{% csrf_token %}
                 {{ contractors.form.name }}
-            <button type="submit" class="btn btn-danger btn-sm">Szukaj</button>
+            <button type="submit" class="btn btn-danger btn-sm" style="margin-left: 2px; margin-bottom: 2px;">Szukaj</button>
+            <a href="/stock/contractor" class="btn btn-primary btn-sm" style="margin-left: 2px; margin-bottom: 2px;">Dodaj kontrahenta</a>
+
             </form>
             <td class="text-center" style="background-color: #0990A6;">
                 Kontrahenci

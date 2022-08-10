@@ -11,6 +11,8 @@ class CustomerFilter(django_filters.FilterSet):
     class Meta:
         model = Customer
         fields = ['company']
+        
+    
 
 
 class ContractorFilter(django_filters.FilterSet):
