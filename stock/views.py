@@ -18,7 +18,6 @@ from reportlab.lib.pagesizes import A8
 from django.contrib import messages
 
 
-
 class WarehouseListView(ListView, LoginRequiredMixin):
     model = Gender
     template_name = 'stock/home.html'
@@ -26,14 +25,14 @@ class WarehouseListView(ListView, LoginRequiredMixin):
 
 class StockView(ListView):
     model = Stock
-    template_name = 'stock/stocks.html' 
+    template_name = 'stock/stocks.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'filter': StockFilter(self.request.GET,
-                                  queryset=self.get_queryset()),
-            })
+                                  queryset=self.get_queryset().order_by('id')),
+        })
         return context
 
 
@@ -49,24 +48,28 @@ class CreateStock(CreateView):
         if form.is_valid():
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
-            
+
             all_stocks = Stock.objects.all()
             new_id = 1
 
             # if no stocks yet create stock with id 1
-            if len(all_stocks) == 0: 
+            if len(all_stocks) == 0:
+                print('adding first stock')
                 s.id = 1
                 s.save()
             else:
+                print('at least 1 stock in db, adding more')
                 # get first free id between 1 and 100
-                for i in Stock.objects.all():
+                all_stocks = Stock.objects.all().order_by('id')
+                for i in all_stocks:
+                    print(f'checking stock with id: {i.id}')
                     if new_id != i.id:
                         # found first empy id, create stock with that id
                         s.id = new_id
                         s.save()
                         break
                     new_id += 1
-                    
+
                 # all ids taken between first and last stock, add new stock at 'the end'
                 s.id = new_id
                 s.save()
@@ -83,12 +86,14 @@ class CreateStock(CreateView):
 
         return render(request, 'stock/create_stock.html', {'form': form})
 
+
 def DeleteStock(request, id):
     s = Stock.objects.get(pk=id)
     s.delete()
     messages.success(request, f'Usunięteo formatkę z #ID {id}')
 
     return redirect('stocks')
+
 
 def TakeStock(request, id1, id2):
 
@@ -100,13 +105,13 @@ def TakeStock(request, id1, id2):
         length=stock.length,
         width=stock.width,
         material=stock.material,
-        )
+    )
 
     stock.width = 0
     stock.length = 0
     stock.save()
 
-    return redirect('edit-production', productionMaterial.production.id )
+    return redirect('edit-production', productionMaterial.production.id)
 
 
 def AddStock(request, id):
@@ -124,7 +129,6 @@ def AddStock(request, id):
             stock.material.id = request.POST['material']
             stock.save()
             return redirect('stock')
-       
 
     return render(request, 'stock/create_stock.html', {'form': form})
 
@@ -150,7 +154,7 @@ def GRN(request):
         'grns': grns,
         'filter': filter,
         'form': form,
-        }
+    }
 
     return render(request, 'stock/grn.html', ctx)
 
@@ -169,10 +173,12 @@ def EditGRN(request, id):
             if form.is_valid():
                 obj = form.save(commit=False)
 
-                if int(float(request.POST['area']) * 1000) % int(float(obj.material.material_area ) * 1000 ) == 0:
+                if int(float(request.POST['area']) * 1000) % int(float(obj.material.material_area) * 1000) == 0:
 
-                    material = Material.objects.get(id=request.POST['material'])
-                    material.quantity += float(request.POST['area']) / float(material.material_area)
+                    material = Material.objects.get(
+                        id=request.POST['material'])
+                    material.quantity += float(
+                        request.POST['area']) / float(material.material_area)
                     material.save()
 
                     obj.grn = grn
@@ -187,7 +193,7 @@ def EditGRN(request, id):
                     return HttpResponse(error)
         else:
             form = GRNMaterailForm()
-        
+
         if 'checked' in request.POST:
             grn.status = 1
             grn.save()
@@ -220,7 +226,7 @@ def EditGRN(request, id):
         'materials': materials,
         'comment': comment,
         'attachment': attachment,
-        }
+    }
 
     return render(request, 'stock/edit_grn.html', ctx)
 
@@ -240,7 +246,7 @@ def DetailGRN(request, id):
         'grns': grns,
         'grn': grn,
         'materials': materials,
-        }
+    }
 
     return render(request, 'stock/detail_grn.html', ctx)
 
@@ -284,37 +290,37 @@ class ContractorUpdateView(UpdateView):
     model = Contractor
     template_name = "account/update_contractor.html"
     fields = '__all__'
-    
+
     def get_success_url(self):
-        return reverse_lazy('detail-contractor', kwargs = {'pk': self.object.pk })
+        return reverse_lazy('detail-contractor', kwargs={'pk': self.object.pk})
+
 
 class ContractorDetailView(DetailView):
     model = Contractor
     template_name = "account/detail_contractor.html"
-    
+
+
 def Generate_stock_label_not_production(request, id):
     stock = Stock.objects.get(id=id)
     buf = BytesIO()
-    
+
     c = canvas.Canvas(buf, pagesize=A8, bottomup=0)
     textob = c.beginText()
     textob.setTextOrigin(cm, cm)
     textob.setFont("Helvetica", 10)
     textob.textLine("")
     textob.textLine("")
-    textob.textLine("{}".format(stock.material))  
+    textob.textLine("{}".format(stock.material))
     textob.textLine("")
     textob.textLine("")
     textob.textLine("")
     textob.textLine("")
-    textob.setFont("Helvetica", 42)   
-    textob.textLine("#{}".format(stock.id)) 
-    
-    textob.setFont("Helvetica", 14)   
+    textob.setFont("Helvetica", 42)
+    textob.textLine("#{}".format(stock.id))
+
+    textob.setFont("Helvetica", 14)
     textob.textLine("{}x{}".format(stock.length, stock.width))
     textob.textLine(stock.created_by)
-    
-    
 
     c.drawText(textob)
     c.showPage()
