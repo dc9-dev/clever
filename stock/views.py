@@ -15,6 +15,9 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A8
 
+from django.contrib import messages
+
+
 
 class WarehouseListView(ListView, LoginRequiredMixin):
     model = Gender
@@ -48,12 +51,13 @@ class CreateStock(CreateView):
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
             
             all_stocks = Stock.objects.all()
+            new_id = 1
+
             # if no stocks yet create stock with id 1
             if len(all_stocks) == 0: 
                 s.id = 1
                 s.save()
             else:
-                new_id = 1
                 # get first free id between 1 and 100
                 for i in Stock.objects.all():
                     if new_id != i.id:
@@ -66,6 +70,7 @@ class CreateStock(CreateView):
                 # all ids taken between first and last stock, add new stock at 'the end'
                 s.id = new_id
                 s.save()
+            messages.success(request, f'Dodano formatkę z #ID {new_id}')
             return redirect('stocks')
         else:
             print(form.is_valid())
@@ -81,6 +86,8 @@ class CreateStock(CreateView):
 def DeleteStock(request, id):
     s = Stock.objects.get(pk=id)
     s.delete()
+    messages.success(request, f'Usunięteo formatkę z #ID {id}')
+
     return redirect('stocks')
 
 def TakeStock(request, id1, id2):
