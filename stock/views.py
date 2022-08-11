@@ -47,13 +47,25 @@ class CreateStock(CreateView):
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
             
-            # get first free id between 1 and 100
             all_stocks = Stock.objects.all()
-            for index, i in enumerate(Stock.objects.all()):
-                if index+1 != i.id:
-                    s.id = index+1
-                    s.save()
-                    break
+            # if no stocks yet create stock with id 1
+            if len(all_stocks) == 0: 
+                s.id = 1
+                s.save()
+            else:
+                new_id = 1
+                # get first free id between 1 and 100
+                for i in Stock.objects.all():
+                    if new_id != i.id:
+                        # found first empy id, create stock with that id
+                        s.id = new_id
+                        s.save()
+                        break
+                    new_id += 1
+                    
+                # all ids taken between first and last stock, add new stock at 'the end'
+                s.id = new_id
+                s.save()
             return redirect('stocks')
         else:
             print(form.is_valid())
