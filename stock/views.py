@@ -48,6 +48,15 @@ class CreateStock(CreateView):
         if form.is_valid():
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
+            
+            # get longer side
+            longer_side = max([s.length, s.width])
+            
+            # assign rack
+            if longer_side < 1500:
+                s.rack = 'A'
+            else:
+                s.rack = 'B'
 
             all_stocks = Stock.objects.all()
             new_id = 1
@@ -73,7 +82,7 @@ class CreateStock(CreateView):
                 # all ids taken between first and last stock, add new stock at 'the end'
                 s.id = new_id
                 s.save()
-            messages.success(request, f'Dodano formatkę z #ID {new_id}')
+            messages.success(request, new_id)
             return redirect('stocks')
         else:
             print(form.is_valid())
@@ -320,6 +329,8 @@ def Generate_stock_label_not_production(request, id):
 
     textob.setFont("Helvetica", 14)
     textob.textLine("{}x{}".format(stock.length, stock.width))
+    if stock.rack:
+        textob.textLine(f'Regal {stock.rack}')
     textob.textLine(stock.created_by)
 
     c.drawText(textob)

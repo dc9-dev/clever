@@ -6,7 +6,10 @@
     class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
     role="alert"
   >
-    {{ message }}
+    Utworzono formatkę z ID #{{ message }}
+    <a href="{% url 'label-pdf' message %}" 
+      >Drukuj</a
+    >
   </div>
   {% endfor %} {% endif %}
   <div class="card">

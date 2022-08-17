@@ -109,6 +109,8 @@ def generate_stock_label(request, id):
     
     textob.setFont("Helvetica", 14)   
     textob.textLine("{}x{}".format(stock.length, stock.width))
+    if stock.rack:
+        textob.textLine(f'Regał {stock.rack}')
     textob.textLine(stock.created_by)
     
     
