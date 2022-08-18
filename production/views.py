@@ -60,7 +60,14 @@ def CreateProduction(request, id):
     productionOrder.status = 1
     productionOrder.save()
     #user_id = request.user.id
-    production, created = Production.objects.get_or_create(
+    
+    try:
+        old_production = Production.objects.get(id=productionOrder.id)
+        old_production.delete()
+    except Exception as e:
+        print(e)
+        
+    production, created = Production.objects.update_or_create(
         id=productionOrder.id,
         customer=productionOrder.customer,
         #user_id=user_id,
@@ -110,6 +117,14 @@ def EditProduction(request, id):
 
     return render(request, 'production/edit_production.html', ctx)
 
+@staff_or_404
+def DeleteProduction(request, id):
+    production = Production.objects.get(id=id)
+    production.delete()
+    productionOrder = ProductionOrder.objects.get(id=id)
+    productionOrder.delete()
+    
+    return redirect('home-production')
 
 @staff_or_404
 def DetailProduction(request, id):
@@ -299,7 +314,7 @@ def EditOrder(request, id):
     if request.method == 'POST' and 'done' in request.POST:
         order.status = 1
         order.save()
-        # CreateProduction(request.POST, order.id)
+        CreateProduction(request.POST, order.id)
         return redirect('detail-order', id=order.id)
 
     if request.method == 'POST' and 'comment' in request.POST:

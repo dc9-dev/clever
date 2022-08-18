@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.ProductionHome, name='home-production'),
     path('new/<int:id>', views.CreateProduction, name='create-production'),
     path('<int:id>/edit', views.EditProduction, name='edit-production'),
+    path('<int:id>/delete', views.DeleteProduction, name='delete-production'),
     path('<int:id>/increment', views.ProductionMaterialIncrement, name='increment'),
     path('<int:id>/decrement', views.ProductionMaterialDecrement, name='decrement'),
     path('<int:id>/detail', views.DetailProduction, name='detail-production'),

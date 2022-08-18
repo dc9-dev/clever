@@ -12,6 +12,7 @@
           {% if production.status != 3 %}
             {% if production.status == 1 %} 
             <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Rozpocznij produkcje</button></a>
+            <a href="{% url 'delete-production' production.id %}"><button class="btn btn-danger btn-sm">Usuń zamówienie</button></a>
               {% elif request.user.id == production.user.id or request.user.is_superuser %}
               <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>
             {% endif %}
