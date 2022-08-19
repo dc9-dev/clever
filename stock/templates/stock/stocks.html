@@ -1,17 +1,24 @@
 {% extends 'main.html' %} {% block content %}
 
 <div class="col-sm-9">
-  {% if messages %} {% for message in messages %}
+  {% if messages %} {% for message in messages %} 
+  {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+  <div
+  class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
+  role="alert"
+> 
+{{message}}
+</div> 
+  {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
   <div
     class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
     role="alert"
-  >
+  > 
     Utworzono formatkę z ID #{{ message }}
-    <a href="{% url 'label-pdf' message %}" 
-      >Drukuj</a
-    >
-  </div>
-  {% endfor %} {% endif %}
+    <a href="{% url 'label-pdf' message %}">Drukuj</a>
+   </div>
+ {% endif %}{% endfor %} {% endif %}
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">

@@ -99,7 +99,7 @@ class CreateStock(CreateView):
 def DeleteStock(request, id):
     s = Stock.objects.get(pk=id)
     s.delete()
-    messages.success(request, f'Usunięteo formatkę z #ID {id}')
+    messages.error(request, f'Usunięteo formatkę z #ID {id}')
 
     return redirect('stocks')
 
