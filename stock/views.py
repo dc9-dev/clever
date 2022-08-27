@@ -31,7 +31,7 @@ class StockView(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'filter': StockFilter(self.request.GET,
-                                  queryset=self.get_queryset().order_by('id')),
+                                  queryset=self.get_queryset().order_by('rack')),
         })
         return context
 
@@ -58,31 +58,31 @@ class CreateStock(CreateView):
             else:
                 s.rack = 'B'
 
-            all_stocks = Stock.objects.all()
-            new_id = 1
+            all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack)
+            new_rack_id = 1
 
             # if no stocks yet create stock with id 1
-            if len(all_stocks) == 0:
+            if len(all_stocks_on_rack) == 0:
                 print('adding first stock')
-                s.id = 1
+                s.rack_id = 1
                 s.save()
             else:
                 print('at least 1 stock in db, adding more')
                 # get first free id between 1 and 100
-                all_stocks = Stock.objects.all().order_by('id')
-                for i in all_stocks:
-                    print(f'checking stock with id: {i.id}')
-                    if new_id != i.id:
+                all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack).order_by('rack_id')
+                for i in all_stocks_on_rack:
+                    print(f'checking stock with id: {i.rack_id}')
+                    if new_rack_id != i.rack_id:
                         # found first empy id, create stock with that id
-                        s.id = new_id
+                        s.rack_id = new_rack_id
                         s.save()
                         break
-                    new_id += 1
+                    new_rack_id += 1
 
                 # all ids taken between first and last stock, add new stock at 'the end'
-                s.id = new_id
+                s.rack_id = new_rack_id
                 s.save()
-            messages.success(request, new_id)
+            messages.success(request, new_rack_id)
             return redirect('stocks')
         else:
             print(form.is_valid())

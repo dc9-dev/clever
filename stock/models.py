@@ -55,6 +55,7 @@ class Stock(models.Model):
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
     created_by = models.CharField(max_length=120, null=True, blank=True);
     rack = models.CharField(max_length=1, null=True, blank=True);
+    rack_id=models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "#{} {}x{} {}".format(self.id, self.length, self.width, self.material)
