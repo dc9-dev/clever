@@ -31,7 +31,7 @@ class StockView(ListView):
         context = super().get_context_data(**kwargs)
         context.update({
             'filter': StockFilter(self.request.GET,
-                                  queryset=self.get_queryset().order_by('rack')),
+                                  queryset=self.get_queryset().order_by('rack_id')),
         })
         return context
 
