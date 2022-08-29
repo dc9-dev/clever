@@ -53,7 +53,7 @@ class CreateStock(CreateView):
             longer_side = max([s.length, s.width])
             
             # assign rack
-            if longer_side < 300:
+            if longer_side < 1500:
                 s.rack = 'A'
             else:
                 s.rack = 'B'
