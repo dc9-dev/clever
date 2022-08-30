@@ -46,6 +46,7 @@ class CreateStock(CreateView):
     def post(self, request, *args, **kwargs):
         form = StockCreateForm(request.POST)
         if form.is_valid():
+            print(form)
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
             

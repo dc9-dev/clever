@@ -15,6 +15,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import landscape, A8
 
+from stock.models import Stock
+
 
 
 def html_to_pdf(template_src, context_dict={}):
@@ -91,6 +93,8 @@ class GenerateProductionPdf(View):
 
 def generate_stock_label(request, id):
     stock = ProductionStockIn.objects.get(id=id)
+    print(stock.number)
+    stock = Stock.objects.get(id=stock.number)
     buf = BytesIO()
     
     c = canvas.Canvas(buf, pagesize=A8, bottomup=0)

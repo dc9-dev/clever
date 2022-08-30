@@ -227,12 +227,21 @@ def ProductionStockIn(request, id):
         form = StockCreateInForm(request.POST)
         if form.is_valid():
             form = StockCreateInForm(request.POST)
-            form.save(commit=False)
+            # get longer side
+            longer_side = int(max([request.POST['length'], request.POST['width']]))
+            # assign rack
+            if longer_side < 1500:
+                rack = 'A'
+            else:
+                rack = 'B'
+
             if stock is None:
                 newStock = Stock.objects.create(
                     length=request.POST['length'],
                     width=request.POST['width'],
                     material=productionMaterial.material,
+                    created_by=f'{request.user.first_name[0]}{request.user.last_name[0]}',
+                    rack=rack
                 )
 
                 productionMaterial.productionstockin_set.create(
@@ -240,6 +249,31 @@ def ProductionStockIn(request, id):
                     length=request.POST['length'],
                     width=request.POST['width'],
                     material=productionMaterial.material)
+                
+                all_stocks_on_rack = Stock.objects.all().filter(rack=newStock.rack)
+                new_rack_id = 1
+
+                # if no stocks yet create stock with id 1
+                if len(all_stocks_on_rack) == 0:
+                    print('adding first stock')
+                    newStock.rack_id = 1
+                    newStock.save()
+                else:
+                    print('at least 1 stock in db, adding more')
+                    # get first free id between 1 and 100
+                    all_stocks_on_rack = Stock.objects.all().filter(rack=newStock.rack).order_by('rack_id')
+                    for i in all_stocks_on_rack:
+                        print(f'checking stock with id: {i.rack_id}')
+                        if new_rack_id != i.rack_id:
+                            # found first empy id, create stock with that id
+                            newStock.rack_id = new_rack_id
+                            newStock.save()
+                            break
+                        new_rack_id += 1
+
+                    # all ids taken between first and last stock, add new stock at 'the end'
+                    newStock.rack_id = new_rack_id
+                    newStock.save()
             else:
                 stock.length = request.POST['length']
                 stock.width = request.POST['width']
