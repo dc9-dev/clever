@@ -16,9 +16,14 @@
     role="alert"
   > 
     Utworzono formatkę z ID #{{ message }}
-    <a href="{% url 'label-pdf' message %}">Drukuj</a>
    </div>
- {% endif %}{% endfor %} {% endif %}
+   {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+   <a href="{% url 'label-pdf' message %}"                       class="btn btn-primary btn-sm"
+   >Drukuj</a>
+ {% endif %}{% endfor %} 
+
+
+ {% endif %}
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">
@@ -124,7 +129,7 @@
                 <div class="row">
                   <div class="col">
                     <a
-                      href="{% url 'label-pdf' stock.id %}"
+                      href="{% url 'label-pdf' stock.rack_id %}"
                       class="btn btn-primary btn-sm"
                       >Drukuj</a
                     >

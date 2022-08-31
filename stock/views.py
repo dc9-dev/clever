@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 
 from .filters import StockFilter, GrnFilter
 from .forms import StockCreateForm, grnCreateForm, GRNMaterailForm, CreateMaterialForm, CreateServicesForm, CreateContractorForm, CommentForm, AttachmentForm
-from production.models import ProductionMaterial, Services
+from production.models import ProductionMaterial, ProductionStockIn, Services
 from .models import Contractor, Stock, Material, GoodsReceivedNote, Gender
 
 from reportlab.pdfgen import canvas
@@ -46,7 +46,6 @@ class CreateStock(CreateView):
     def post(self, request, *args, **kwargs):
         form = StockCreateForm(request.POST)
         if form.is_valid():
-            print(form)
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
             
@@ -84,6 +83,7 @@ class CreateStock(CreateView):
                 s.rack_id = new_rack_id
                 s.save()
             messages.success(request, new_rack_id)
+            messages.info(request, s.id)
             return redirect('stocks')
         else:
             print(form.is_valid())
@@ -98,9 +98,16 @@ class CreateStock(CreateView):
 
 
 def DeleteStock(request, id):
+    si = ProductionStockIn.objects.filter(number = id).first()
+    if si:
+        si.delete()
+
     s = Stock.objects.get(pk=id)
+    rack_id = s.rack_id
+    rack = s.rack
     s.delete()
-    messages.error(request, f'Usunięteo formatkę z #ID {id}')
+    
+    messages.error(request, f'Usunięteo formatkę z #ID {rack_id} z regalu {rack}')
 
     return redirect('stocks')
 
@@ -326,7 +333,7 @@ def Generate_stock_label_not_production(request, id):
     textob.textLine("")
     textob.textLine("")
     textob.setFont("Helvetica", 42)
-    textob.textLine("#{}".format(stock.id))
+    textob.textLine("#{}".format(stock.rack_id))
 
     textob.setFont("Helvetica", 14)
     textob.textLine("{}x{}".format(stock.length, stock.width))
@@ -339,4 +346,4 @@ def Generate_stock_label_not_production(request, id):
     c.save()
     buf.seek(0)
 
-    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.id))
+    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.rack_id))

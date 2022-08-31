@@ -93,8 +93,7 @@ class GenerateProductionPdf(View):
 
 def generate_stock_label(request, id):
     stock = ProductionStockIn.objects.get(id=id)
-    print(stock.number)
-    stock = Stock.objects.get(id=stock.number)
+    stock = Stock.objects.get(id=stock.get_number())
     buf = BytesIO()
     
     c = canvas.Canvas(buf, pagesize=A8, bottomup=0)
@@ -109,12 +108,13 @@ def generate_stock_label(request, id):
     textob.textLine("")
     textob.textLine("")
     textob.setFont("Helvetica", 42)   
-    textob.textLine("#{}".format(stock.number)) 
+    textob.textLine("#{}".format(stock.rack_id)) 
     
     textob.setFont("Helvetica", 14)   
     textob.textLine("{}x{}".format(stock.length, stock.width))
+
     if stock.rack:
-        textob.textLine(f'Regał {stock.rack}')
+        textob.textLine(f'Regal {stock.rack}')
     textob.textLine(stock.created_by)
     
     
@@ -124,6 +124,6 @@ def generate_stock_label(request, id):
     c.save()
     buf.seek(0)
 
-    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.number))
+    return FileResponse(buf, as_attachment=True, filename='#{}.pdf'.format(stock.rack_id))
 
 

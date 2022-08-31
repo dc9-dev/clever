@@ -111,6 +111,9 @@ class ProductionStockIn(models.Model):
 
     def __str__(self):
         return "{} x {}".format(self.length, self.width)
+    
+    def get_number(self):
+        return self.number
 
 
 class ProductionComments(models.Model):
