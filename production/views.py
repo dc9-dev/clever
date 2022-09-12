@@ -26,17 +26,20 @@ from stock.models import Material
 
 @staff_or_404
 def ProductionHome(request):
-    
-    productions_pending = Production.objects.filter(status=1).order_by('-date')[:25]
-    productions_during = Production.objects.filter(status=2).order_by('-date')[:25]
-    productions_done = Production.objects.filter(status=3).order_by('-date')[:25]
+
+    productions_pending = Production.objects.filter(
+        status=1).order_by('-date')[:25]
+    productions_during = Production.objects.filter(
+        status=2).order_by('-date')[:25]
+    productions_done = Production.objects.filter(
+        status=3).order_by('-date')[:25]
 
     ctx = {
         'pending': productions_pending,
         'during': productions_during,
         'done': productions_done,
     }
-   
+
     return render(request, 'production/home.html', ctx)
 
 
@@ -54,29 +57,29 @@ def ProductionStatus(request, id):
         return redirect('detail-production', id=production.id)
 
 
-
 def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 1
     productionOrder.save()
     #user_id = request.user.id
-    
+
     try:
         old_production = Production.objects.get(id=productionOrder.id)
         old_production.delete()
     except Exception as e:
         print(e)
-        
+
     production, created = Production.objects.update_or_create(
         id=productionOrder.id,
         customer=productionOrder.customer,
-        #user_id=user_id,
+        # user_id=user_id,
         order=productionOrder.order,
         date=productionOrder.date, )
 
     mats = production.productionmaterial_set.all()
 
-    duplicates = productionOrder.materialservices_set.values("material").annotate(area_sum=Sum("area"))
+    duplicates = productionOrder.materialservices_set.values(
+        "material").annotate(area_sum=Sum("area"))
 
     for materials in duplicates:
         data = []
@@ -117,14 +120,16 @@ def EditProduction(request, id):
 
     return render(request, 'production/edit_production.html', ctx)
 
+
 @staff_or_404
 def DeleteProduction(request, id):
     production = Production.objects.get(id=id)
     production.delete()
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.delete()
-    
+
     return redirect('home-production')
+
 
 @staff_or_404
 def DetailProduction(request, id):
@@ -172,6 +177,7 @@ class ProductionLabel(UpdateView):
 
     def get_success_url(self):
         return self.request.GET.get('next', reverse_lazy('edit-production'))
+
 
 @staff_or_404
 def ProductionComments(request, id):
@@ -228,7 +234,8 @@ def ProductionStockIn(request, id):
         if form.is_valid():
             form = StockCreateInForm(request.POST)
             # get longer side
-            longer_side = int(max([request.POST['length'], request.POST['width']]))
+            longer_side = int(
+                max([request.POST['length'], request.POST['width']]))
             # assign rack
             if longer_side < 1500:
                 rack = 'A'
@@ -249,7 +256,7 @@ def ProductionStockIn(request, id):
                     length=request.POST['length'],
                     width=request.POST['width'],
                     material=productionMaterial.material)
-                
+
                 all_stocks_on_rack = Stock.objects.all().filter(rack=newStock.rack)
                 new_rack_id = 1
 
@@ -261,7 +268,8 @@ def ProductionStockIn(request, id):
                 else:
                     print('at least 1 stock in db, adding more')
                     # get first free id between 1 and 100
-                    all_stocks_on_rack = Stock.objects.all().filter(rack=newStock.rack).order_by('rack_id')
+                    all_stocks_on_rack = Stock.objects.all().filter(
+                        rack=newStock.rack).order_by('rack_id')
                     for i in all_stocks_on_rack:
                         print(f'checking stock with id: {i.rack_id}')
                         if new_rack_id != i.rack_id:
@@ -297,10 +305,14 @@ def ProductionStockIn(request, id):
 
 
 def HomeOrders(request):
-    orders_preparation = ProductionOrder.objects.filter(status=0).order_by('-date')[:25]
-    orders_pending = ProductionOrder.objects.filter(status=1).order_by('-date')[:25]
-    orders_during = ProductionOrder.objects.filter(status=2).order_by('-date')[:25]
-    orders_done = ProductionOrder.objects.filter(status=3).order_by('-date')[:25]
+    orders_preparation = ProductionOrder.objects.filter(
+        status=0).order_by('-date')[:25]
+    orders_pending = ProductionOrder.objects.filter(
+        status=1).order_by('-date')[:25]
+    orders_during = ProductionOrder.objects.filter(
+        status=2).order_by('-date')[:25]
+    orders_done = ProductionOrder.objects.filter(
+        status=3).order_by('-date')[:25]
 
     ctx = {
         'preparation': orders_preparation,
@@ -318,6 +330,7 @@ def CreateOrder(request):
 
     if request.method == 'POST':
         form = CreateOrderForm(request.POST)
+        print(form)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
@@ -436,6 +449,7 @@ class SearchOrder(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = ProductionOrderFilter(self.request.GET, queryset=self.get_queryset())
+        context['filter'] = ProductionOrderFilter(
+            self.request.GET, queryset=self.get_queryset())
         print(ProductionOrderFilter(self.request.GET, queryset=self.get_queryset()))
         return context

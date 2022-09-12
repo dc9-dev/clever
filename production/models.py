@@ -8,6 +8,7 @@ from account.models import Customer
 from decimal import Decimal
 import os
 
+
 class Production(models.Model):
     PENDING = 1
     DURING = 2
@@ -19,21 +20,24 @@ class Production(models.Model):
         (DONE, 'Zakończone'),
     )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, blank=True, null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
     comments = models.TextField(blank=True, null=True)
-    
+
     def __str__(self):
         return self.order
 
 
 class ProductionMaterial(models.Model):
     production = models.ForeignKey(Production, on_delete=models.CASCADE)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, blank=True)
-    area = models.DecimalField(default=Decimal('0.000'), decimal_places=4, blank=False, max_digits=10)
+    material = models.ForeignKey(
+        Material, on_delete=models.CASCADE, blank=True)
+    area = models.DecimalField(default=Decimal(
+        '0.000'), decimal_places=4, blank=False, max_digits=10)
     quantity = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     def _str__(self):
@@ -81,7 +85,7 @@ class ProductionMaterial(models.Model):
             return abs(float(self.area) - total_area)
 
     def waste_precent(self):
-        area = self.area 
+        area = self.area
         quantity = self.quantity
         material_area = self.material.material_area
         waste = self.area - quantity * material_area
@@ -89,11 +93,12 @@ class ProductionMaterial(models.Model):
             return abs(waste) * 100 / area
         else:
             return 0
-            
+
 
 class ProductionStock(models.Model):
     number = models.IntegerField(null=True)
-    productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
+    productionMaterial = models.ForeignKey(
+        ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
@@ -104,29 +109,32 @@ class ProductionStock(models.Model):
 
 class ProductionStockIn(models.Model):
     number = models.IntegerField(null=True)
-    productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE)
+    productionMaterial = models.ForeignKey(
+        ProductionMaterial, on_delete=models.CASCADE)
     length = IntegerRangeField(min_value=50, max_value=2800)
     width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} x {}".format(self.length, self.width)
-    
+
     def get_number(self):
         return self.number
 
 
 class ProductionComments(models.Model):
 
-    productionMaterial = models.ForeignKey(ProductionMaterial, on_delete=models.CASCADE, related_name="comments")
+    productionMaterial = models.ForeignKey(
+        ProductionMaterial, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(blank=True, null=True)
-    
+
 
 class Services(models.Model):
     title = models.CharField(max_length=255)
-    price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    price = models.DecimalField(default=Decimal(
+        '0.00'), decimal_places=2, blank=False, max_digits=10)
     units = models.CharField(max_length=255)
-    
+
     def __str__(self):
         return self.title
 
@@ -157,15 +165,21 @@ class ProductionOrder(models.Model):
     def save(self, *args, **kwargs):
         dt = timezone.now()
         if self.pk is None:
-           counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-           self.order = "ZO/{0:0=3d}/{1}".format(counter, dt.strftime("%d/%m/%y"))
+            #    counter = ProductionOrder.objects.filter(date__month=dt.month).count()
+            latest_id = ProductionOrder.objects.latest('id').id
+            if latest_id:
+                self.order = "ZO/{0:0=3d}/{1}".format(
+                    latest_id+1, dt.strftime("%d/%m/%y"))
+            else:
+                self.order = "ZO/{0:0=3d}/{1}".format(
+                    1, dt.strftime("%d/%m/%y"))
         super(ProductionOrder, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.order
 
     def get_total(self):
-        total = 0 
+        total = 0
         for i in self.materialservices_set.all():
             result = i.price * i.area
             total += result
@@ -173,7 +187,8 @@ class ProductionOrder(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
     content = models.TextField()
@@ -190,15 +205,18 @@ class MaterialServices(models.Model):
                                  blank=False,
                                  null=True,
                                  on_delete=models.CASCADE)
-    area = models.DecimalField(default=Decimal('0.000'), decimal_places=3, blank=False, max_digits=10)
-    price = models.DecimalField(default=Decimal('0.00'), decimal_places=2, blank=False, max_digits=10)
+    area = models.DecimalField(default=Decimal(
+        '0.000'), decimal_places=3, blank=False, max_digits=10)
+    price = models.DecimalField(default=Decimal(
+        '0.00'), decimal_places=2, blank=False, max_digits=10)
 
     def total(self):
         return self.area * self.price
 
 
 class Attachment(models.Model):
-    production_order = models.ForeignKey(ProductionOrder, on_delete=models.CASCADE)
+    production_order = models.ForeignKey(
+        ProductionOrder, on_delete=models.CASCADE)
     file = models.FileField(upload_to='production/order/attachments/')
 
     def __str__(self):
