@@ -330,7 +330,6 @@ def CreateOrder(request):
 
     if request.method == 'POST':
         form = CreateOrderForm(request.POST)
-        print(form)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()

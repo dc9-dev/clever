@@ -166,13 +166,15 @@ class ProductionOrder(models.Model):
         dt = timezone.now()
         if self.pk is None:
             #    counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-            latest_id = ProductionOrder.objects.latest('id').id
-            if latest_id:
+            try:
+                latest_id = ProductionOrder.objects.latest('id').id
                 self.order = "ZO/{0:0=3d}/{1}".format(
                     latest_id+1, dt.strftime("%d/%m/%y"))
-            else:
+
+            except ProductionOrder.DoesNotExist:
                 self.order = "ZO/{0:0=3d}/{1}".format(
                     1, dt.strftime("%d/%m/%y"))
+
         super(ProductionOrder, self).save(*args, **kwargs)
 
     def __str__(self):
