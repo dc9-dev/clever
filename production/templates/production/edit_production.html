@@ -82,13 +82,13 @@
                 </td>
                 <td scope="col" class="">
                   {% for stock in material.stocks.all %}
-                  <p>#{{ stock.number }} {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
+                  <p> {{ stock.length }} x {{ stock.width }} {{ stock.material }}</p>
                   {% endfor %}
                 </td>
                 <td scope="col"><a href="{% url 'production-filter' material.id %}"><button type="text" class="btn btn-success btn-sm">pobierz</button></a></td>
                 <td scope="col">
                   {% for stock in material.productionstockin_set.all %}
-                  <p>#{{ stock.number }} {{ stock.length }} x {{ stock.width }} {{ stock.material }} <br>
+                  <p> {{ stock.length }} x {{ stock.width }} {{ stock.material }} <br>
                     <a href="{% url 'label' stock.id %}" class="link-dark"><span class="badge bg-dark">Drukuj etykietę</span></a></p>
                   {% endfor %}
                 </td>
