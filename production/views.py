@@ -306,13 +306,13 @@ def ProductionStockIn(request, id):
 
 def HomeOrders(request):
     orders_preparation = ProductionOrder.objects.filter(
-        status=0).order_by('-date')[:25]
+        status=0).order_by('-date')[:100]
     orders_pending = ProductionOrder.objects.filter(
-        status=1).order_by('-date')[:25]
+        status=1).order_by('-date')[:100]
     orders_during = ProductionOrder.objects.filter(
-        status=2).order_by('-date')[:25]
+        status=2).order_by('-date')[:100]
     orders_done = ProductionOrder.objects.filter(
-        status=3).order_by('-date')[:25]
+        status=3).order_by('-date')[:100]
 
     ctx = {
         'preparation': orders_preparation,
