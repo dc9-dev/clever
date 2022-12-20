@@ -90,6 +90,8 @@ class ProductionMaterial(models.Model):
         material_area = self.material.material_area
         waste = self.area - quantity * material_area
         if waste < 0:
+            if area == 0:
+                return 0
             return abs(waste) * 100 / area
         else:
             return 0

@@ -27,7 +27,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'nestingpolska.usermd.net']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pawelkorpal',
+        'NAME': 'nesting',
         'USER': 'pawelkorpal',
         'PASSWORD': '',
         'HOST': 'localhost',
