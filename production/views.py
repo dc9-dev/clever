@@ -28,16 +28,27 @@ from stock.models import Material
 def ProductionHome(request):
 
     productions_pending = Production.objects.filter(
-        status=1).order_by('-date')[:25]
+        status=1).order_by('date')[:25]
+    all_frezers = Production.objects.filter(
+        status=2).values_list('user_id', flat=True).distinct() 
+    productions_during_by_frezer = []
+    productions_done_by_frezer = []
+    for frezer in all_frezers:
+        productions_during_by_frezer.append(Production.objects.filter(
+            status=2, user_id=frezer).order_by('date')[:25])
+        productions_done_by_frezer.append(Production.objects.filter(
+            status=3, user_id=frezer).order_by('date')[:25])
     productions_during = Production.objects.filter(
-        status=2).order_by('-date')[:25]
+        status=2).order_by('date')
     productions_done = Production.objects.filter(
-        status=3).order_by('-date')[:25]
+        status=3).order_by('date')[:25]
 
     ctx = {
         'pending': productions_pending,
         'during': productions_during,
+        'during_by_frezer': productions_during_by_frezer,
         'done': productions_done,
+        'done_by_frezer' : productions_done_by_frezer,
     }
 
     return render(request, 'production/home.html', ctx)
@@ -332,6 +343,8 @@ def CreateOrder(request):
         form = CreateOrderForm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+            # print(f'user: {request.user.id}')
+            obj.user_id = request.user.id
             obj.save()
             return redirect('edit-order', id=obj.id)
 

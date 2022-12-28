@@ -4,7 +4,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 from stock.models import Material, IntegerRangeField
-from account.models import Customer
+from account.models import Customer, UserBase
 from decimal import Decimal
 import os
 
@@ -25,11 +25,16 @@ class Production(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+    # frez_date = models.DateTimeField(blank=True, null=True)
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
     comments = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.order
+    
+    def frezer(self):
+        frezer = UserBase.objects.get(pk=self.user_id)
+        return f'{frezer.first_name} {frezer.last_name}'
 
 
 class ProductionMaterial(models.Model):
@@ -158,6 +163,8 @@ class ProductionOrder(models.Model):
     )
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, blank=True, null=True)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
@@ -166,16 +173,19 @@ class ProductionOrder(models.Model):
 
     def save(self, *args, **kwargs):
         dt = timezone.now()
-        if self.pk is None:
+        print(f'status: {self.status}')
+        print(f'order: {self.order}')
+        if self.status > 0 and self.order == '':
             #    counter = ProductionOrder.objects.filter(date__month=dt.month).count()
-            try:
-                latest_id = ProductionOrder.objects.latest('id').id
-                self.order = "ZO/{0:0=3d}/{1}".format(
-                    latest_id+1, dt.strftime("%d/%m/%y"))
+            if self.status > 0:
+                try:
+                    latest_id = ProductionOrder.objects.latest('id').id
+                    self.order = "ZO/{0:0=3d}/{1}".format(
+                        latest_id+1, dt.strftime("%d/%m/%y"))
 
-            except ProductionOrder.DoesNotExist:
-                self.order = "ZO/{0:0=3d}/{1}".format(
-                    1, dt.strftime("%d/%m/%y"))
+                except ProductionOrder.DoesNotExist:
+                    self.order = "ZO/{0:0=3d}/{1}".format(
+                        1, dt.strftime("%d/%m/%y"))
 
         super(ProductionOrder, self).save(*args, **kwargs)
 
@@ -188,6 +198,10 @@ class ProductionOrder(models.Model):
             result = i.price * i.area
             total += result
         return total
+
+    def get_user(self):
+        user = UserBase.objects.get(pk=self.user_id)
+        return f'{user.first_name} {user.last_name}'
 
 
 class Comment(models.Model):

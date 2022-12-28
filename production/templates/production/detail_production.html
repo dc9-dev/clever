@@ -16,6 +16,10 @@
               {% elif request.user.id == production.user.id or request.user.is_superuser %}
               <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Edytuj</button></a>
             {% endif %}
+            {% else %}
+            {% if request.user.is_superuser %}
+              <a href="{% url 'edit-production' production.id %}"><button class="btn btn-success btn-sm">Korekta</button></a>
+            {% endif %}
           {% endif %}
        </h5>
        <div class="row">

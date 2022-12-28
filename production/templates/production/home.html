@@ -1,6 +1,7 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
 <div class="row">
+  {% comment %} left column {% endcomment %}
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
@@ -20,8 +21,6 @@
         </ul>
       </div>
     </div>
-  </div>
-  <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
         <h6 class="mt-3">W trakcie ( {{ during.count }} )</h6>
@@ -41,7 +40,63 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-4">
+  {% comment %} mid column {% endcomment %}
+  <div class="col-sm-8">
+    <div class="row">
+      {% for frezer in during_by_frezer %}
+      <div class="col">
+        {% if frezer.count > 0 %}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">W trakcie ( {{ frezer.count }} ) - {{frezer.0.frezer}}</h6>
+            <ul class="list-group list-group-flush">
+              {% for production in frezer %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row">
+      {% for frezer in done_by_frezer %}
+      <div class="col">
+        {% if frezer.count > 0 %}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">Zakończone ( {{ frezer.count }} ) - {{frezer.0.frezer}}</h6>
+            <ul class="list-group list-group-flush">
+              {% for production in frezer %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+  {% comment %} <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
         <h6 class="mt-3">Zakończone ( {{ done.count }} )</h6>
@@ -79,6 +134,6 @@
         </ul>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 </div>
 {% endblock %}

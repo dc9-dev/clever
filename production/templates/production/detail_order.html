@@ -16,6 +16,22 @@
                   {% endif %}
                 </tr>
                 <tr>
+                  <td>Data utworzenia:</td>
+                  <td>
+                    {% if order.date %}
+                    {{ order.date }}
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Utworzone przez:</td>
+                  <td>
+                    {% if order.user_id %}
+                    {{ order.get_user }}
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
                   <td>Opis:</td>
                   <td>
                     {% if order.description %}

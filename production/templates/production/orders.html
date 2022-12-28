@@ -13,7 +13,11 @@
 				<h6 class="mt-3">Przygotowywanie ( {{ preparation.count }} )</h6>
 				<ul class="list-group list-group-flush">
 					{% for order in preparation %}
+					{% if order.customer.company %}
 					<li class="list-group-item"><small><a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order.customer.company }}</a></small></li>
+					{% else %}
+					<li class="list-group-item"><small><a href="{% url 'detail-order' order.id %}" class="link-dark">{{ order.customer.first_name }} {{ order.customer.last_name }}</a></small></li>
+					{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
