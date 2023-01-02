@@ -30,10 +30,12 @@ def ProductionHome(request):
     productions_pending = Production.objects.filter(
         status=1).order_by('date')[:25]
     all_frezers = Production.objects.filter(
-        status=2).values_list('user_id', flat=True).distinct() 
+        status__gte=1).values_list('user_id', flat=True).distinct() 
     productions_during_by_frezer = []
     productions_done_by_frezer = []
     for frezer in all_frezers:
+        if frezer == None or frezer < 7:
+            continue
         productions_during_by_frezer.append(Production.objects.filter(
             status=2, user_id=frezer).order_by('date')[:25])
         productions_done_by_frezer.append(Production.objects.filter(
