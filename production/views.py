@@ -352,6 +352,15 @@ def CreateOrder(request):
 
     return render(request, 'production/create_order.html', {'form': form, })
 
+@staff_or_404
+def DeleteOrder(request, id):
+    if request.method == 'POST' and 'delete' in request.POST:
+        obj = ProductionOrder.objects.get(id=id)
+        obj.delete()
+
+    return redirect('home-orders')
+
+
 
 @staff_or_404
 def EditOrder(request, id):
