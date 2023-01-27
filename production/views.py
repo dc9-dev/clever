@@ -34,17 +34,22 @@ def ProductionHome(request):
     all_frezers_ids = Production.objects.filter(
         status__gte=1).values_list('user_id', flat=True).distinct()
     all_frezers = []
-    productions_during_by_frezer = []
-    productions_done_by_frezer = []
+    frezers = []
     for frezer in all_frezers_ids:
         if frezer == None:
             continue
-        if frezer == None or frezer < 7:
+        if  frezer < 7:
             continue
+        
+        f = {}
+        
         user = UserBase.objects.get(id=frezer)
-        all_frezers.append(user)
-        productions_during_by_frezer.append(Production.objects.filter(
-            status=2, user_id=frezer).order_by('date')[:25])
+        f["user"] = user
+        
+        productions_during_by_frezer = Production.objects.filter(
+            status=2, user_id=frezer).order_by('date')[:25]
+        f["during"] = productions_during_by_frezer
+        
         done = Production.objects.filter(
             status=3, user_id=frezer).order_by('date')[:25]
 
@@ -62,21 +67,26 @@ def ProductionHome(request):
                     tmp[short_date] = [p]
             else:
                 tmp_rest.append(p)
+                
         tmp = dict(reversed(sorted(tmp.items(), key=lambda item: datetime.strptime(item[0], '%d-%m-%Y'))))
         tmp["reszta"] = tmp_rest
-        productions_done_by_frezer.append(tmp)
+        f["done"] = tmp
+        frezers.append(f)
+        
+    # not needed anymore
     productions_during = Production.objects.filter(
         status=2).order_by('date')
     productions_done = Production.objects.filter(
         status=3).order_by('date')[:25]
-    print(all_frezers)
+        
     ctx = {
         'pending': productions_pending,
         'during': productions_during,
         'during_by_frezer': productions_during_by_frezer,
         'done': productions_done,
-        'done_by_frezer': productions_done_by_frezer,
-        'all_frezers' : all_frezers
+        # 'done_by_frezer': productions_done_by_frezer,
+        'all_frezers' : all_frezers,
+        'frezers' : frezers
     }
 
     return render(request, 'production/home.html', ctx)

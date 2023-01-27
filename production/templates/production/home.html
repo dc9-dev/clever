@@ -45,9 +45,92 @@
   {% comment %} mid column {% endcomment %}
   <div class="col-sm-8">
     <div class="row">
+      {% for frezer in frezers %}
+
+      {% comment %} main frezer column {% endcomment %}
+      <div class="col">
+
+        {% comment %} header card {% endcomment %}
+        <div class="card">
+          <div class="card-body">
+          {{frezer.user}}
+          </div>
+        </div>
+
+        {% comment %} during card {% endcomment %}
+        {% if frezer.during.count > 0 %}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">
+              W trakcie ( {{ frezer.during.count }} )
+            </h6>
+            <ul class="list-group list-group-flush">
+              {% for production in frezer.during %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+                {% for material in production.productionmaterial_set.all %}
+                <small>
+                  <span
+                    class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
+                    >{{ material.waste_precent|floatformat:2 }}%</span
+                  ></small
+                >
+                {% endfor %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+
+        {% comment %} done cards {% endcomment %}
+        {% for key, value in frezer.done.items %}
+        {% if value|length > 0 %}
+
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">
+              {{key}} - Zakończone ( {{ value|length }} )
+            </h6>
+            <ul class="list-group list-group-flush scrollable">
+              {% for production in value %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+                {% for material in production.productionmaterial_set.all %}
+                <small>
+                  <span
+                    class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
+                    >{{ material.waste_precent|floatformat:2 }}%</span
+                  ></small
+                >
+                {% endfor %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+
+    {% comment %} <div class="row">
       {% for frezer in all_frezers%}
         
-        {% comment %} header with frezer name {% endcomment %}
           <div class="col">
           <div class="card">
             <div class="card-body">
@@ -59,89 +142,88 @@
     </div>
 
 
-        {% comment %} in progress {% endcomment %}
-        <div class="row">
-          {% for frezer in during_by_frezer %}
-          <div class="col">
-            {% if frezer.count > 0 %}
-            <div class="card">
-              <div class="card-body">
-                <h6 class="mt-3">
-                  W trakcie ( {{ frezer.count }} )
-                </h6>
-                <ul class="list-group list-group-flush">
-                  {% for production in frezer %}
-                  <li class="list-group-item">
-                    <small
-                      ><a
-                        href="{% url 'detail-production' production.id %}"
-                        class="link-dark"
-                        >{{ production.order }} - {{production.customer}}</a
-                      ></small
-                    >
-                    {% for material in production.productionmaterial_set.all %}
-                    <small>
-                      <span
-                        class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
-                        >{{ material.waste_precent|floatformat:2 }}%</span
-                      ></small
-                    >
-                    {% endfor %}
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-            {% endif %}
+    <div class="row">
+      {% for frezer in during_by_frezer %}
+      <div class="col">
+        {% if frezer.count > 0 %}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">
+              W trakcie ( {{ frezer.count }} )
+            </h6>
+            <ul class="list-group list-group-flush">
+              {% for production in frezer %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+                {% for material in production.productionmaterial_set.all %}
+                <small>
+                  <span
+                    class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
+                    >{{ material.waste_precent|floatformat:2 }}%</span
+                  ></small
+                >
+                {% endfor %}
+              </li>
+              {% endfor %}
+            </ul>
           </div>
-          {% endfor %}
         </div>
-        
-        {% comment %} done {% endcomment %}
-        <div class="row">
-          {% for frezer in done_by_frezer %}
-          <div class="col">
-            {% for key, value in frezer.items %}
-            {% if value|length > 0 %}
-    
-            <div class="card">
-              <div class="card-body">
-                <h6 class="mt-3">
-                  {{key}} - Zakończone ( {{ value|length }} )
-                </h6>
-                <ul class="list-group list-group-flush scrollable">
-                  {% for production in value %}
-                  <li class="list-group-item">
-                    <small
-                      ><a
-                        href="{% url 'detail-production' production.id %}"
-                        class="link-dark"
-                        >{{ production.order }} - {{production.customer}}</a
-                      ></small
-                    >
-                    {% for material in production.productionmaterial_set.all %}
-                    <small>
-                      <span
-                        class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
-                        >{{ material.waste_precent|floatformat:2 }}%</span
-                      ></small
-                    >
-                    {% endfor %}
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-          </div>
-    
-          {% endfor %}
-        </div>
+        {% endif %}
       </div>
+      {% endfor %}
+    </div>
+        
+    <div class="row">
+      {% for frezer in done_by_frezer %}
+      <div class="col">
+        {% for key, value in frezer.items %}
+        {% if value|length > 0 %}
+
+        <div class="card">
+          <div class="card-body">
+            <h6 class="mt-3">
+              {{key}} - Zakończone ( {{ value|length }} )
+            </h6>
+            <ul class="list-group list-group-flush scrollable">
+              {% for production in value %}
+              <li class="list-group-item">
+                <small
+                  ><a
+                    href="{% url 'detail-production' production.id %}"
+                    class="link-dark"
+                    >{{ production.order }} - {{production.customer}}</a
+                  ></small
+                >
+                {% for material in production.productionmaterial_set.all %}
+                <small>
+                  <span
+                    class="{% if material.waste_precent >= 25 %} text-danger {% else %} text-success {% endif%}"
+                    >{{ material.waste_precent|floatformat:2 }}%</span
+                  ></small
+                >
+                {% endfor %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+
+      {% endfor %}
+    </div> {% endcomment %}
+  </div>
 
 
   </div>
+
   <style>
     .scrollable {
       max-height: 500px;
