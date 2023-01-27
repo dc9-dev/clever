@@ -25,6 +25,7 @@ class Production(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
     # frez_date = models.DateTimeField(blank=True, null=True)
     status = models.SmallIntegerField(choices=STATUS, default=PENDING)
     comments = models.TextField(blank=True, null=True)
@@ -167,14 +168,15 @@ class ProductionOrder(models.Model):
                              on_delete=models.CASCADE, blank=True, null=True)
     order = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
     status = models.SmallIntegerField(choices=STATUS, default=PREPARATION)
     settlement = models.BooleanField(default=False)
     description = models.TextField()
 
     def save(self, *args, **kwargs):
         dt = timezone.now()
-        print(f'status: {self.status}')
-        print(f'order: {self.order}')
+        # print(f'status: {self.status}')
+        # print(f'order: {self.order}')
         if self.status > 0 and self.order == '':
             #    counter = ProductionOrder.objects.filter(date__month=dt.month).count()
             if self.status > 0:

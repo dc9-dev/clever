@@ -71,7 +71,7 @@ class CreateStock(CreateView):
                 # get first free id between 1 and 100
                 all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack).order_by('rack_id')
                 for i in all_stocks_on_rack:
-                    print(f'checking stock with id: {i.rack_id}')
+                    # print(f'checking stock with id: {i.rack_id}')
                     if new_rack_id != i.rack_id:
                         # found first empy id, create stock with that id
                         s.rack_id = new_rack_id
@@ -123,10 +123,10 @@ def TakeStock(request, id1, id2):
         width=stock.width,
         material=stock.material,
     )
-
-    stock.width = 0
-    stock.length = 0
-    stock.save()
+    stock.delete()
+    # stock.width = 0
+    # stock.length = 0
+    # stock.save()
 
     return redirect('edit-production', productionMaterial.production.id)
 

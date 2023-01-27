@@ -22,6 +22,8 @@ from stock.models import Stock
 from stock.forms import StockCreateInForm
 from stock.filters import StockFilter
 from stock.models import Material
+from datetime import datetime
+from account.models import UserBase
 
 
 @staff_or_404
@@ -29,28 +31,52 @@ def ProductionHome(request):
 
     productions_pending = Production.objects.filter(
         status=1).order_by('date')[:25]
-    all_frezers = Production.objects.filter(
-        status__gte=1).values_list('user_id', flat=True).distinct() 
+    all_frezers_ids = Production.objects.filter(
+        status__gte=1).values_list('user_id', flat=True).distinct()
+    all_frezers = []
     productions_during_by_frezer = []
     productions_done_by_frezer = []
-    for frezer in all_frezers:
+    for frezer in all_frezers_ids:
+        if frezer == None:
+            continue
         if frezer == None or frezer < 7:
             continue
+        user = UserBase.objects.get(id=frezer)
+        all_frezers.append(user)
         productions_during_by_frezer.append(Production.objects.filter(
             status=2, user_id=frezer).order_by('date')[:25])
-        productions_done_by_frezer.append(Production.objects.filter(
-            status=3, user_id=frezer).order_by('date')[:25])
+        done = Production.objects.filter(
+            status=3, user_id=frezer).order_by('date')[:25]
+
+        tmp = {}
+        tmp_rest = []
+        for p in done:
+            if p.updated_at:
+                day = p.updated_at.strftime("%d")
+                month = p.updated_at.strftime("%m")
+                year = p.updated_at.strftime("%Y")
+                short_date = f"{day}-{month}-{year}"
+                if short_date in tmp.keys():
+                    tmp[short_date].append(p)
+                else:
+                    tmp[short_date] = [p]
+            else:
+                tmp_rest.append(p)
+        tmp = dict(reversed(sorted(tmp.items(), key=lambda item: datetime.strptime(item[0], '%d-%m-%Y'))))
+        tmp["reszta"] = tmp_rest
+        productions_done_by_frezer.append(tmp)
     productions_during = Production.objects.filter(
         status=2).order_by('date')
     productions_done = Production.objects.filter(
         status=3).order_by('date')[:25]
-
+    print(all_frezers)
     ctx = {
         'pending': productions_pending,
         'during': productions_during,
         'during_by_frezer': productions_during_by_frezer,
         'done': productions_done,
-        'done_by_frezer' : productions_done_by_frezer,
+        'done_by_frezer': productions_done_by_frezer,
+        'all_frezers' : all_frezers
     }
 
     return render(request, 'production/home.html', ctx)
@@ -63,8 +89,10 @@ def ProductionStatus(request, id):
 
     if request.method == 'POST':
         production.status = 3
+        production.updated_at = datetime.now()
         production.save()
         productionOrder.status = 3
+        productionOrder.updated_at = datetime.now()
         productionOrder.save()
 
         return redirect('detail-production', id=production.id)
@@ -73,8 +101,9 @@ def ProductionStatus(request, id):
 def CreateProduction(request, id):
     productionOrder = ProductionOrder.objects.get(id=id)
     productionOrder.status = 1
+    productionOrder.updated_at = datetime.now()
     productionOrder.save()
-    #user_id = request.user.id
+    # user_id = request.user.id
 
     try:
         old_production = Production.objects.get(id=productionOrder.id)
@@ -117,8 +146,10 @@ def EditProduction(request, id):
         if production.status == 1:
             production.user_id = request.user.id
             production.status = 2
+            production.updated_at = datetime.now()
             production.save()
             productionOrder.status = 2
+            productionOrder.updated_at = datetime.now()
             productionOrder.save()
     except Production.DoesNotExist:
         return redirect('stock')
@@ -284,7 +315,7 @@ def ProductionStockIn(request, id):
                     all_stocks_on_rack = Stock.objects.all().filter(
                         rack=newStock.rack).order_by('rack_id')
                     for i in all_stocks_on_rack:
-                        print(f'checking stock with id: {i.rack_id}')
+                        # print(f'checking stock with id: {i.rack_id}')
                         if new_rack_id != i.rack_id:
                             # found first empy id, create stock with that id
                             newStock.rack_id = new_rack_id
@@ -352,6 +383,7 @@ def CreateOrder(request):
 
     return render(request, 'production/create_order.html', {'form': form, })
 
+
 @staff_or_404
 def DeleteOrder(request, id):
     if request.method == 'POST' and 'delete' in request.POST:
@@ -359,7 +391,6 @@ def DeleteOrder(request, id):
         obj.delete()
 
     return redirect('home-orders')
-
 
 
 @staff_or_404
@@ -383,6 +414,7 @@ def EditOrder(request, id):
 
     if request.method == 'POST' and 'done' in request.POST:
         order.status = 1
+        order.updated_at = datetime.now()
         order.save()
         CreateProduction(request.POST, order.id)
         return redirect('detail-order', id=order.id)

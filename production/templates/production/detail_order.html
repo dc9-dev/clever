@@ -24,6 +24,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>Ostatnia aktualizacja:</td>
+                  <td>
+                    {% if order.updated_at %}
+                    {{ order.updated_at }}
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
                   <td>Utworzone przez:</td>
                   <td>
                     {% if order.user_id %}
