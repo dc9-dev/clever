@@ -32,6 +32,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>Wyfrezował:</td>
+                  <td>
+                    {% if order.user_id %}
+                    {{ frezer }}
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
                   <td>Utworzone przez:</td>
                   <td>
                     {% if order.user_id %}

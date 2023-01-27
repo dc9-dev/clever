@@ -47,11 +47,11 @@ def ProductionHome(request):
         f["user"] = user
         
         productions_during_by_frezer = Production.objects.filter(
-            status=2, user_id=frezer).order_by('date')[:25]
+            status=2, user_id=frezer).order_by('date')[:1000]
         f["during"] = productions_during_by_frezer
         
         done = Production.objects.filter(
-            status=3, user_id=frezer).order_by('date')[:25]
+            status=3, user_id=frezer).order_by('date')[:1000]
 
         tmp = {}
         tmp_rest = []
@@ -467,12 +467,14 @@ def DetailOrder(request, id):
     order = ProductionOrder.objects.get(id=id)
     ms = order.materialservices_set.all()
 
+    frezer = UserBase.objects.get(id=order.user_id)
     if order.status == 0:
         return redirect('edit-order', id=order.id)
 
     ctx = {
         'order': order,
         'materialservices': ms,
+        'frezer' : frezer
     }
 
     return render(request, 'production/detail_order.html', ctx)
