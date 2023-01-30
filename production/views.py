@@ -287,8 +287,10 @@ def ProductionStockIn(request, id):
         form = StockCreateInForm(request.POST)
         if form.is_valid():
             # get longer side
+            length = int(request.POST['length'])
+            width = int(request.POST['width'])
             longer_side = int(
-                max([int(request.POST['length']), int(request.POST['width'])]))
+                max([length, width]))
             # print(f"longer side: {longer_side}")
             
             # assign rack
@@ -300,8 +302,8 @@ def ProductionStockIn(request, id):
             # print(f"rack: {rack}")
             if stock is None:
                 newStock = Stock.objects.create(
-                    length=request.POST['length'],
-                    width=request.POST['width'],
+                    length=length,
+                    width=width,
                     material=productionMaterial.material,
                     created_by=f'{request.user.first_name[0]}{request.user.last_name[0]}',
                     rack=rack
@@ -309,8 +311,8 @@ def ProductionStockIn(request, id):
 
                 productionMaterial.productionstockin_set.create(
                     number=newStock.id,
-                    length=request.POST['length'],
-                    width=request.POST['width'],
+                    length=length,
+                    width=width,
                     material=productionMaterial.material)
 
                 all_stocks_on_rack = Stock.objects.all().filter(rack=newStock.rack)
