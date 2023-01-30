@@ -286,16 +286,18 @@ def ProductionStockIn(request, id):
     if request.method == 'POST':
         form = StockCreateInForm(request.POST)
         if form.is_valid():
-            form = StockCreateInForm(request.POST)
             # get longer side
             longer_side = int(
-                max([request.POST['length'], request.POST['width']]))
+                max([int(request.POST['length']), int(request.POST['width'])]))
+            # print(f"longer side: {longer_side}")
+            
             # assign rack
             if longer_side < 1500:
                 rack = 'A'
             else:
                 rack = 'B'
 
+            # print(f"rack: {rack}")
             if stock is None:
                 newStock = Stock.objects.create(
                     length=request.POST['length'],
@@ -465,9 +467,10 @@ def EditOrder(request, id):
 @staff_or_404
 def DetailOrder(request, id):
     order = ProductionOrder.objects.get(id=id)
+    production = Production.objects.get(order=order.order)
     ms = order.materialservices_set.all()
 
-    frezer = UserBase.objects.get(id=order.user_id)
+    frezer = UserBase.objects.get(id=production.user_id)
     if order.status == 0:
         return redirect('edit-order', id=order.id)
 
