@@ -473,7 +473,10 @@ def DetailOrder(request, id):
     frezer = None
     try:
         production = Production.objects.get(order=order.order)
-        frezer = UserBase.objects.get(id=production.user_id)
+        try:
+            frezer = UserBase.objects.get(id=production.user_id)
+        except UserBase.DoesNotExist:
+            pass
 
     except Production.DoesNotExist:
         pass
