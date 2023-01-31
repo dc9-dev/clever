@@ -469,10 +469,16 @@ def EditOrder(request, id):
 @staff_or_404
 def DetailOrder(request, id):
     order = ProductionOrder.objects.get(id=id)
-    production = Production.objects.get(order=order.order)
+    production = None
+    frezer = None
+    try:
+        production = Production.objects.get(order=order.order)
+        frezer = UserBase.objects.get(id=production.user_id)
+
+    except Production.DoesNotExist:
+        pass
     ms = order.materialservices_set.all()
 
-    frezer = UserBase.objects.get(id=production.user_id)
     if order.status == 0:
         return redirect('edit-order', id=order.id)
 
