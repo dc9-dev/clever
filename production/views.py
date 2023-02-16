@@ -30,7 +30,7 @@ from account.models import UserBase
 def ProductionHome(request):
 
     productions_pending = Production.objects.filter(
-        status=1).order_by('date')[:25]
+        status=1).order_by('date')[:1000]
     all_frezers_ids = Production.objects.filter(
         status__gte=1).values_list('user_id', flat=True).distinct()
     all_frezers = []

@@ -2,12 +2,12 @@
 
 <div class="row">
   {% comment %} left column {% endcomment %}
-  {% if request.user.is_superuser == False %}
+  {% if request.user.is_superuser == True %}
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
         <h6 class="mt-3">Do realizacji ( {{ pending.count }} )</h6>
-        <ul class="list-group">
+        <ul class="list-group scrollable">
           {% for production in pending %}
           <li class="list-group-item">
             <small
