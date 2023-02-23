@@ -77,7 +77,7 @@
         </a>
       </li>
       {% endif %}
-      {% if group.name == 'material_accept' %}
+      {% if group.name == 'material_accept' or group.name == 'moderator' %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'grn' %}">
           <i class="bi bi-bag-plus"></i>
