@@ -3,7 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
-from stock.models import Material, IntegerRangeField
+from stock.models import Material, IntegerRangeField, Gender
 from account.models import Customer, UserBase
 from decimal import Decimal
 import os
@@ -32,7 +32,7 @@ class Production(models.Model):
 
     def __str__(self):
         return self.order
-    
+
     def frezer(self):
         frezer = UserBase.objects.get(pk=self.user_id)
         return f'{frezer.first_name} {frezer.last_name}'
@@ -107,7 +107,7 @@ class ProductionStock(models.Model):
     number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(
         ProductionMaterial, on_delete=models.CASCADE, related_name="stocks")
-    length = IntegerRangeField(min_value=50, max_value=2800)
+    length = IntegerRangeField(min_value=50, max_value=3800)
     width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
@@ -119,7 +119,7 @@ class ProductionStockIn(models.Model):
     number = models.IntegerField(null=True)
     productionMaterial = models.ForeignKey(
         ProductionMaterial, on_delete=models.CASCADE)
-    length = IntegerRangeField(min_value=50, max_value=2800)
+    length = IntegerRangeField(min_value=50, max_value=3800)
     width = IntegerRangeField(min_value=50, max_value=2070)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
@@ -225,6 +225,11 @@ class MaterialServices(models.Model):
                                  blank=False,
                                  null=True,
                                  on_delete=models.CASCADE)
+    gender = models.ForeignKey(Gender,
+                               blank=True,
+                               null=True,
+                               on_delete=models.CASCADE,
+                               default=1)
     area = models.DecimalField(default=Decimal(
         '0.000'), decimal_places=3, blank=False, max_digits=10)
     price = models.DecimalField(default=Decimal(

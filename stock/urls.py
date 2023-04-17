@@ -18,5 +18,5 @@ urlpatterns = [
     path('contractor', views.ContractorCreateView.as_view(), name='create-contractor'),
     path('contractor/edit/', views.ContractorUpdateView.as_view(), name='edit-contractor'),
     path('getpdf/<int:id>', views.Generate_stock_label_not_production, name='label-pdf'),
-
+    path('api/load_materials/', views.load_materials, name='api_load_materials')
 ]

@@ -27,20 +27,42 @@ class StockView(ListView):
     model = Stock
     template_name = 'stock/stocks.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
+    def get(self, request, *args, **kwargs):
+        gender = request.GET.get('gender', None)
+        if gender is None:
+            context = {
+                'filter': Stock.objects.none(),
+                'materials' : Material.objects.all(),
+                'groups': Gender.objects.all()
+            }
+            return render(request, 'stock/stocks.html', context)
+        context = {
             'filter': StockFilter(self.request.GET,
                                   queryset=self.get_queryset().order_by('rack_id')),
-        })
-        return context
+            'groups': Gender.objects.all(),
+            'materials' : Material.objects.filter(gender_id=gender).all(),
+            'group' : Gender.objects.filter(id=gender).first()
+        }
+        return render(request, 'stock/stocks.html', context)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context.update({
+    #         'filter': StockFilter(self.request.GET,
+    #                               queryset=self.get_queryset().order_by('rack_id')),
+    #         'groups': Gender.objects.all()
+    #     })
+    #     return context
 
 
 class CreateStock(CreateView):
 
     def get(self, request, *args, **kwargs):
 
-        context = {'form': StockCreateForm()}
+        context = {
+                    'form': StockCreateForm(),
+                   'genders' : Gender.objects.all(),
+                   'materials' : Material.objects.all()}
         return render(request, 'stock/create_stock.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -48,17 +70,17 @@ class CreateStock(CreateView):
         if form.is_valid():
             s = form.save(commit=False)
             s.created_by = f'{request.user.first_name[0]}{request.user.last_name[0]}'
-            
+
             # get longer side
             longer_side = max([s.length, s.width])
-            
+
             # assign rack
             if longer_side < 1500:
                 s.rack = 'A'
             else:
                 s.rack = 'B'
 
-            all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack)
+            all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack, gender_id=s.gender)
             new_rack_id = 1
 
             # if no stocks yet create stock with id 1
@@ -69,7 +91,7 @@ class CreateStock(CreateView):
             else:
                 print('at least 1 stock in db, adding more')
                 # get first free id between 1 and 100
-                all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack).order_by('rack_id')
+                all_stocks_on_rack = Stock.objects.all().filter(rack=s.rack, gender_id=s.gender).order_by('rack_id')
                 for i in all_stocks_on_rack:
                     # print(f'checking stock with id: {i.rack_id}')
                     if new_rack_id != i.rack_id:
@@ -96,9 +118,14 @@ class CreateStock(CreateView):
 
         return render(request, 'stock/create_stock.html', {'form': form})
 
+def load_materials(request):
+    print("loading materials in stock")
+    gender_id = request.GET.get('gender')
+    materials = Material.objects.all().filter(gender_id=int(gender_id))
+    return render(request, 'stock/material_dropdown_list_options.html', {'materials': materials})
 
 def DeleteStock(request, id):
-    si = ProductionStockIn.objects.filter(number = id).first()
+    si = ProductionStockIn.objects.filter(number=id).first()
     if si:
         si.delete()
 
@@ -106,8 +133,9 @@ def DeleteStock(request, id):
     rack_id = s.rack_id
     rack = s.rack
     s.delete()
-    
-    messages.error(request, f'Usunięteo formatkę z #ID {rack_id} z regalu {rack}')
+
+    messages.error(
+        request, f'Usunięteo formatkę z #ID {rack_id} z regalu {rack}')
 
     return redirect('stocks')
 

@@ -27,15 +27,60 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">
-        Formatki
+        Formatki {% if group %} {{group}} {% endif %}
         <a href="{% url 'create-stock' %}"
           ><button class="btn btn-primary btn-sm">Nowa Formatka</button></a
         >
       </h5>
+      <div class="row">
+        {% for g in groups %}
+        <div class="col-auto">
+        <form method="GET" action="{% url 'stocks' %}">
+          {% csrf_token %}
+          <input name="gender" value="{{g.id}}" hidden/>
+          <button class="btn btn-primary btn-sm">{{g.code}}</button>
+        </form>
+        </div>
+        {% endfor%}
+      </div>
+      <br>
+      {% if filter %}
       <h7>Regał A</h7>
       <div class="table-responsive">
         <table class="table table-borderless table-hover table-sm">
-          {% include 'stock/search.html' %}
+
+          {# {% include 'stock/search.html' %} #}
+          <form method="GET" class="row">{% csrf_token %}
+            {% if group %}
+            <input name="gender" value="{{group.id}}"hidden/>
+            {% endif %}
+            <td>
+            </td>
+            <td>
+               <input type="number" class="form-control-sm" name="length"/>
+            </td>
+            <td>
+              <input type="number" class="form-control-sm" name="width"/>
+            </td>
+            {% if request.resolver_match.view_name == 'stocks' %}
+            <td>
+              <select class="form-select-sm" name="material">
+                <option value="null" selected>-----</option>
+                {% for material in materials %}
+                  <option value={{material.id}}> {{material}} </option>
+                {% endfor %}
+              </select>
+            </td>
+            {% else %}
+            <td>
+            </td>
+            {% endif %}
+            <td>
+              <button class="btn btn-dark btn-sm" type="submit">szukaj</button>
+            </td>
+          </form>
+          
+          
           <thead>
             <tr>
               <th scope="col">#ID</th>
@@ -49,7 +94,7 @@
             {% for stock in filter.qs %}
             {% if stock.rack == 'A'%}
             <tr>
-              <td scope="row">{{ stock.rack_id }}</td>
+              <td scope="row">{{ stock.rack_id }}{{stock.gender.code}}</td>
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
               {% if stock.length == 0 %}
@@ -94,7 +139,36 @@
         </table>
         <h7>Regał B</h7>
         <table class="table table-borderless table-hover table-sm">
-          {% include 'stock/search.html' %}
+          {#{% include 'stock/search.html' %}#}
+          <form method="GET" class="row">{% csrf_token %}
+            {% if group %}
+            <input name="gender" value="{{group.id}}"hidden/>
+            {% endif %}
+            <td>
+            </td>
+            <td>
+               <input type="number" class="form-control-sm" name="length"/>
+            </td>
+            <td>
+              <input type="number" class="form-control-sm" name="width"/>
+            </td>
+            {% if request.resolver_match.view_name == 'stocks' %}
+            <td>
+              <select class="form-select-sm" name="material">
+                <option value="null" selected>-----</option>
+                {% for material in materials %}
+                  <option value={{material.id}}> {{material}} </option>
+                {% endfor %}
+              </select>
+            </td>
+            {% else %}
+            <td>
+            </td>
+            {% endif %}
+            <td>
+              <button class="btn btn-dark btn-sm" type="submit">szukaj</button>
+            </td>
+          </form>
           <thead>
             <tr>
               <th scope="col">#ID</th>
@@ -108,7 +182,7 @@
             {% for stock in filter.qs %}
             {% if stock.rack == 'B'%}
             <tr>
-              <td scope="row">{{ stock.rack_id }}</td>
+              <td scope="row">{{ stock.rack_id }}{{stock.gender.code}}</td>
               <td>{{ stock.length }}mm</td>
               <td>{{ stock.width }}mm</td>
               {% if stock.length == 0 %}
@@ -152,6 +226,7 @@
           </tbody>
         </table>
       </div>
+      {% endif %}
     </div>
   </div>
 

@@ -8,10 +8,11 @@
        <h5 class="card-title">Nowa formatka do magazynu </h5>
        <div class="dataTable-top">
         <table class="table table-borderless table-sm">
-          <form method="POST">{% csrf_token %}
+          <form method="POST" id="stockForm" data-material-url="{% url 'api_load_materials' %}" >{% csrf_token %}
             <tr>
               <th scope="col">Długość(mm)</th>
               <th scope="col">Szerokość(mm)</th>
+              <th scope="col">Grupa materiału</th>
               <th scope="col">Materiał</th>
               <th scope="col">Akcja</th>
             </tr>
@@ -19,13 +20,14 @@
               <th scope="col">{{ form.length }}</th>
               <th scope="col">{{ form.width }}</th>
               {% if request.resolver_match.view_name == 'stockin' %}
+              <th>{{ gender }}</th>
                <th>{{ material.material }}</th>
               {% else %}
-              <th scope="col">{{ form.material }}</th>
+              <th scole="col">{{ form.gender }}</th>
+              <th scope="col">{{ form.material}}</th>
               {% endif %}
               <th scope="col"><button class="btn btn-primary btn-sm" type="submit">Dodaj</button></th>
             </tr>
-        
           </form>
         </table>
       </div>
@@ -34,4 +36,21 @@
     </div>
   </div>
 </div>
+<script>
+  $("#id_gender").change(function () {
+    var url = $("#stockForm").attr("data-material-url");  // get the url of the `load_cities` view
+    var genderId = $(this).val();  // get the selected country ID from the HTML input
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'gender': genderId       // add the country id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_material").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+
+  });
+
+</script>
 {% endblock %}

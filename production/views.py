@@ -21,10 +21,16 @@ from clever.decorators import staff_or_404
 from stock.models import Stock
 from stock.forms import StockCreateInForm
 from stock.filters import StockFilter
-from stock.models import Material
+from stock.models import Material, Gender
 from datetime import datetime
 from account.models import UserBase
 
+def load_materials(request):
+    print("loading materials in production")
+    gender_id = request.GET.get('gender')
+    materials = Material.objects.all().filter(gender_id=int(gender_id))
+    print(materials)
+    return render(request, 'production/material_dropdown_list_options.html', {'materials': materials})
 
 @staff_or_404
 def ProductionHome(request):
@@ -356,6 +362,7 @@ def ProductionStockIn(request, id):
 
     ctx = {
         'form': form,
+        'gender': productionMaterial.material.gender,
         'material': productionMaterial,
     }
 
@@ -417,6 +424,9 @@ def EditOrder(request, id):
 
     if request.method == 'POST' and 'add' in request.POST:
         form = EditOrderForm(request.POST)
+        print("elo from")
+        print(f'form: {form}')
+        print(f"form is valid: {form.cleaned_data}")
         if form.is_valid():
             obj = form.save(commit=False)
             obj.productionorder_id = order.id
@@ -461,6 +471,7 @@ def EditOrder(request, id):
         'form': form,
         'comment': comment,
         'attachment': attachment,
+        'genders': Gender.objects.all(),
     }
 
     return render(request, 'production/edit_order.html', ctx)

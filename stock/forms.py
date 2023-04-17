@@ -33,7 +33,20 @@ class StockCreateForm(forms.ModelForm):
     class Meta:
         model = Stock
         fields = '__all__'
-
+    
+    def __init__(self, *args, ** kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['material'].queryset = Material.objects.none()
+        
+        if 'gender' in self.data:
+            try:
+                gender_id = int(self.data.get('gender'))
+                self.fields['material'].queryset = Material.objects.filter(gender_id=gender_id)
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['material'].queryset = self.instance.Material.material_set.order_by('name')
+                
 
 class StockCreateInForm(forms.ModelForm):
     

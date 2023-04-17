@@ -19,7 +19,7 @@
               <td>płyty</td>
               <td>pow. płyt</td>
               <td>formatki</td>
-              
+              {#<td>kod</td>#}
             </tr>
           </thead>
           {% for mat in gender.material_set.all %}
@@ -28,6 +28,7 @@
             <td>{{ mat.quantity}}szt.</td>
             <td>{{ mat.caluclate_material|floatformat:2 }}m2</td>
             <td>{{ mat.stocks.count }}szt.</td>
+            {#<td>{{ mat.gender.code }}</td>#}
            
           </tr>
           {% endfor %}

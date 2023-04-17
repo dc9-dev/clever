@@ -55,6 +55,7 @@
           <table class="table table-success table-striped">
             <thead>
               <tr>
+                <th scope="col">Grupa materiałowa</th>
                 <th scope="col">Materiał <a href="{% url 'create-material'  %}?next={{ request.path }}"
                     class="text-dark bi bi-plus-square-dotted"></a></th>
                 <th scope="col">Usługi <a href="{% url 'create-services' %}?next={{ request.path }}"
@@ -66,8 +67,9 @@
               </tr>
             </thead>
             <tbody>
-              <form method="POST">{% csrf_token %}
+              <form method="POST" id="editOrderForm" data-material-url="{% url 'api_load_materials_production' %}">{% csrf_token %}
                 <tr>
+                  <td scope="col">{{ form.gender }}</td>
                   <td scope="col">{{ form.material }}</td>
                   <td scope="col">{{ form.services }}</td>
                   <td scope="col">{{ form.area }}</td>
@@ -79,6 +81,13 @@
               {% for ms in materialservices %}
               <form method="POST">{% csrf_token %}
                 <tr>
+                  <td scope="col">
+                    {% if ms.gender == None %}
+                    
+                    {% else %}
+                    {{ ms.gender }}
+                    {% endif %}
+                  </td>
                   <td scope="col">
                     {% if ms.material == None %}
                     
@@ -104,6 +113,7 @@
             </tbody>
             <tfoot class="dark">
               <tr class="fw-bold">
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -155,4 +165,23 @@
       </div>
     </div>
   </div>
+  <script>
+    $("#id_gender").change(function () {
+      console.log("Elo")
+      var url = $("#editOrderForm").attr("data-material-url");  
+      var genderId = $(this).val();  
+      $.ajax({                      
+        url: url,                   
+        data: {
+          'gender': genderId       
+        },
+        success: function (data) {   
+          console.log(data)
+          $("#id_material").html(data);  
+        }
+      });
+  
+    });
+  
+  </script>
   {% endblock %}

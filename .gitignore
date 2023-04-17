@@ -140,3 +140,5 @@ GitHub.sublime-settings
 .history
 .vscode/
 clever.code-workspace
+
+clever/settings/prod.py

@@ -1,4 +1,5 @@
 from django import forms
+from stock.models import Material, Gender
 
 from account.models import Customer
 from .models import (Attachment,
@@ -41,6 +42,20 @@ class EditOrderForm(forms.ModelForm):
     class Meta:
         model = MaterialServices
         exclude = ['productionorder', 'total_price']
+        
+    def __init__(self, *args, ** kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['material'].queryset = Material.objects.none()
+        
+        if 'gender' in self.data:
+            print("elo from form")
+            try:
+                gender_id = int(self.data.get('gender'))
+                self.fields['material'].queryset = Material.objects.filter(gender_id=gender_id)
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['material'].queryset = self.instance.Material.material_set.order_by('name')
 
 class AttachmentForm(forms.ModelForm):
     file = forms.FileField(label='',)

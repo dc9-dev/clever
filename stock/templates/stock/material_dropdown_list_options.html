@@ -1,0 +1,6 @@
+<select name="id-material" id="material">
+    <option>---------</option>
+    {% for material in materials %}
+    <option value="{{ material.id }}">{{ material }}</option>
+    {% endfor %}
+</select>

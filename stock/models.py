@@ -24,6 +24,7 @@ class Warehouse(models.Model):
 
 class Gender(models.Model):
     title = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return self.title
@@ -35,6 +36,7 @@ class Material(models.Model):
     name = models.CharField(max_length=255, blank=False, null=True)
     quantity = models.SmallIntegerField(default=0, blank=False, null=True)
     material_area = models.DecimalField(default=Decimal('5.796'), decimal_places=4, blank=False, max_digits=10)
+    thickness = IntegerRangeField(min_value=50, max_value=3800, null=True)
 
     class Meta:
         verbose_name = "materiał"
@@ -50,9 +52,10 @@ class Material(models.Model):
 
 class Stock(models.Model):
     
-    length = IntegerRangeField(min_value=50, max_value=2800, null=True)
+    length = IntegerRangeField(min_value=50, max_value=3800, null=True)
     width = IntegerRangeField(min_value=50, max_value=2070, null=True)
     material = models.ForeignKey(Material, null=False, on_delete=models.CASCADE, related_name="stocks")
+    gender = models.ForeignKey(Gender, null=True, on_delete=models.CASCADE, related_name="stocks", default=1)
     created_by = models.CharField(max_length=120, null=True, blank=True);
     rack = models.CharField(max_length=1, null=True, blank=True);
     rack_id=models.IntegerField(null=True, blank=True)

@@ -24,4 +24,6 @@ urlpatterns = [
     path('order/detail/<int:id>', views.DetailOrder, name='detail-order'),
     path('order/search', views.SearchOrder.as_view(), name='search-order'),
     path('mail/<int:id>', views.mail, name='send-mail'),
+    path('api/load_materials/', views.load_materials, name='api_load_materials_production')
+
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
