@@ -44,6 +44,7 @@
                 <th scope="col" colspan="10">Materiał</th>
               </tr>
               <tr>
+                <td colspan="2">Grupa materiałowa</td>
                 <td colspan="2">Nazwa</td>
                 <td>Ilość(m2)</td>
                 <td>Szt.</td>
@@ -59,6 +60,7 @@
               {% for material in materials %}
               <form method="POST">{% csrf_token %}
               <tr>
+                <td colspan="2"></td>
                 <td colspan="2">{{ material.material.short_name }}</td>
                 <td>{{ material.area }}</td>
                 <td>{{ material.quantity }}</td>
@@ -74,7 +76,7 @@
               {% endfor %}
             </tbody>
             <tfooter>
-              <form method="POST">{% csrf_token %}
+              <form method="POST" id="editGrnForm" data-material-url="{% url 'api_load_materials' %}">{% csrf_token %}
                 <tr class="fw-bold">
                   <td colspan="5"></td>
                   <td>Razem: </td>
@@ -84,6 +86,14 @@
                   <td></td>
                 </tr>
                 <tr>
+                  <td colspan="2">                  
+                    <select id="id_gender">
+                    <option>-------------</option>
+                    {% for gender in genders %}
+                      <option value="{{gender.id}}">{{gender}}</option>
+                    {% endfor %}
+                  </select>
+                </td>
                   <td colspan="2">{{ form.material }}</td>
                   <td>{{ form.area }}</td>
                   <td></td>
@@ -149,4 +159,21 @@
     </div>
   </div>
 </div>
+<script>
+  $("#id_gender").change(function () {
+    var url = $("#editGrnForm").attr("data-material-url");  
+    var genderId = $(this).val();  
+    $.ajax({                      
+      url: url,                   
+      data: {
+        'gender': genderId       
+      },
+      success: function (data) {   
+        $("#id_material").html(data);  
+      }
+    });
+
+  });
+
+</script>
 {% endblock %}

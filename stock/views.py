@@ -271,6 +271,7 @@ def EditGRN(request, id):
         'materials': materials,
         'comment': comment,
         'attachment': attachment,
+        'genders' : Gender.objects.all()
     }
 
     return render(request, 'stock/edit_grn.html', ctx)

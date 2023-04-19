@@ -36,7 +36,7 @@ class Material(models.Model):
     name = models.CharField(max_length=255, blank=False, null=True)
     quantity = models.SmallIntegerField(default=0, blank=False, null=True)
     material_area = models.DecimalField(default=Decimal('5.796'), decimal_places=4, blank=False, max_digits=10)
-    thickness = IntegerRangeField(min_value=50, max_value=3800, null=True)
+    thickness = IntegerRangeField(max_value=3800, null=True)
 
     class Meta:
         verbose_name = "materiał"
