@@ -121,7 +121,7 @@ class CreateStock(CreateView):
 def load_materials(request):
     print("loading materials in stock")
     gender_id = request.GET.get('gender')
-    materials = Material.objects.all().filter(gender_id=int(gender_id))
+    materials = Material.objects.all().filter(gender_id=int(gender_id)).order_by('name')
     return render(request, 'stock/material_dropdown_list_options.html', {'materials': materials})
 
 def DeleteStock(request, id):

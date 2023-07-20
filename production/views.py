@@ -26,10 +26,10 @@ from datetime import datetime
 from account.models import UserBase
 
 def load_materials(request):
-    print("loading materials in production")
+    # print("loading materials in production")
     gender_id = request.GET.get('gender')
-    materials = Material.objects.all().filter(gender_id=int(gender_id))
-    print(materials)
+    materials = Material.objects.all().filter(gender_id=int(gender_id)).order_by('name')
+    # print(materials)
     return render(request, 'production/material_dropdown_list_options.html', {'materials': materials})
 
 @staff_or_404
