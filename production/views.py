@@ -288,10 +288,11 @@ def ProductionStockIn(request, id):
     productionMaterial = ProductionMaterial.objects.get(id=id)
     stock = Stock.objects.filter(length=0, width=0).first()
     form = StockCreateInForm()
-
     if request.method == 'POST':
-        form = StockCreateInForm(request.POST)
+        form = StockCreateInForm(request.POST, initial={'gender' : productionMaterial.material.gender.id})
+        # print(form.errors)
         if form.is_valid():
+            print("form is valid")
             # get longer side
             length = int(request.POST['length'])
             width = int(request.POST['width'])
@@ -312,7 +313,8 @@ def ProductionStockIn(request, id):
                     width=width,
                     material=productionMaterial.material,
                     created_by=f'{request.user.first_name[0]}{request.user.last_name[0]}',
-                    rack=rack
+                    rack=rack,
+                    gender_id = productionMaterial.material.gender.id
                 )
 
                 productionMaterial.productionstockin_set.create(
@@ -333,9 +335,9 @@ def ProductionStockIn(request, id):
                     print('at least 1 stock in db, adding more')
                     # get first free id between 1 and 100
                     all_stocks_on_rack = Stock.objects.all().filter(
-                        rack=newStock.rack).order_by('rack_id')
+                        rack=newStock.rack, gender_id=productionMaterial.material.gender.id).order_by('rack_id')
                     for i in all_stocks_on_rack:
-                        # print(f'checking stock with id: {i.rack_id}')
+                        print(f'checking stock with id: {i.rack_id}')
                         if new_rack_id != i.rack_id:
                             # found first empy id, create stock with that id
                             newStock.rack_id = new_rack_id
@@ -359,7 +361,6 @@ def ProductionStockIn(request, id):
 
             return redirect('edit-production',
                             id=productionMaterial.production_id)
-
     ctx = {
         'form': form,
         'gender': productionMaterial.material.gender,

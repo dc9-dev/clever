@@ -169,18 +169,35 @@
     $("#id_gender").change(function () {
       var url = $("#editOrderForm").attr("data-material-url");  
       var genderId = $(this).val();  
+
       $.ajax({                      
         url: url,                   
         data: {
           'gender': genderId       
         },
         success: function (data) {   
-          console.log(data)
+          {% comment %} console.log(data) {% endcomment %}
           $("#id_material").html(data);  
         }
       });
   
     });
+
+    window.onload = function() {
+      var url = $("#editOrderForm").attr("data-material-url");  
+      var genderId = document.getElementById('id_gender').value
+
+      $.ajax({                      
+        url: url,                   
+        data: {
+          'gender': genderId       
+        },
+        success: function (data) {   
+          {% comment %} console.log(data) {% endcomment %}
+          $("#id_material").html(data);  
+        }
+      }); 
+    };
   
   </script>
   {% endblock %}

@@ -21,6 +21,7 @@
               <th scope="col">{{ form.width }}</th>
               {% if request.resolver_match.view_name == 'stockin' %}
               <th>{{ gender }}</th>
+              <th hidden>{{ form.gender }}</th>
                <th>{{ material.material }}</th>
               {% else %}
               <th scole="col">{{ form.gender }}</th>
@@ -38,19 +39,35 @@
 </div>
 <script>
   $("#id_gender").change(function () {
-    var url = $("#stockForm").attr("data-material-url");  // get the url of the `load_cities` view
-    var genderId = $(this).val();  // get the selected country ID from the HTML input
-    $.ajax({                       // initialize an AJAX request
-      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    var url = $("#stockForm").attr("data-material-url");  
+    var genderId = $(this).val();  
+    $.ajax({                       
+      url: url,                    
       data: {
-        'gender': genderId       // add the country id to the GET parameters
+        'gender': genderId       
       },
-      success: function (data) {   // `data` is the return of the `load_cities` view function
-        $("#id_material").html(data);  // replace the contents of the city input with the data that came from the server
+      success: function (data) {   
+        $("#id_material").html(data);  
       }
     });
 
   });
+
+  window.onload = function() {
+    var url = $("#stockForm").attr("data-material-url");  
+    var genderId = document.getElementById('id_gender').value
+
+    $.ajax({                      
+      url: url,                   
+      data: {
+        'gender': genderId       
+      },
+      success: function (data) {   
+        
+        $("#id_material").html(data);  
+      }
+    }); 
+  };
 
 </script>
 {% endblock %}
